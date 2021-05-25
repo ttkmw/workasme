@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
 import { LinkContainer } from 'react-router-bootstrap';
+import 'src/App.css';
 
 const Home = () => <span>Home</span>;
 
