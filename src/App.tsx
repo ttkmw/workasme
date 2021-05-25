@@ -1,57 +1,77 @@
-import React from 'react';
+import React, {useState} from 'react';
 import 'src/App.css';
-import { MemoryRouter, Switch, Route } from 'react-router-dom';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
-import Button from 'react-bootstrap/Button';
-import { LinkContainer } from 'react-router-bootstrap';
-import 'src/App.css';
+import {Button, Toast} from "react-bootstrap";
 
-const Home = () => <span>Home</span>;
-
-const About = () => <span>About</span>;
-
-const Users = () => <span>Users</span>;
-
-function App() {
+const App: React.FC = () => {
   return (
-    <MemoryRouter>
-      <Container className="p-3">
-        <Jumbotron>
-          <h1 className="header">Welcome To React-Bootstrap</h1>
-          <h2>
-            Current Page is{' '}
-            <Switch>
-              <Route path="/about">
-                <About />
-              </Route>
-              <Route path="/users">
-                <Users />
-              </Route>
-              <Route path="/">
-                <Home />
-              </Route>
-            </Switch>
-          </h2>
-          <h2>
-            Navigate to{' '}
-            <ButtonToolbar className="custom-btn-toolbar">
-              <LinkContainer to="/">
-                <Button>Home</Button>
-              </LinkContainer>
-              <LinkContainer to="/about">
-                <Button>About</Button>
-              </LinkContainer>
-              <LinkContainer to="/users">
-                <Button>Users</Button>
-              </LinkContainer>
-            </ButtonToolbar>
-          </h2>
-        </Jumbotron>
-      </Container>
-    </MemoryRouter>
+    <Container className="p-3">
+      <Jumbotron>
+        <h1 className="header">
+          Welcome To React-Bootstrap TypeScript Example
+        </h1>
+      </Jumbotron>
+      <h2>Buttons</h2>
+      <ButtonsShowcase />
+      <h2>Toasts</h2>
+      <ToastsShowcase />
+    </Container>
   );
-}
+};
+
+
+const ButtonsShowcase: React.FC = () => (
+  <div className="p-1">
+    <Button variant="primary" className="mr-1">
+      Primary
+    </Button>
+    <Button variant="secondary" className="mr-1">
+      Secondary
+    </Button>
+    <Button variant="success" className="mr-1">
+      Success
+    </Button>
+    <Button variant="warning" className="mr-1">
+      Warning
+    </Button>
+    <Button variant="danger" className="mr-1">
+      Danger
+    </Button>
+    <Button variant="info" className="mr-1">
+      Info
+    </Button>
+    <Button variant="light" className="mr-1">
+      Light
+    </Button>
+    <Button variant="dark" className="mr-1">
+      Dark
+    </Button>
+    <Button variant="link" className="mr-1">
+      Link
+    </Button>
+  </div>
+);
+
+const ToastsShowcase: React.FC = () => {
+  const [show, toggleShow] = useState(true);
+
+  return (
+    <>
+      {!show && <Button onClick={() => toggleShow(true)}>Show Toast</Button>}
+      {/*
+    // @ts-ignore */}
+      <Toast show={show} onClose={() => toggleShow(false)}>
+        <Toast.Header>
+          <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
+          <strong className="mr-auto">Bootstrap</strong>
+          <small>11 mins ago</small>
+        </Toast.Header>
+        <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
+      </Toast>
+    </>
+  );
+};
+
 
 export default App;
