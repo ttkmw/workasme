@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import 'src/App.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import {Button, Toast} from "react-bootstrap";
