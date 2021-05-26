@@ -4,10 +4,12 @@ import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx } from '@emotion/react'
+import Colors from "src/pages/constants/Colors";
 
 const TopNavigation: React.FC = () => {
-  return <Navbar bg="light" expand="lg" css={{
-    backgroundColor: "#0000FF",
+  return <Navbar expand="lg" css={{
+    backgroundColor: Colors.theme.bar.top,
+    height: 80
   }}>
     <Container>
           <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
