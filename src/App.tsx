@@ -1,43 +1,14 @@
 import React, {useState} from 'react';
-import Jumbotron from 'react-bootstrap/Jumbotron';
-import Container from 'react-bootstrap/Container';
 import {Button, Toast} from "react-bootstrap";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx } from '@emotion/react'
+import TopNavigation from "src/pages/components/bars/navigation/Top";
 
 
 const App: React.FC = () => {
   return (
-    <Container className="p-3">
-      <Jumbotron>
-        <h1 className="header">
-          Welcome To React-Bootstrap TypeScript Example
-        </h1>
-
-      </Jumbotron>
-      <h1 css={{
-        boxSizing: 'border-box',
-        width: 200,
-        height: 200,
-        backgroundColor: "#0000FF",
-        color: "#0000FF"
-      }}>
-        zzzz
-      </h1>
-      <div
-        css={{
-          color: 'darkorchid',
-          backgroundColor: 'lightgray'
-        }}
-      >
-        This is darkorchid.
-      </div>
-      <h2>Buttons</h2>n
-      <ButtonsShowcase/>
-      <h2>Toasts</h2>
-      <ToastsShowcase/>
-    </Container>
+    <TopNavigation />
   );
 };
 
