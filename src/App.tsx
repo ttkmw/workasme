@@ -2,6 +2,10 @@ import React, {useState} from 'react';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import {Button, Toast} from "react-bootstrap";
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx } from '@emotion/react'
+
 
 const App: React.FC = () => {
   return (
@@ -10,15 +14,41 @@ const App: React.FC = () => {
         <h1 className="header">
           Welcome To React-Bootstrap TypeScript Example
         </h1>
+
       </Jumbotron>
-      <h2>Buttons</h2>
-      <ButtonsShowcase />
+      <h1 css={{
+        boxSizing: 'border-box',
+        width: 200,
+        height: 200,
+        backgroundColor: "#0000FF",
+        color: "#0000FF"
+      }}>
+        zzzz
+      </h1>
+      <div
+        css={{
+          color: 'darkorchid',
+          backgroundColor: 'lightgray'
+        }}
+      >
+        This is darkorchid.
+      </div>
+      <h2>Buttons</h2>n
+      <ButtonsShowcase/>
       <h2>Toasts</h2>
-      <ToastsShowcase />
+      <ToastsShowcase/>
     </Container>
   );
 };
 
+
+// const titleStyle = css({
+//   boxSizing: 'border-box',
+//   width: 200,
+//   height: 200,
+//   backgroundColor: "#0000FF",
+//   color: "#0000FF"
+// });
 
 const ButtonsShowcase: React.FC = () => (
   <div className="p-1">
@@ -62,7 +92,7 @@ const ToastsShowcase: React.FC = () => {
     // @ts-ignore */}
       <Toast show={show} onClose={() => toggleShow(false)}>
         <Toast.Header>
-          <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
+          <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt=""/>
           <strong className="mr-auto">Bootstrap</strong>
           <small>11 mins ago</small>
         </Toast.Header>
