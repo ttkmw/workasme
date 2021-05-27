@@ -5,13 +5,14 @@ import {Button, Toast} from "react-bootstrap";
 import {css, jsx} from '@emotion/react'
 import TopNavigation from "src/pages/components/bars/navigation/Top";
 import Colors from "src/pages/constants/Colors";
+import Sizes from "src/pages/constants/Sizes";
 
 
 const App: React.FC = () => {
 
   const topNavigatoinContainerStyle = css({
     backgroundColor: Colors.theme.bar.top,
-    height: 80
+    height: Sizes.layout.bar.top.value
   });
 
 
