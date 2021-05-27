@@ -4,13 +4,13 @@ import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from '@emotion/react'
-import Colors from "src/pages/constants/Colors";
 import {SerializedStyles} from "@emotion/serialize";
 
 
 const TopNavigation: React.FC<{ containerStyle: SerializedStyles }> = (props: { containerStyle: SerializedStyles }) => {
   const {containerStyle} = props;
 
+  // todo: refac links
   return <Navbar expand="lg" css={containerStyle}>
     <Container>
       <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
