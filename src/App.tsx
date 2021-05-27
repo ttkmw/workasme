@@ -2,13 +2,21 @@ import React, {useState} from 'react';
 import {Button, Toast} from "react-bootstrap";
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx } from '@emotion/react'
+import {css, jsx} from '@emotion/react'
 import TopNavigation from "src/pages/components/bars/navigation/Top";
+import Colors from "src/pages/constants/Colors";
 
 
 const App: React.FC = () => {
+
+  const topNavigatoinContainerStyle = css({
+    backgroundColor: Colors.theme.bar.top,
+    height: 80
+  });
+
+
   return (
-    <TopNavigation />
+    <TopNavigation  containerStyle={topNavigatoinContainerStyle}/>
   );
 };
 
