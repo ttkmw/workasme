@@ -7,7 +7,7 @@ import {css, jsx} from '@emotion/react'
 import {SerializedStyles} from "@emotion/serialize";
 
 
-const TopNavigation: React.FC<{ containerStyle: SerializedStyles }> = (props: { containerStyle: SerializedStyles }) => {
+const TopNavigationBar: React.FC<{ containerStyle: SerializedStyles }> = (props: { containerStyle: SerializedStyles }) => {
   const {containerStyle} = props;
 
   // todo: refac links
@@ -32,4 +32,4 @@ const TopNavigation: React.FC<{ containerStyle: SerializedStyles }> = (props: { 
   </Navbar>
 };
 
-export default TopNavigation;
+export default TopNavigationBar;
