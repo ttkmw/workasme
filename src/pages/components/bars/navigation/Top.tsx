@@ -5,6 +5,8 @@ import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 /** @jsx jsx */
 import {css, jsx} from '@emotion/react'
 import {SerializedStyles} from "@emotion/serialize";
+import logo from './website_logo.png'
+import Sizes from "src/constants/Sizes";
 
 
 const TopNavigationBar: React.FC<{ containerStyle: SerializedStyles }> = (props: { containerStyle: SerializedStyles }) => {
@@ -13,7 +15,9 @@ const TopNavigationBar: React.FC<{ containerStyle: SerializedStyles }> = (props:
   // todo: refac links
   return <Navbar expand="lg" css={containerStyle}>
     <Container>
-      <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+      <Navbar.Brand href="#home">
+        <img src={logo} alt="Logo" width={Sizes.components.bar.logo.width.value} height={Sizes.components.bar.logo.height.value}/>
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav"/>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
