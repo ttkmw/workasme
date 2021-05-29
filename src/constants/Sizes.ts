@@ -4,6 +4,7 @@ import Percentage from "src/graphic/size/percentage";
 
 const LOGO_HEIGHT_PER_WIDTH: Percentage = new Percentage(17.1);
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   layout: {
     bar: {
