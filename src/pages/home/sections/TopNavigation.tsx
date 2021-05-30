@@ -23,11 +23,11 @@ const TopNavigationSection: React.FC = () => {
   const collapse: ReactElement<NavbarCollapse> = <Navbar.Collapse id="basic-navbar-nav">
     <Container>
       <Nav className="me-auto">
-        <Nav.Link href="#management">Management</Nav.Link>
-        <Nav.Link href="#contact">Contact</Nav.Link>
+        <Nav.Link href="/management">Management</Nav.Link>
+        <Nav.Link href="/contact">Contact</Nav.Link>
       </Nav>
       <Nav>
-        <Nav.Link href="#sign">
+        <Nav.Link href="/sign">
           <SignInButton />
         </Nav.Link>
       </Nav>
