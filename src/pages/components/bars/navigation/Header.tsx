@@ -1,14 +1,15 @@
 import React, {ReactElement} from "react";
 import {css} from "@emotion/react";
-import TopNavigationBar from "src/pages/components/bars/navigation/Top";
 import Sizes from "src/constants/Sizes";
 import {Button, Nav, Navbar, NavbarBrand} from "react-bootstrap";
 import brandImage from 'src/assets/brand_at_top_navigation.png'
 import NavbarCollapse from "react-bootstrap/lib/NavbarCollapse";
 import Container from 'react-bootstrap/Container';
 import Colors from "src/constants/Colors";
+import {SerializedStyles} from "@emotion/serialize";
+import {LinkContainer} from 'react-router-bootstrap'
 
-const TopNavigationSection: React.FC = () => {
+const Header: React.FC = () => {
   const topNavigationContainerStyle = css({
     backgroundColor: Colors.theme.bar.top,
     height: Sizes.layout.bar.top.value
@@ -23,13 +24,19 @@ const TopNavigationSection: React.FC = () => {
   const collapse: ReactElement<NavbarCollapse> = <Navbar.Collapse id="basic-navbar-nav">
     <Container>
       <Nav className="me-auto">
-        <Nav.Link href="/management">Management</Nav.Link>
-        <Nav.Link href="/contact">Contact</Nav.Link>
+        <LinkContainer to={"/management"}>
+          <Nav.Link>Management</Nav.Link>
+        </LinkContainer>
+        <LinkContainer to={"/contact"}>
+          <Nav.Link href="/contact">Contact</Nav.Link>
+        </LinkContainer>
       </Nav>
       <Nav>
-        <Nav.Link href="/sign">
-          <SignInButton />
-        </Nav.Link>
+        <LinkContainer to={"/sign"}>
+          <Nav.Link>
+            <SignInButton />
+          </Nav.Link>
+        </LinkContainer>
       </Nav>
     </Container>
   </Navbar.Collapse>;
@@ -56,4 +63,31 @@ const SignInButton: React.FC = () => {
   </>
 };
 
-export default TopNavigationSection;
+const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
+                                                             brand,
+                                                             collapse,
+                                                             containerStyle
+                                                           }: TopNavigationBarProps) => {
+
+
+  // todo: refac links
+  return <Navbar expand="lg" >
+    <Container css={containerStyle}>
+      <LinkContainer to={"/"}>{brand}</LinkContainer>
+      {/*todo: check - 이거 뭔지 현재 모름.*/}
+      <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+      {collapse}
+    </Container>
+  </Navbar>
+};
+
+
+
+
+interface TopNavigationBarProps {
+  brand: ReactElement<NavbarBrand>;
+  collapse: ReactElement<NavbarCollapse>;
+  containerStyle: SerializedStyles;
+}
+
+export default Header;

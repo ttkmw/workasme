@@ -7,10 +7,12 @@ import reportWebVitals from "src/reportWebVitals";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SelfManagementPage from "src/pages/management/self/SelfManagement";
+import Header from "src/pages/components/bars/navigation/Header";
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
+      <Header />
       <Switch>
         <Route exact path={"/"}  component={App}/>
         <Route exact path={"/management"}  component={SelfManagementPage}/>
