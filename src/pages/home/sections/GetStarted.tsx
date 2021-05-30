@@ -4,7 +4,8 @@ import Container from 'react-bootstrap/Container';
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
-import {Button} from "react-bootstrap";
+import {Button, Nav} from "react-bootstrap";
+import {LinkContainer} from "react-router-bootstrap";
 
 const GetStartedSection: React.FC = () => {
   //width: 389
@@ -68,24 +69,30 @@ const Description: React.FC = () => {
   </div>
 };
 
+
+// <LinkContainer to={"/management"}>
+//   <Nav.Link>Management</Nav.Link>
+// </LinkContainer>
 const GetStartedButton: React.FC = () => {
   const backgroundColor: string = "#802578";
   const color: string = "white";
-  return <div css={css({
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  })}>
-    <>
-      <style type="text/css"> {`
+  return <LinkContainer to={"/sign"}>
+    <div css={css({
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    })}>
+      <>
+        <style type="text/css"> {`
             .btn-getStarted {
               background-color: ${backgroundColor};
               color: ${color};
             }
           `}
-      </style>
-      <Button variant={"getStarted"} size={"lg"}>Get Started</Button>
-    </>
-  </div>
+        </style>
+        <Button variant={"getStarted"} size={"lg"}>Get Started</Button>
+      </>
+    </div>
+  </LinkContainer>
 };
 
 export default GetStartedSection;
