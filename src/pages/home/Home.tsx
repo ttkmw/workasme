@@ -1,13 +1,13 @@
 import React from "react";
 import TopNavigationSection from "src/pages/home/sections/TopNavigation";
-import IntroductionSection from "src/pages/home/sections/Introduction";
+import GetStartedSection from "src/pages/home/sections/GetStarted";
 
 const HomePage: React.FC = () => {
 
 
   return <div>
     <TopNavigationSection />
-    <IntroductionSection />
+    <GetStartedSection />
 
   </div>;
 };

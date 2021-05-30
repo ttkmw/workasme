@@ -1,12 +1,12 @@
-import React, {ReactElement, useState} from "react";
+import React, {ReactElement} from "react";
 import {css} from "@emotion/react";
 import TopNavigationBar from "src/pages/components/bars/navigation/Top";
-import Colors from "src/constants/Colors";
 import Sizes from "src/constants/Sizes";
 import {Button, Nav, Navbar, NavbarBrand} from "react-bootstrap";
 import brandImage from 'src/assets/brand_at_top_navigation.png'
 import NavbarCollapse from "react-bootstrap/lib/NavbarCollapse";
 import Container from 'react-bootstrap/Container';
+import Colors from "src/constants/Colors";
 
 const TopNavigationSection: React.FC = () => {
   const topNavigationContainerStyle = css({
