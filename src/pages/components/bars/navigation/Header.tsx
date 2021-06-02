@@ -1,13 +1,15 @@
 import React, {ReactElement} from "react";
 import {css} from "@emotion/react";
 import Sizes from "src/constants/Sizes";
-import {Button, Nav, Navbar, NavbarBrand} from "react-bootstrap";
+import {Nav, Navbar, NavbarBrand} from "react-bootstrap";
 import brandImage from 'src/assets/brand_at_top_navigation.png'
 import NavbarCollapse from "react-bootstrap/lib/NavbarCollapse";
 import Container from 'react-bootstrap/Container';
 import Colors from "src/constants/Colors";
 import {SerializedStyles} from "@emotion/serialize";
 import {LinkContainer} from 'react-router-bootstrap'
+import ButtonComponent from "src/pages/components/ButtonComponent";
+import Percentage from "src/graphic/size/percentage";
 
 const Header: React.FC = () => {
   const topNavigationContainerStyle = css({
@@ -34,7 +36,11 @@ const Header: React.FC = () => {
       <Nav>
         <LinkContainer to={"/sign"}>
           <Nav.Link>
-            <SignInButton />
+            <ButtonComponent name={"join"} backgroundColor={Colors.theme.main.orgasme}
+                             defaultTextColor={Colors.theme.text.button.default}
+             width={new Percentage(100)}>
+              Join
+            </ButtonComponent>
           </Nav.Link>
         </LinkContainer>
       </Nav>
@@ -46,22 +52,6 @@ const Header: React.FC = () => {
   </div>;
 };
 
-const SignInButton: React.FC = () => {
-  //todo: refac - use constants
-  //todo: refac - 클릭했을 시 글씨 색상 주황색으로 바꾸기.
-  const backgroundColor: string = "#802578";
-  const color: string = "white";
-  return <>
-    <style type="text/css"> {`
-            .btn-sign {
-              background-color: ${backgroundColor};
-              color: ${color};
-            }
-          `}
-    </style>
-    <Button variant={"sign"}>Sign</Button>
-  </>
-};
 
 const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
                                                              brand,
@@ -71,7 +61,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
 
 
   // todo: refac links
-  return <Navbar expand="lg" >
+  return <Navbar expand="lg">
     <Container css={containerStyle}>
       <LinkContainer to={"/"}>{brand}</LinkContainer>
       {/*todo: check - 이거 뭔지 현재 모름.*/}
@@ -80,8 +70,6 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
     </Container>
   </Navbar>
 };
-
-
 
 
 interface TopNavigationBarProps {

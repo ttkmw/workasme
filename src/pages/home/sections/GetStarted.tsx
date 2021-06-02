@@ -6,6 +6,7 @@ import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import {Button, Nav} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
+import Colors from "src/constants/Colors";
 
 const GetStartedSection: React.FC = () => {
   //width: 389
@@ -31,14 +32,14 @@ const IntroductionPhrase: React.FC = () => {
       <span css={
         css({
           fontFamily: "ObjectSans-Heavy",
-          color: '#d94d3b',
+          color: Colors.theme.main.work,
           fontWeight: 700
         })
       }>work with </span>
       <span css={
         css({
           fontFamily: "Pattaya-Regular",
-          color: 'purple',
+          color: Colors.theme.main.orgasme,
           fontWeight: 900
         })
       }>
@@ -74,8 +75,6 @@ const Description: React.FC = () => {
 //   <Nav.Link>Management</Nav.Link>
 // </LinkContainer>
 const GetStartedButton: React.FC = () => {
-  const backgroundColor: string = "#802578";
-  const color: string = "white";
   return <LinkContainer to={"/sign"}>
     <div css={css({
       marginLeft: 'auto',
@@ -84,8 +83,8 @@ const GetStartedButton: React.FC = () => {
       <>
         <style type="text/css"> {`
             .btn-getStarted {
-              background-color: ${backgroundColor};
-              color: ${color};
+              background-color: ${Colors.theme.main.orgasme};
+              color: ${Colors.theme.text.button.default};
             }
           `}
         </style>

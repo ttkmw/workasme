@@ -1,5 +1,7 @@
 // 범위 1~100
-export default class Percentage {
+import {Size} from "src/graphic/size/Size";
+
+export default class Percentage implements Size {
   private readonly _value: number;
 
   // todo: validation logic and test

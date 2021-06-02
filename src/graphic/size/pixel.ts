@@ -1,7 +1,8 @@
 import Percentage from "./percentage";
+import {Size} from "src/graphic/size/Size";
 
 
-export default class Pixel {
+export default class Pixel implements Size {
   private readonly _value: number;
 
   constructor(value: number) {

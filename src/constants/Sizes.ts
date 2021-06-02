@@ -18,6 +18,13 @@ export default {
         height: new Pixel(120).multiply(LOGO_HEIGHT_PER_WIDTH),
 
       }
+    },
+    button: {
+      padding: {
+        horizontal: {
+          default: new Pixel(12),
+        }
+      }
     }
   }
 };
