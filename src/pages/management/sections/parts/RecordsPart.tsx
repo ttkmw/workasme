@@ -1,7 +1,7 @@
 import React, {ReactNode} from "react";
-import RecordCard from "src/pages/management/self/sections/components/cards/Record";
+import RecordCard from "src/pages/management/sections/parts/components/cards/RecordCard";
 
-const RecordsSection: React.FC = () => {
+const RecordsPart: React.FC = () => {
   const recordCards: React.FC[] = [() => <RecordCard/>, () => <RecordCard/>];
   return <div>
     <GuideBoardPart />
@@ -23,4 +23,4 @@ const RecordsContainer: React.FC<{ children: ReactNode }> = ({children}) => {
 };
 
 
-export default RecordsSection;
+export default RecordsPart;

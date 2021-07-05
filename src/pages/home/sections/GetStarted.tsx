@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
-import {Button, Nav} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
 import Colors from "src/constants/Colors";
 

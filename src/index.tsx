@@ -5,10 +5,10 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import reportWebVitals from "src/reportWebVitals";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import SelfManagementPage from "src/pages/management/self/SelfManagement";
 import Header from "src/pages/components/bars/navigation/Header";
 import HomePage from "src/pages/home/Home";
 import SignPage from "src/pages/sign/SignPage";
+import ManagementPage from "src/pages/management/ManagementPage";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -17,7 +17,7 @@ ReactDOM.render(
       <Switch>
         <Route exact path={"/"}  component={HomePage}/>
         <Route exact path={"/sign"}  component={SignPage}/>
-        <Route exact path={"/management"}  component={SelfManagementPage}/>
+        <Route exact path={"/management"}  component={ManagementPage}/>
       </Switch>
     </Router>
   </React.StrictMode>,
