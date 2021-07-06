@@ -13,7 +13,7 @@ import {
 } from "react-scroll";
 import TaskListPart from "./parts/TaskListPart";
 
-const SelfManagementSection: React.FC = () => {
+const TaskManagementSection: React.FC = () => {
   const marginVertical = new Pixel(30);
   return <Container css={css({
     paddingLeft: 0,
@@ -58,4 +58,4 @@ const SelfManagementSection: React.FC = () => {
 };
 
 
-export default SelfManagementSection;
+export default TaskManagementSection;

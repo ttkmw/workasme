@@ -35,12 +35,22 @@ const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertic
     marginBottom: marginVertical.value
   })}>
 
-    {/* TODO: 서버랑 연동할 때 JSon 신경써야 할듯. */}
-
+    <PartTitle marginBottom = {new Pixel(20)}/>
     <TaskTable rows={rows} isUpdating={isUpdating}/>
 
     {/*is Updating*/}
     <TaskButtons rows={rows} setRows={setRows} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
+  </div>
+};
+
+const PartTitle: React.FC<{marginBottom: Pixel}> = (props: {marginBottom: Pixel}) => {
+  const {marginBottom} = props;
+  return <div css={css({
+    marginBottom: marginBottom.value
+  })}>
+    <h2>
+      Task List
+    </h2>
   </div>
 };
 
