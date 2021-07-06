@@ -4,6 +4,9 @@ import Pixel from "src/graphic/size/pixel";
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Chart from "react-google-charts";
+import { PieChart } from "react-minimal-pie-chart";
+import { LabelRenderProps } from "react-minimal-pie-chart/types/Label";
+import FullOptionPieChart from "src/pages/management/sections/parts/components/charts/FullOptionPieChart";
 
 const EvaluationPart: React.FC<{height: Pixel}> = (props: {height: Pixel}) => {
   const {height} = props;
@@ -16,28 +19,27 @@ const EvaluationPart: React.FC<{height: Pixel}> = (props: {height: Pixel}) => {
   </div>
 };
 
-const FeedbackComponent: React.FC = () => {
-  return <div>hahaha</div>
-};
 
 const EvaluationPieChartComponent: React.FC = () => {
-  return <Chart
-    width={'500px'}
-    height={'300px'}
-    chartType="PieChart"
-    loader={<div>Loading Chart</div>}
-    data={[
-      ['Time Category', 'Hours per Day'],
-      ['Mental', 11],
-      ['Physical', 2],
-      ['Intellectual', 2],
-      ['etc', 9],
-    ]}
-    options={{
-      title: 'Time Track Results',
-    }}
-    rootProps={{ 'data-testid': '1' }}
-  />;
+  return <div css={css({
+    backgroundColor: 'yellow',
+    height: 300,
+    width: 300
+  })}>
+    <FullOptionPieChart
+      data={[
+        { title: 'Mental', value: 11, color: '#E38627' },
+        { title: 'Physical', value: 2, color: '#C13C37' },
+        { title: 'Intellectual', value: 2, color: '#6A2135' },
+        { title: 'ETC', value: 9, color: 'blue' },
+      ]}
+    />
+
+  </div>;
+};
+
+const FeedbackComponent: React.FC = () => {
+  return <div>hahaha</div>
 };
 
 
