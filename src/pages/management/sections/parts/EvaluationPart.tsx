@@ -4,23 +4,35 @@ import Pixel from "src/graphic/size/pixel";
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Chart from "react-google-charts";
-import { PieChart } from "react-minimal-pie-chart";
-import { LabelRenderProps } from "react-minimal-pie-chart/types/Label";
+import {PieChart} from "react-minimal-pie-chart";
+import {LabelRenderProps} from "react-minimal-pie-chart/types/Label";
 import FullOptionPieChart from "src/pages/management/sections/parts/components/charts/FullOptionPieChart";
+import {TimeTrackerRowDto} from "src/pages/management/sections/parts/dtos/TimeTrackerRowDto";
+import {Col, Container, Row} from "react-bootstrap";
 
-const EvaluationPart: React.FC<{height: Pixel}> = (props: {height: Pixel}) => {
+const EvaluationPart: React.FC<{ height: Pixel }> = (props: { height: Pixel }) => {
   const {height} = props;
-  return <div css={css({
-    backgroundColor: 'red',
-    height: height.value
+  return <Container css={css({
+    backgroundColor: 'grey',
+    height: height.value,
   })}>
-    <EvaluationPieChartComponent />
-    <FeedbackComponent />
-  </div>
+    <Row>
+      <Col>
+        <EvaluationPieChartComponent/>
+      </Col>
+      <Col>
+        <FeedbackComponent/>
+      </Col>
+    </Row>
+  </Container>
 };
 
 
-const EvaluationPieChartComponent: React.FC = () => {
+// todo: timeTrackDto넣어주기 - section에서.
+const EvaluationPieChartComponent: React.FC<{ timeTrackRowDto?: TimeTrackerRowDto }> =
+  (props: { timeTrackRowDto?: TimeTrackerRowDto }) => {
+
+  // todo: timeTrackRowDto -> timeTrackCategory. makeOutByTimetrackCategory
   return <div css={css({
     backgroundColor: 'yellow',
     height: 300,
@@ -28,10 +40,10 @@ const EvaluationPieChartComponent: React.FC = () => {
   })}>
     <FullOptionPieChart
       data={[
-        { title: 'Mental', value: 11, color: '#E38627' },
-        { title: 'Physical', value: 2, color: '#C13C37' },
-        { title: 'Intellectual', value: 2, color: '#6A2135' },
-        { title: 'ETC', value: 9, color: 'blue' },
+        {title: 'Mental', value: 11, color: 'blue'},
+        {title: 'Physical', value: 2, color: 'red'},
+        {title: 'Intellectual', value: 2, color: 'orange'},
+        {title: 'ETC', value: 9, color: 'green'},
       ]}
     />
 
@@ -39,7 +51,7 @@ const EvaluationPieChartComponent: React.FC = () => {
 };
 
 const FeedbackComponent: React.FC = () => {
-  return <div>hahaha</div>
+  return <span>hahaha</span>
 };
 
 
