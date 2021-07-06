@@ -22,16 +22,8 @@ const TimeManagementSection: React.FC = () => {
           paddingLeft: 0,
           paddingRight: 0
         })}>
-          <Element
-            name="TaskList"
-          >
-            <TimeTrackerPart marginVertical={marginVertical}/>
-          </Element>
-          <Element
-            name="Feedback"
-          >
-            <EvaluationPart height={new Pixel(300)}/>
-          </Element>
+          <TimeTrackerPart marginVertical={marginVertical}/>
+          <EvaluationPart height={new Pixel(400)}/>
         </Col>
       </Row>
     </Col>
