@@ -11,6 +11,7 @@ const EvaluationPart: React.FC<{height: Pixel}> = (props: {height: Pixel}) => {
     backgroundColor: 'red',
     height: height.value
   })}>
+    <EvaluationPieChartComponent />
     <FeedbackComponent />
   </div>
 };
