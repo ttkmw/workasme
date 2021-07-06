@@ -32,23 +32,10 @@ const TaskManagementSection: React.FC = () => {
             <YouShouldFocusOnPriorityPart marginVertical={marginVertical}/>
           </Element>
 
-
           <Element
-            name="ToDoList"
+            name="TaskList"
           >
             <TaskListPart marginVertical={marginVertical}/>
-          </Element>
-
-          <Element
-            name="Memento"
-          >
-            <TimeTrackerPart height={new Pixel(300)}/>
-          </Element>
-
-          <Element
-            name="Feedback"
-          >
-            <EvaluationPart height={new Pixel(300)}/>
           </Element>
         </Col>
         <SideBar width={new Pixel(270)}/>
