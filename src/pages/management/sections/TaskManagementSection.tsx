@@ -2,7 +2,6 @@ import React from "react";
 import YouShouldFocusOnPriorityPart from "src/pages/management/sections/parts/YouShouldFocusOnPriorityPart";
 import EvaluationPart from "src/pages/management/sections/parts/EvaluationPart";
 import TimeTrackerPart from "src/pages/management/sections/parts/TimeTrackerPart";
-import SideBar from "src/pages/components/bars/navigation/SideBar";
 import {Col, Container, Row} from "react-bootstrap";
 /** @jsxRuntime classic */
 /** @jsx jsx */
@@ -38,7 +37,6 @@ const TaskManagementSection: React.FC = () => {
             <TaskListPart marginVertical={marginVertical}/>
           </Element>
         </Col>
-        <SideBar width={new Pixel(270)}/>
       </Row>
     </Col>
   </Container>;

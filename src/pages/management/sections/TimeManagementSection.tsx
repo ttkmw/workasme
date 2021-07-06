@@ -6,7 +6,6 @@ import TaskListPart from "src/pages/management/sections/parts/TaskListPart";
 import TimeTrackerPart from "src/pages/management/sections/parts/TimeTrackerPart";
 import Pixel from "src/graphic/size/pixel";
 import EvaluationPart from "src/pages/management/sections/parts/EvaluationPart";
-import SideBar from "src/pages/components/bars/navigation/SideBar";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -34,7 +33,6 @@ const TimeManagementSection: React.FC = () => {
             <EvaluationPart height={new Pixel(300)}/>
           </Element>
         </Col>
-        <SideBar width={new Pixel(270)}/>
       </Row>
     </Col>
   </Container>;
