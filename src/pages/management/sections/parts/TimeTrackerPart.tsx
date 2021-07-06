@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {Dispatch, SetStateAction, useCallback, useState} from "react";
 import Pixel from "src/graphic/size/pixel";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Colors from "src/constants/Colors";
 import {TimeTrackerRowDto} from "src/pages/management/sections/parts/dtos/TimeTrackerRowDto";
-import {Table, Toast} from "react-bootstrap";
+import {Button, Table, Toast} from "react-bootstrap";
 import {TaskListRowDto} from "src/pages/management/sections/parts/dtos/TaskListRowDto";
 import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
 
@@ -40,6 +40,7 @@ const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVer
   })}>
 
     <TimeTrackerTable rows={rows} isUpdating={isUpdating}/>
+    <TimeTrackerButtons rows={rows} setRows={setRows} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
 
   </div>
 };
@@ -70,5 +71,87 @@ const TimeTrackerTable: React.FC<{ rows: TimeTrackerRowDto[], isUpdating: boolea
     </tbody>
   </Table>
 };
+
+const TimeTrackerButtons: React.FC<{
+  rows: TimeTrackerRowDto[], setRows: Dispatch<SetStateAction<TimeTrackerRowDto[]>>,
+  isUpdating: boolean, setIsUpdating: Dispatch<SetStateAction<boolean>>
+}> =
+  (props: { rows: TimeTrackerRowDto[], setRows: Dispatch<SetStateAction<TimeTrackerRowDto[]>>, isUpdating: boolean, setIsUpdating: Dispatch<SetStateAction<boolean>> }) => {
+    const {rows, setRows, isUpdating, setIsUpdating} = props;
+
+    if (isUpdating) {
+      return <TimeTrackerButtonsWhenUpdating isUpdating={isUpdating} setIsUpdating={setIsUpdating} rows={rows} setRows={setRows}/>
+    }
+
+    return <TimeTrackerButtonsWhenNotUpdating isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
+  };
+
+const TimeTrackerButtonsWhenNotUpdating: React.FC<{isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>}> = (
+  props: { isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>}
+) => {
+  const {isUpdating, setIsUpdating} = props;
+
+  const onUpdateButtonClicked = useCallback(
+    () => {
+      setIsUpdating(true)
+    }, [setIsUpdating]
+  );
+
+  return <div css={css({
+    display: 'flex',
+    flexDirection: "row-reverse"
+  })}>
+
+    <Button
+      onClick={onUpdateButtonClicked}
+    >
+      Update
+    </Button>
+
+  </div>
+};
+
+const TimeTrackerButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>,
+  rows: TimeTrackerRowDto[], setRows: Dispatch<SetStateAction<TimeTrackerRowDto[]>> }> =
+  (props: { rows: TimeTrackerRowDto[], setRows: Dispatch<SetStateAction<TimeTrackerRowDto[]>>, isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>}) => {
+
+    const {rows, setRows, isUpdating, setIsUpdating} = props;
+
+    const onAddRowButtonClicked = useCallback(
+      () => {
+        setRows(rows.concat({
+          expectedBehavior: "", expectedTime: "", acutualBehavior: "", actuaTime: "", timeCategory: ""
+        }))
+      }, [rows]
+    );
+
+    const onCompleteButtonClicked = useCallback(
+      () => {
+        setIsUpdating(false)
+      }, [isUpdating]
+    );
+
+
+    return <div
+      css={css({
+        display: 'flex',
+        flexDirection: "row-reverse"
+      })}
+    >
+      <Button
+        onClick={onCompleteButtonClicked}
+        css={css({
+          marginLeft: '10px'
+        })}
+      >
+        Complete
+      </Button>
+      <Button
+        onClick={onAddRowButtonClicked}
+      >
+        Add Row
+      </Button>
+    </div>
+  };
 
 export default TimeTrackerPart;
