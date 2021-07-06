@@ -5,6 +5,7 @@ import Pixel from "src/graphic/size/pixel";
 import {css, jsx} from "@emotion/react";
 import {Button, Dropdown, Table} from "react-bootstrap";
 import {TaskListRowDto} from "src/pages/management/sections/parts/dtos/TaskListRowDto";
+import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
 
 const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
   const {marginVertical} = props;
@@ -35,12 +36,22 @@ const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertic
     marginBottom: marginVertical.value
   })}>
 
-    {/* TODO: 서버랑 연동할 때 JSon 신경써야 할듯. */}
-
+    <PartTitle marginBottom = {new Pixel(20)}/>
     <TaskTable rows={rows} isUpdating={isUpdating}/>
 
     {/*is Updating*/}
     <TaskButtons rows={rows} setRows={setRows} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
+  </div>
+};
+
+const PartTitle: React.FC<{marginBottom: Pixel}> = (props: {marginBottom: Pixel}) => {
+  const {marginBottom} = props;
+  return <div css={css({
+    marginBottom: marginBottom.value
+  })}>
+    <h2>
+      Task List
+    </h2>
   </div>
 };
 
@@ -131,33 +142,6 @@ const TaskButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdating:  D
 const TaskTable: React.FC<{ rows: TaskListRowDto[], isUpdating: boolean }> = (props: { rows: TaskListRowDto[], isUpdating: boolean }) => {
   const {rows, isUpdating} = props;
 
-  const Cell: React.FC<{ initialValue: string }> = (props: { initialValue: string }) => {
-    const {initialValue} = props;
-    const inputRef = React.useRef<HTMLInputElement>(null);
-    const [value, setValue] = React.useState(initialValue);
-
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(e.target.value)
-    };
-
-    const handleOnlyEnterKeyPressed = (e: any) => {
-      if (isEnterPressed()) {
-        // @ts-ignore
-        inputRef.current.blur()
-      }
-
-      function isEnterPressed() {
-        return e.key === "Enter";
-      }
-    };
-
-    function isNotUpdating() {
-      return !isUpdating;
-    }
-
-    return <input disabled={isNotUpdating()} value={value} onKeyPress={handleOnlyEnterKeyPressed} onChange={onChange} ref={inputRef}/>
-  };
-
 
   return <Table striped bordered hover>
     <thead>
@@ -171,10 +155,10 @@ const TaskTable: React.FC<{ rows: TaskListRowDto[], isUpdating: boolean }> = (pr
     <tbody>
     {rows.map((row) => {
       return <tr>
-        <td onClick={row.onClick}><Cell initialValue={row.name}/></td>
-        <td onClick={row.onClick}><Cell initialValue={row.importanceLevel}/></td>
-        <td onClick={row.onClick}><Cell initialValue={row.stuckOn}/></td>
-        <td onClick={row.onClick}><Cell initialValue={row.checkPriority}/></td>
+        <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.name}/></td>
+        <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.importanceLevel}/></td>
+        <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.stuckOn}/></td>
+        <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.checkPriority}/></td>
       </tr>
     })}
     </tbody>
