@@ -8,19 +8,20 @@ import {PieChart} from "react-minimal-pie-chart";
 import {LabelRenderProps} from "react-minimal-pie-chart/types/Label";
 import FullOptionPieChart from "src/pages/management/sections/parts/components/charts/FullOptionPieChart";
 import {TimeTrackerRowDto} from "src/pages/management/sections/parts/dtos/TimeTrackerRowDto";
-import {Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Form, ListGroup, Row} from "react-bootstrap";
 
 const EvaluationPart: React.FC<{ height: Pixel }> = (props: { height: Pixel }) => {
   const {height} = props;
   return <Container css={css({
-    backgroundColor: 'grey',
     height: height.value,
   })}>
-    <Row>
-      <Col>
+    <Row css={css({
+      alignItems: 'center'
+    })}>
+      <Col lg={5}>
         <EvaluationPieChartComponent/>
       </Col>
-      <Col>
+      <Col lg={7} >
         <FeedbackComponent/>
       </Col>
     </Row>
@@ -34,9 +35,8 @@ const EvaluationPieChartComponent: React.FC<{ timeTrackRowDto?: TimeTrackerRowDt
 
   // todo: timeTrackRowDto -> timeTrackCategory. makeOutByTimetrackCategory
   return <div css={css({
-    backgroundColor: 'yellow',
-    height: 300,
-    width: 300
+    height: new Pixel(300).value,
+    width: new Pixel(300).value
   })}>
     <FullOptionPieChart
       data={[
@@ -51,7 +51,21 @@ const EvaluationPieChartComponent: React.FC<{ timeTrackRowDto?: TimeTrackerRowDt
 };
 
 const FeedbackComponent: React.FC = () => {
-  return <span>hahaha</span>
+  return <Container >
+    <Col>
+      <ListGroup as={"ol"} variant="flush">
+        <ListGroup.Item as={"li"}>Cras justo odio</ListGroup.Item>
+        <ListGroup.Item as={"li"}>Dapibus ac facilisis in</ListGroup.Item>
+        <ListGroup.Item as={"li"}>Morbi leo risus</ListGroup.Item>
+        <ListGroup.Item as={"li"}>Porta ac consectetur ac</ListGroup.Item>
+      </ListGroup>
+
+      <Form.Control css={css({
+        marginTop: 10
+      })} type="text" size="lg" placeholder="Comment" />
+
+    </Col>
+  </Container>
 };
 
 

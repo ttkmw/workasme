@@ -23,7 +23,7 @@ const TimeManagementSection: React.FC = () => {
           paddingRight: 0
         })}>
           <TimeTrackerPart marginVertical={marginVertical}/>
-          <EvaluationPart height={new Pixel(400)}/>
+          <EvaluationPart height={new Pixel(300)}/>
         </Col>
       </Row>
     </Col>

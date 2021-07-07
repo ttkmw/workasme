@@ -7,6 +7,8 @@ import Pixel from "src/graphic/size/pixel";
 import {Button} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
 import Colors from "src/constants/Colors";
+import Percentage from "src/graphic/size/percentage";
+import ButtonComponent from "src/pages/components/ButtonComponent";
 
 const GetStartedSection: React.FC = () => {
   //width: 389
@@ -88,7 +90,11 @@ const GetStartedButton: React.FC = () => {
             }
           `}
         </style>
-        <Button variant={"getStarted"} size={"lg"}>Get Started</Button>
+        <ButtonComponent name={"getStarted"} backgroundColor={Colors.theme.main.work}
+                         defaultTextColor={Colors.theme.text.button.default}
+                         width={new Pixel(200)} size={"lg"}>
+          Get Started
+        </ButtonComponent>
       </>
     </div>
   </LinkContainer>

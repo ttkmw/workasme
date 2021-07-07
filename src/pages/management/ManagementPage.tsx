@@ -6,7 +6,7 @@ import TimeManagementSection from "src/pages/management/sections/TimeManagementS
 
 const ManagementPage: React.FC = () => {
   return <Container>
-    <Tabs defaultActiveKey="self" id="management">
+    <Tabs defaultActiveKey="time" id="management">
       <Tab eventKey="time" title="Time">
         <TimeManagementSection />
       </Tab>

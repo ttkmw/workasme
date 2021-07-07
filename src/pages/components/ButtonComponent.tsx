@@ -9,6 +9,7 @@ interface ButtonComponentProps {
   defaultTextColor: string;
   borderColor?: string;
   width: Size;
+  size?: "sm" | "lg"
 }
 
 //todo: customize 를 스트링으로 하다보니, 아쉬움. 스트링 대신 다른 방법 찾아보기.
@@ -18,7 +19,8 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
                                                            backgroundColor,
                                                            defaultTextColor,
                                                            borderColor,
-                                                           width
+                                                           width,
+                                                           size
                                                          }: ButtonComponentProps) => {
 
   //todo: refac - 클릭했을 시 글씨 색상 주황색으로 바꾸기. - btn:hover
@@ -32,7 +34,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
             }
           `}
     </style>
-    <BootstrapButton variant={name}>{children}</BootstrapButton>
+    <BootstrapButton variant={name} size={size}>{children}</BootstrapButton>
   </>
 };
 

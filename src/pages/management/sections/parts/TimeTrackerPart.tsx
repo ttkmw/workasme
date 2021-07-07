@@ -8,6 +8,9 @@ import {TimeTrackerRowDto} from "src/pages/management/sections/parts/dtos/TimeTr
 import {Button, Table, Toast} from "react-bootstrap";
 import {TaskListRowDto} from "src/pages/management/sections/parts/dtos/TaskListRowDto";
 import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
+import {Container} from "react-bootstrap";
+import Percentage from "src/graphic/size/percentage";
+import ButtonComponent from "src/pages/components/ButtonComponent";
 
 // todo: props 따로 빼기
 const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
@@ -18,23 +21,23 @@ const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVer
 
   const [rows, setRows] = useState<TimeTrackerRowDto[]>([
     {
-      expectedBehavior: "TimTrakerPart",
+      expectedActivity: "TimTrakerPart",
       expectedTime: "2 hour",
-      acutualBehavior: "TimeTrackerPart",
+      acutualActivity: "TimeTrackerPart",
       actuaTime: "3 hour",
       timeCategory: "Intellectual",
     },
     {
-      expectedBehavior: "pray",
+      expectedActivity: "pray",
       expectedTime: "2 hour",
-      acutualBehavior: "pray",
+      acutualActivity: "pray",
       actuaTime: "3 hour",
       timeCategory: "Mental",
     }
   ]);
 
 
-  return <div css={css({
+  return <Container css={css({
     marginTop: marginVertical.value,
     marginBottom: marginVertical.value
   })}>
@@ -42,7 +45,7 @@ const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVer
     <TimeTrackerTable rows={rows} isUpdating={isUpdating}/>
     <TimeTrackerButtons rows={rows} setRows={setRows} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
 
-  </div>
+  </Container>
 };
 
 const TimeTrackerTable: React.FC<{ rows: TimeTrackerRowDto[], isUpdating: boolean }> = (props: { rows: TimeTrackerRowDto[], isUpdating: boolean } ) => {
@@ -61,9 +64,9 @@ const TimeTrackerTable: React.FC<{ rows: TimeTrackerRowDto[], isUpdating: boolea
     <tbody>
     {rows.map((row) => {
       return <tr>
-        <td><BasicInputCell initialValue={row.expectedBehavior} isUpdating={isUpdating}/></td>
+        <td><BasicInputCell initialValue={row.expectedActivity} isUpdating={isUpdating}/></td>
         <td><BasicInputCell initialValue={row.expectedTime} isUpdating={isUpdating}/></td>
-        <td><BasicInputCell initialValue={row.acutualBehavior} isUpdating={isUpdating}/></td>
+        <td><BasicInputCell initialValue={row.acutualActivity} isUpdating={isUpdating}/></td>
         <td><BasicInputCell initialValue={row.actuaTime} isUpdating={isUpdating}/></td>
         <td><BasicInputCell initialValue={row.timeCategory} isUpdating={isUpdating}/></td>
       </tr>
@@ -102,11 +105,11 @@ const TimeTrackerButtonsWhenNotUpdating: React.FC<{isUpdating: boolean, setIsUpd
     flexDirection: "row-reverse"
   })}>
 
-    <Button
-      onClick={onUpdateButtonClicked}
-    >
+    <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+                     defaultTextColor={Colors.theme.text.button.default}
+                     width={new Pixel(100)}>
       Update
-    </Button>
+    </ButtonComponent>
 
   </div>
 };
@@ -120,7 +123,7 @@ const TimeTrackerButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdat
     const onAddRowButtonClicked = useCallback(
       () => {
         setRows(rows.concat({
-          expectedBehavior: "", expectedTime: "", acutualBehavior: "", actuaTime: "", timeCategory: ""
+          expectedActivity: "", expectedTime: "", acutualActivity: "", actuaTime: "", timeCategory: ""
         }))
       }, [rows]
     );
