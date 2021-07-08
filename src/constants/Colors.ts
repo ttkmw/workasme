@@ -17,6 +17,11 @@ export default {
       button: {
         default: "#ffffff",
       },
+      tab: {
+        active: "#495057",
+        inactive: "#5A646E",
+        disabled: "#6c757d"
+      }
     },
     screen: {
       background: '#FFFFFF'

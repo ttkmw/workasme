@@ -1,12 +1,14 @@
 import React, {ReactNode} from "react";
 import {Button as BootstrapButton} from "react-bootstrap";
 import {Size} from "src/graphic/size/Size";
+import Colors from "src/constants/Colors";
 
 interface ButtonComponentProps {
   children: ReactNode;
   name: string;
   backgroundColor: string;
   defaultTextColor: string;
+  hoverTextColor: string;
   borderColor?: string;
   width: Size;
   onClick: () => void,
@@ -19,6 +21,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
                                                            name,
                                                            backgroundColor,
                                                            defaultTextColor,
+                                                           hoverTextColor,
                                                            borderColor,
                                                            width,
                                                            onClick,
@@ -34,6 +37,15 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
               color: ${defaultTextColor};
               width: ${width.toString()};¸
             }
+            
+            .btn-${name}:hover {
+              background-color: ${backgroundColor};
+              border-color: ${getBorderColor(borderColor)};
+              color: ${hoverTextColor};
+              width: ${width.toString()};¸   
+             }
+            
+            
           `}
     </style>
     <BootstrapButton onClick={onClick} variant={name} size={size}>{children}</BootstrapButton>

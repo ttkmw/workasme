@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialSignState = {
-  status: 'SignedOut',
-  isSigned: false
+  status: 'SignedIn',
+  isSigned: true
 };
 
 export const signSlice = createSlice({

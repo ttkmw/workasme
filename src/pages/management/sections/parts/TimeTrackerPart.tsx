@@ -107,6 +107,7 @@ const TimeTrackerButtonsWhenNotUpdating: React.FC<{isUpdating: boolean, setIsUpd
 
     <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
                      defaultTextColor={Colors.theme.text.button.default}
+                     hoverTextColor={Colors.theme.main.orgasme}
                      width={new Pixel(100)} onClick={() => {console.log("clicked!")}}>
       Update
     </ButtonComponent>

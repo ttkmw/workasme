@@ -113,6 +113,7 @@ const ContinueWithGoogleButton: React.FC = () => {
 
   return <ButtonComponent name={"outline-primary"} backgroundColor={Colors.theme.button.default}
                           defaultTextColor={Colors.theme.main.orgasme}
+                          hoverTextColor={Colors.theme.main.orgasme}
                           borderColor={Colors.theme.main.orgasme}
                           width={new Percentage(100)}
                           onClick={() => {console.log("clicked!")}}
@@ -142,6 +143,7 @@ const ButtonContent: React.FC = () => {
 const CreateAccountButton: React.FC = () => {
   return <ButtonComponent name={"createAccount"} backgroundColor={Colors.theme.main.orgasme}
                           defaultTextColor={Colors.theme.text.button.default}
+                          hoverTextColor={Colors.theme.main.orgasme}
                           width={new Percentage(100)}
                           onClick={() => {console.log("clicked!")}}
   >
