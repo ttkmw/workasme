@@ -9,6 +9,7 @@ interface ButtonComponentProps {
   defaultTextColor: string;
   borderColor?: string;
   width: Size;
+  onClick: () => void,
   size?: "sm" | "lg"
 }
 
@@ -20,6 +21,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
                                                            defaultTextColor,
                                                            borderColor,
                                                            width,
+                                                           onClick,
                                                            size
                                                          }: ButtonComponentProps) => {
 
@@ -34,7 +36,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
             }
           `}
     </style>
-    <BootstrapButton variant={name} size={size}>{children}</BootstrapButton>
+    <BootstrapButton onClick={onClick} variant={name} size={size}>{children}</BootstrapButton>
   </>
 };
 

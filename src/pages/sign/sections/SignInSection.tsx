@@ -11,8 +11,8 @@ import Percentage from "src/graphic/size/percentage";
 
 const SignInSection: React.FC = () => {
   return <Container>
-    <Title />
-    <SignInForm />
+    <Title/>
+    <SignInForm/>
 
   </Container>;
 };
@@ -20,9 +20,9 @@ const SignInSection: React.FC = () => {
 const SignInForm: React.FC = () => {
   return <Container>
     <Form>
-      <EmailInput />
-      <PasswordInput />
-      <SignInButton />
+      <EmailInput/>
+      <PasswordInput/>
+      <SignInButton/>
     </Form>
   </Container>;
 };
@@ -30,21 +30,25 @@ const SignInForm: React.FC = () => {
 const EmailInput: React.FC = () => {
   return <Form.Group controlId="formBasicEmail">
     <Form.Label>Email</Form.Label>
-    <Form.Control type="email" />
+    <Form.Control type="email"/>
   </Form.Group>;
 };
 
 const PasswordInput: React.FC = () => {
   return <Form.Group controlId="formBasicPassword">
     <Form.Label>Password</Form.Label>
-    <Form.Control type="password" />
+    <Form.Control type="password"/>
   </Form.Group>;
 };
 
 const SignInButton: React.FC = () => {
   return <ButtonComponent name={"signIn"} backgroundColor={Colors.theme.main.orgasme}
                           defaultTextColor={Colors.theme.text.button.default}
-   width={new Percentage(100)}>
+                          width={new Percentage(100)}
+                          onClick={() => {
+                            console.log("clicked!")
+                          }}
+  >
     Sign In
   </ButtonComponent>;
 };

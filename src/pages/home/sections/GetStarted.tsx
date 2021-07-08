@@ -92,7 +92,7 @@ const GetStartedButton: React.FC = () => {
         </style>
         <ButtonComponent name={"getStarted"} backgroundColor={Colors.theme.main.work}
                          defaultTextColor={Colors.theme.text.button.default}
-                         width={new Pixel(200)} size={"lg"}>
+                         width={new Pixel(200)} onClick={() => {console.log("clicked!")}} size={"lg"}>
           Get Started
         </ButtonComponent>
       </>
