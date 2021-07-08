@@ -3,9 +3,6 @@ import Pixel from "src/graphic/size/pixel";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import Chart from "react-google-charts";
-import {PieChart} from "react-minimal-pie-chart";
-import {LabelRenderProps} from "react-minimal-pie-chart/types/Label";
 import FullOptionPieChart from "src/pages/management/sections/parts/components/charts/FullOptionPieChart";
 import {TimeTrackerRowDto} from "src/pages/management/sections/parts/dtos/TimeTrackerRowDto";
 import {Col, Container, Form, ListGroup, Row} from "react-bootstrap";

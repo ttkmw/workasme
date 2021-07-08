@@ -5,11 +5,9 @@ import Pixel from "src/graphic/size/pixel";
 import {css, jsx} from "@emotion/react";
 import Colors from "src/constants/Colors";
 import {TimeTrackerRowDto} from "src/pages/management/sections/parts/dtos/TimeTrackerRowDto";
-import {Button, Table, Toast} from "react-bootstrap";
-import {TaskListRowDto} from "src/pages/management/sections/parts/dtos/TaskListRowDto";
+import {Table} from "react-bootstrap";
 import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
 import {Container} from "react-bootstrap";
-import Percentage from "src/graphic/size/percentage";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 
 // todo: props 따로 빼기

@@ -42,10 +42,8 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
               background-color: ${backgroundColor};
               border-color: ${getBorderColor(borderColor)};
               color: ${hoverTextColor};
-              width: ${width.toString()};¸   
+              width: ${width.toString()};   
              }
-            
-            
           `}
     </style>
     <BootstrapButton onClick={onClick} variant={name} size={size}>{children}</BootstrapButton>

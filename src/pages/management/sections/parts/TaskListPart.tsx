@@ -6,6 +6,8 @@ import {css, jsx} from "@emotion/react";
 import {Button, Dropdown, Table} from "react-bootstrap";
 import {TaskListRowDto} from "src/pages/management/sections/parts/dtos/TaskListRowDto";
 import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
+import Colors from "src/constants/Colors";
+import ButtonComponent from "src/pages/components/ButtonComponent";
 
 const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
   const {marginVertical} = props;
@@ -36,15 +38,20 @@ const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertic
     marginBottom: marginVertical.value
   })}>
 
-    <PartTitle marginBottom = {new Pixel(20)}/>
+    <PartTitle marginBottom={new Pixel(20)}/>
     <TaskTable rows={rows} isUpdating={isUpdating}/>
 
-    {/*is Updating*/}
-    <TaskButtons rows={rows} setRows={setRows} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
+    <div css={css({
+      display: 'flex',
+      flexDirection: "row-reverse"
+    })}>
+      <TaskButtons rows={rows} setRows={setRows} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
+    </div>
+
   </div>
 };
 
-const PartTitle: React.FC<{marginBottom: Pixel}> = (props: {marginBottom: Pixel}) => {
+const PartTitle: React.FC<{ marginBottom: Pixel }> = (props: { marginBottom: Pixel }) => {
   const {marginBottom} = props;
   return <div css={css({
     marginBottom: marginBottom.value
@@ -63,22 +70,23 @@ const TaskButtons: React.FC<{
     const {rows, setRows, isUpdating, setIsUpdating} = props;
 
     if (isUpdating) {
-      return <TaskButtonsWhenUpdating isUpdating={isUpdating} setIsUpdating={setIsUpdating} rows={rows} setRows={setRows}/>
+      return <TaskButtonsWhenUpdating isUpdating={isUpdating} setIsUpdating={setIsUpdating} rows={rows}
+                                      setRows={setRows}/>
     }
 
     return <TaskButtonsWhenNotUpdating isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
   };
 
 
-const TaskButtonsWhenNotUpdating: React.FC<{isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>}> = (
-  props: { isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>}
+const TaskButtonsWhenNotUpdating: React.FC<{ isUpdating: boolean, setIsUpdating: Dispatch<SetStateAction<boolean>> }> = (
+  props: { isUpdating: boolean, setIsUpdating: Dispatch<SetStateAction<boolean>> }
 ) => {
   const {isUpdating, setIsUpdating} = props;
 
   const onUpdateButtonClicked = useCallback(
     () => {
       setIsUpdating(true)
-    }, [isUpdating]
+    }, [setIsUpdating]
   );
 
   return <div css={css({
@@ -86,29 +94,32 @@ const TaskButtonsWhenNotUpdating: React.FC<{isUpdating: boolean, setIsUpdating: 
     flexDirection: "row-reverse"
   })}>
 
-    <Button
-      onClick={onUpdateButtonClicked}
-    >
+    <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+                     defaultTextColor={Colors.theme.text.button.default}
+                     hoverTextColor={Colors.theme.main.orgasme}
+                     width={new Pixel(100)} onClick={onUpdateButtonClicked}>
       Update
-    </Button>
+    </ButtonComponent>
 
   </div>
 };
 
-const TaskButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>,
-  rows: TaskListRowDto[], setRows: Dispatch<SetStateAction<TaskListRowDto[]>> }> =
-  (props: { rows: TaskListRowDto[], setRows: Dispatch<SetStateAction<TaskListRowDto[]>>, isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>}) => {
+const TaskButtonsWhenUpdating: React.FC<{
+  isUpdating: boolean, setIsUpdating: Dispatch<SetStateAction<boolean>>,
+  rows: TaskListRowDto[], setRows: Dispatch<SetStateAction<TaskListRowDto[]>>
+}> =
+  (props: { rows: TaskListRowDto[], setRows: Dispatch<SetStateAction<TaskListRowDto[]>>, isUpdating: boolean, setIsUpdating: Dispatch<SetStateAction<boolean>> }) => {
 
-  const {rows, setRows, isUpdating, setIsUpdating} = props;
+    const {rows, setRows, isUpdating, setIsUpdating} = props;
 
-  const onAddRowButtonClicked = useCallback(
-    () => {
-      setRows(rows.concat({
-        checkPriority: "", importanceLevel: "", name: "", onClick: function () {
-        }, stuckOn: ""
-      }))
-    }, [rows]
-  );
+    const onAddRowButtonClicked = useCallback(
+      () => {
+        setRows(rows.concat({
+          checkPriority: "", importanceLevel: "", name: "", onClick: function () {
+          }, stuckOn: ""
+        }))
+      }, [rows]
+    );
 
     const onCompleteButtonClicked = useCallback(
       () => {
@@ -118,26 +129,28 @@ const TaskButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdating:  D
 
 
     return <div
-    css={css({
-      display: 'flex',
-      flexDirection: "row-reverse"
-    })}
-  >
-    <Button
-      onClick={onCompleteButtonClicked}
       css={css({
-        marginLeft: '10px'
+        width: 220,
+        display: 'flex',
+        justifyContent: "space-between",
       })}
     >
-      Complete
-    </Button>
-    <Button
-      onClick={onAddRowButtonClicked}
-    >
-      Add Row
-    </Button>
-  </div>
-};
+
+      <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+                       defaultTextColor={Colors.theme.text.button.default}
+                       hoverTextColor={Colors.theme.main.orgasme}
+                       width={new Pixel(100)} onClick={onAddRowButtonClicked}>
+        Add Row
+      </ButtonComponent>
+
+      <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+                       defaultTextColor={Colors.theme.text.button.default}
+                       hoverTextColor={Colors.theme.main.orgasme}
+                       width={new Pixel(100)} onClick={onCompleteButtonClicked}>
+        Complete
+      </ButtonComponent>
+    </div>
+  };
 
 const TaskTable: React.FC<{ rows: TaskListRowDto[], isUpdating: boolean }> = (props: { rows: TaskListRowDto[], isUpdating: boolean }) => {
   const {rows, isUpdating} = props;

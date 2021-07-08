@@ -33,9 +33,11 @@ function FullOptionPieChart(props: Props) {
       radius={PieChart.defaultProps.radius - 6}
       lineWidth={lineWidth}
       segmentsStyle={{ transition: 'stroke .3s', cursor: 'pointer' }}
-      segmentsShift={(index) => (index === selected ? 6 : 1)}
+      segmentsShift={(index) => (index === selected ? 1 : 1)}
       animate
-      label={({ dataEntry }) => Math.round(dataEntry.percentage) + '%'}
+      label={({ dataEntry }) => {
+        return Math.round(dataEntry.percentage) + "%"
+      }}
       labelPosition={100 - lineWidth / 2}
       labelStyle={{
         fill: '#fff',
