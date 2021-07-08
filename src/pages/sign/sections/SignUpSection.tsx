@@ -143,7 +143,7 @@ const ButtonContent: React.FC = () => {
 const CreateAccountButton: React.FC = () => {
   return <ButtonComponent name={"createAccount"} backgroundColor={Colors.theme.main.orgasme}
                           defaultTextColor={Colors.theme.text.button.default}
-                          hoverTextColor={Colors.theme.main.orgasme}
+                          hoverTextColor={Colors.theme.main.work}
                           width={new Percentage(100)}
                           onClick={() => {console.log("clicked!")}}
   >

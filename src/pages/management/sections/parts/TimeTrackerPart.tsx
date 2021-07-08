@@ -43,7 +43,13 @@ const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVer
   })}>
 
     <TimeTrackerTable rows={rows} isUpdating={isUpdating}/>
-    <TimeTrackerButtons rows={rows} setRows={setRows} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
+    <div css={css({
+      display: 'flex',
+      flexDirection: "row-reverse"
+    })}>
+      <TimeTrackerButtons rows={rows} setRows={setRows} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
+    </div>
+
 
   </Container>
 };
@@ -81,13 +87,14 @@ const TimeTrackerButtons: React.FC<{
 }> =
   (props: { rows: TimeTrackerRowDto[], setRows: Dispatch<SetStateAction<TimeTrackerRowDto[]>>, isUpdating: boolean, setIsUpdating: Dispatch<SetStateAction<boolean>> }) => {
     const {rows, setRows, isUpdating, setIsUpdating} = props;
-
     if (isUpdating) {
       return <TimeTrackerButtonsWhenUpdating isUpdating={isUpdating} setIsUpdating={setIsUpdating} rows={rows} setRows={setRows}/>
     }
 
     return <TimeTrackerButtonsWhenNotUpdating isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
   };
+
+
 
 const TimeTrackerButtonsWhenNotUpdating: React.FC<{isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>}> = (
   props: { isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>}
@@ -108,7 +115,7 @@ const TimeTrackerButtonsWhenNotUpdating: React.FC<{isUpdating: boolean, setIsUpd
     <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
                      defaultTextColor={Colors.theme.text.button.default}
                      hoverTextColor={Colors.theme.main.orgasme}
-                     width={new Pixel(100)} onClick={() => {console.log("clicked!")}}>
+                     width={new Pixel(100)} onClick={onUpdateButtonClicked}>
       Update
     </ButtonComponent>
 
@@ -126,35 +133,37 @@ const TimeTrackerButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdat
         setRows(rows.concat({
           expectedActivity: "", expectedTime: "", acutualActivity: "", actuaTime: "", timeCategory: ""
         }))
-      }, [rows]
+      }, [rows, setRows]
     );
 
     const onCompleteButtonClicked = useCallback(
       () => {
         setIsUpdating(false)
-      }, [isUpdating]
+      }, [setIsUpdating]
     );
 
 
     return <div
       css={css({
-        display: 'flex',
-        flexDirection: "row-reverse"
+        width: 220,
+        display: "flex",
+        justifyContent: "space-between",
       })}
     >
-      <Button
-        onClick={onCompleteButtonClicked}
-        css={css({
-          marginLeft: '10px'
-        })}
-      >
-        Complete
-      </Button>
-      <Button
-        onClick={onAddRowButtonClicked}
-      >
+
+      <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+                       defaultTextColor={Colors.theme.text.button.default}
+                       hoverTextColor={Colors.theme.main.orgasme}
+                       width={new Pixel(100)} onClick={onAddRowButtonClicked}>
         Add Row
-      </Button>
+      </ButtonComponent>
+
+      <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+                       defaultTextColor={Colors.theme.text.button.default}
+                       hoverTextColor={Colors.theme.main.orgasme}
+                       width={new Pixel(100)} onClick={onCompleteButtonClicked}>
+        Complete
+      </ButtonComponent>
     </div>
   };
 
