@@ -5,6 +5,9 @@ import Pixel from "src/graphic/size/pixel";
 import {css, jsx} from "@emotion/react";
 import {Col, Container, Form, ListGroup, Row} from "react-bootstrap";
 import EvaluationPieChartComponent from "./components/charts/EvaluationPieChartComponent";
+import {TimeSnippet} from "src/pages/management/sections/parts/dtos/TimeSnippet";
+import {useSelector} from "react-redux";
+import {selectTime} from "src/context/timeSlice";
 
 const EvaluationPart: React.FC<{ height: Pixel }> = (props: { height: Pixel }) => {
   const {height} = props;

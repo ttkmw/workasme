@@ -4,11 +4,12 @@ import Pixel from "src/graphic/size/pixel";
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Colors from "src/constants/Colors";
-import {TimeTrackerRowDto} from "src/pages/management/sections/parts/dtos/TimeTrackerRowDto";
-import {Table} from "react-bootstrap";
+import {TimeCategory, TimeSnippet} from "src/pages/management/sections/parts/dtos/TimeSnippet";
+import {Button, ButtonGroup, Container, Dropdown, Table} from "react-bootstrap";
 import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
-import {Container} from "react-bootstrap";
 import ButtonComponent from "src/pages/components/ButtonComponent";
+import {useDispatch, useSelector} from "react-redux";
+import {addTime, selectTime} from "src/context/timeSlice";
 
 // todo: props 따로 빼기
 const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
@@ -16,23 +17,8 @@ const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVer
 
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-
-  const [rows, setRows] = useState<TimeTrackerRowDto[]>([
-    {
-      expectedActivity: "TimTrakerPart",
-      expectedTime: "2 hour",
-      acutualActivity: "TimeTrackerPart",
-      actuaTime: "3 hour",
-      timeCategory: "Intellectual",
-    },
-    {
-      expectedActivity: "pray",
-      expectedTime: "2 hour",
-      acutualActivity: "pray",
-      actuaTime: "3 hour",
-      timeCategory: "Mental",
-    }
-  ]);
+  const timeSnippetsDto: TimeSnippet[] = useSelector(selectTime);
+  const [timeSnippets, setTimeSnippets] = useState(timeSnippetsDto);
 
 
   return <Container css={css({
@@ -40,20 +26,23 @@ const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVer
     marginBottom: marginVertical.value
   })}>
 
-    <TimeTrackerTable rows={rows} isUpdating={isUpdating}/>
+    <TimeTrackerTable timeSnippets={timeSnippets} isUpdating={isUpdating}/>
     <div css={css({
       display: 'flex',
       flexDirection: "row-reverse"
     })}>
-      <TimeTrackerButtons rows={rows} setRows={setRows} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
+      <TimeTrackerButtons timeSnippets={timeSnippets} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
     </div>
-
-
   </Container>
 };
 
-const TimeTrackerTable: React.FC<{ rows: TimeTrackerRowDto[], isUpdating: boolean }> = (props: { rows: TimeTrackerRowDto[], isUpdating: boolean } ) => {
-  const {rows, isUpdating} = props;
+const TimeTrackerTable: React.FC<{ timeSnippets: TimeSnippet[], isUpdating: boolean }> = (props: { timeSnippets: TimeSnippet[], isUpdating: boolean } ) => {
+
+
+
+  const {timeSnippets, isUpdating} = props;
+
+
 
   return <Table>
     <thead>
@@ -66,7 +55,7 @@ const TimeTrackerTable: React.FC<{ rows: TimeTrackerRowDto[], isUpdating: boolea
     </tr>
     </thead>
     <tbody>
-    {rows.map((row) => {
+    {timeSnippets.map((row) => {
       return <tr>
         <td><BasicInputCell initialValue={row.expectedActivity} isUpdating={isUpdating}/></td>
         <td><BasicInputCell initialValue={row.expectedTime} isUpdating={isUpdating}/></td>
@@ -80,13 +69,13 @@ const TimeTrackerTable: React.FC<{ rows: TimeTrackerRowDto[], isUpdating: boolea
 };
 
 const TimeTrackerButtons: React.FC<{
-  rows: TimeTrackerRowDto[], setRows: Dispatch<SetStateAction<TimeTrackerRowDto[]>>,
+  timeSnippets: TimeSnippet[],
   isUpdating: boolean, setIsUpdating: Dispatch<SetStateAction<boolean>>
 }> =
-  (props: { rows: TimeTrackerRowDto[], setRows: Dispatch<SetStateAction<TimeTrackerRowDto[]>>, isUpdating: boolean, setIsUpdating: Dispatch<SetStateAction<boolean>> }) => {
-    const {rows, setRows, isUpdating, setIsUpdating} = props;
+  (props: { timeSnippets: TimeSnippet[], isUpdating: boolean, setIsUpdating: Dispatch<SetStateAction<boolean>> }) => {
+    const {timeSnippets, isUpdating, setIsUpdating} = props;
     if (isUpdating) {
-      return <TimeTrackerButtonsWhenUpdating isUpdating={isUpdating} setIsUpdating={setIsUpdating} rows={rows} setRows={setRows}/>
+      return <TimeTrackerButtonsWhenUpdating isUpdating={isUpdating} setIsUpdating={setIsUpdating} timeSnippets={timeSnippets}/>
     }
 
     return <TimeTrackerButtonsWhenNotUpdating isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
@@ -121,17 +110,20 @@ const TimeTrackerButtonsWhenNotUpdating: React.FC<{isUpdating: boolean, setIsUpd
 };
 
 const TimeTrackerButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>,
-  rows: TimeTrackerRowDto[], setRows: Dispatch<SetStateAction<TimeTrackerRowDto[]>> }> =
-  (props: { rows: TimeTrackerRowDto[], setRows: Dispatch<SetStateAction<TimeTrackerRowDto[]>>, isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>}) => {
+  timeSnippets: TimeSnippet[] }> =
+  (props: { timeSnippets: TimeSnippet[], isUpdating: boolean, setIsUpdating:  Dispatch<SetStateAction<boolean>>}) => {
 
-    const {rows, setRows, isUpdating, setIsUpdating} = props;
+    const {timeSnippets, isUpdating, setIsUpdating} = props;
+    const dispatch = useDispatch();
 
     const onAddRowButtonClicked = useCallback(
-      () => {
-        setRows(rows.concat({
-          expectedActivity: "", expectedTime: "", acutualActivity: "", actuaTime: "", timeCategory: ""
-        }))
-      }, [rows, setRows]
+      () => dispatch(addTime({
+        expectedActivity: "Haha",
+        expectedTime: "Hoho",
+        acutualActivity: "Juju",
+        actuaTime: "kkkk",
+        timeCategory: TimeCategory.ETC
+      })), [dispatch]
     );
 
     const onCompleteButtonClicked = useCallback(
@@ -139,7 +131,6 @@ const TimeTrackerButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdat
         setIsUpdating(false)
       }, [setIsUpdating]
     );
-
 
     return <div
       css={css({
@@ -149,14 +140,14 @@ const TimeTrackerButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdat
       })}
     >
 
-      <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+      <ButtonComponent name={"AddBlankRow"} backgroundColor={Colors.theme.main.work}
                        defaultTextColor={Colors.theme.text.button.default}
                        hoverTextColor={Colors.theme.main.orgasme}
                        width={new Pixel(100)} onClick={onAddRowButtonClicked}>
-        Add Row
+        Add Blank Row
       </ButtonComponent>
 
-      <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+      <ButtonComponent name={"Comnplete"} backgroundColor={Colors.theme.main.work}
                        defaultTextColor={Colors.theme.text.button.default}
                        hoverTextColor={Colors.theme.main.orgasme}
                        width={new Pixel(100)} onClick={onCompleteButtonClicked}>

@@ -1,10 +1,12 @@
 import {configureStore} from "@reduxjs/toolkit";
 import signReducer from './signSlice';
+import timeReducer from './timeSlice';
 
 
 export const store = configureStore({
   reducer: {
-    sign: signReducer
+    sign: signReducer,
+    time: timeReducer
   },
 });
 
