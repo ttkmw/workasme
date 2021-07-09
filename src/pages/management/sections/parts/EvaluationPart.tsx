@@ -3,9 +3,8 @@ import Pixel from "src/graphic/size/pixel";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import FullOptionPieChart from "src/pages/management/sections/parts/components/charts/FullOptionPieChart";
-import {TimeTrackerRowDto} from "src/pages/management/sections/parts/dtos/TimeTrackerRowDto";
 import {Col, Container, Form, ListGroup, Row} from "react-bootstrap";
+import EvaluationPieChartComponent from "./components/charts/EvaluationPieChartComponent";
 
 const EvaluationPart: React.FC<{ height: Pixel }> = (props: { height: Pixel }) => {
   const {height} = props;
@@ -26,26 +25,6 @@ const EvaluationPart: React.FC<{ height: Pixel }> = (props: { height: Pixel }) =
 };
 
 
-// todo: timeTrackDto넣어주기 - section에서.
-const EvaluationPieChartComponent: React.FC<{ timeTrackRowDto?: TimeTrackerRowDto }> =
-  (props: { timeTrackRowDto?: TimeTrackerRowDto }) => {
-
-  // todo: timeTrackRowDto -> timeTrackCategory. makeOutByTimetrackCategory
-  return <div css={css({
-    height: new Pixel(300).value,
-    width: new Pixel(300).value
-  })}>
-    <FullOptionPieChart
-      data={[
-        {title: 'Mental', value: 11, color: 'blue'},
-        {title: 'Physical', value: 2, color: 'red'},
-        {title: 'Intellectual', value: 2, color: 'orange'},
-        {title: 'ETC', value: 9, color: 'green'},
-      ]}
-    />
-
-  </div>;
-};
 
 const FeedbackComponent: React.FC = () => {
   return <Container >
