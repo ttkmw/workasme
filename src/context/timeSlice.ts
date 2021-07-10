@@ -3,13 +3,7 @@ import {TimeCategory} from "src/pages/management/sections/parts/dtos/TimeSnippet
 
 
 const initialTimeState = {
-  timeSnippets: [{
-    expectedActivity: "",
-    expectedTime: "",
-    acutualActivity: "",
-    actuaTime: "",
-    timeCategory: TimeCategory.ETC
-  }]
+  timeSnippets: []
 };
 
 export const timeSlice = createSlice({
@@ -17,6 +11,7 @@ export const timeSlice = createSlice({
   initialState: initialTimeState,
   reducers: {
     addTime: (state, action) => {
+      // @ts-ignore
       state.timeSnippets.push(action.payload)
     }
   }

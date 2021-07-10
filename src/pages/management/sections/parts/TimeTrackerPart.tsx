@@ -5,7 +5,7 @@ import Pixel from "src/graphic/size/pixel";
 import {css, jsx} from "@emotion/react";
 import Colors from "src/constants/Colors";
 import {TimeCategory, TimeSnippet} from "src/pages/management/sections/parts/dtos/TimeSnippet";
-import {Button, ButtonGroup, Container, Dropdown, Table} from "react-bootstrap";
+import {Button, ButtonGroup, Col, Container, Dropdown, Form, Row, Table} from "react-bootstrap";
 import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 import {useDispatch, useSelector} from "react-redux";
@@ -17,23 +17,103 @@ const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVer
 
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-  const timeSnippetsDto: TimeSnippet[] = useSelector(selectTime);
-  const [timeSnippets, setTimeSnippets] = useState(timeSnippetsDto);
-
+  const timeSnippets: TimeSnippet[] = useSelector(selectTime);
 
   return <Container css={css({
     marginTop: marginVertical.value,
     marginBottom: marginVertical.value
   })}>
-
+    <TimeTrackerForm />
     <TimeTrackerTable timeSnippets={timeSnippets} isUpdating={isUpdating}/>
-    <div css={css({
-      display: 'flex',
-      flexDirection: "row-reverse"
-    })}>
-      <TimeTrackerButtons timeSnippets={timeSnippets} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
-    </div>
+  {/*  타임트래커 버튼을 아예 없애버*/}
   </Container>
+};
+
+const TimeTrackerForm: React.FC = () => {
+  const [expectedActivity, setExpectedActivity] = useState("");
+  const [expectedTime, setExpectedTime] = useState("");
+  const [actualActivity, setActualActivity] = useState("");
+  const [actualTime, setActualTime] = useState("");
+  const [timeCategory, setTimeCategory] = useState("");
+
+  const timeSnippets: TimeSnippet[] = useSelector(selectTime);
+
+  const dispatch = useDispatch();
+
+
+  return <Form>
+    <Row>
+
+      <Col>
+        <Form.Group controlId="formExpectedActivity">
+          <Form.Label>ExpectedActivity</Form.Label>
+          <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setExpectedActivity(e.target.value)}}
+                        type="text" />
+        </Form.Group>
+      </Col>
+
+      <Col>
+        <Form.Group controlId="formExpectedTime">
+          <Form.Label>ExpectedTime</Form.Label>
+          <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setExpectedTime(e.target.value)}} type="text" />
+          <Form.Text className="text-muted">
+            You have to write Number(Hour)
+          </Form.Text>
+        </Form.Group>
+
+      </Col>
+    </Row>
+
+    <Row>
+      <Col>
+        <Form.Group controlId="formActualActivity">
+          <Form.Label>ActualActivity</Form.Label>
+          <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setActualActivity(e.target.value)}}
+                        type="text" />
+        </Form.Group>
+      </Col>
+
+      <Col>
+        <Form.Group controlId="formActualTime">
+          <Form.Label>ActualTime</Form.Label>
+          <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setActualTime(e.target.value)}} type="text" />
+          <Form.Text className="text-muted">
+            You have to write Number(Hour)
+          </Form.Text>
+        </Form.Group>
+      </Col>
+    </Row>
+
+    <Row css={css({
+      marginBottom: new Pixel(10).value
+    })}>
+      <Col>
+        <Form.Label>Time Category</Form.Label>
+        <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setTimeCategory(e.target.value)}} as="select" multiple>
+          <option>Intellectual</option>
+          <option>Physical</option>
+          <option>Mental</option>
+          <option>ETC</option>
+        </Form.Control>
+      </Col>
+    </Row>
+    <Row>
+      <Col css={css({
+        display: 'flex',
+        flexDirection: "row-reverse"
+      })}>
+        <Button onClick={() => dispatch(addTime({
+          expectedActivity: expectedActivity,
+          expectedTime: expectedTime,
+          actualActivity: actualActivity,
+          actualTime: actualTime,
+          timeCategory: timeCategory
+        }))} variant="primary" type="button">
+          Submit
+        </Button>
+      </Col>
+    </Row>
+  </Form>
 };
 
 const TimeTrackerTable: React.FC<{ timeSnippets: TimeSnippet[], isUpdating: boolean }> = (props: { timeSnippets: TimeSnippet[], isUpdating: boolean } ) => {
@@ -57,11 +137,11 @@ const TimeTrackerTable: React.FC<{ timeSnippets: TimeSnippet[], isUpdating: bool
     <tbody>
     {timeSnippets.map((row) => {
       return <tr>
-        <td><BasicInputCell initialValue={row.expectedActivity} isUpdating={isUpdating}/></td>
-        <td><BasicInputCell initialValue={row.expectedTime} isUpdating={isUpdating}/></td>
-        <td><BasicInputCell initialValue={row.acutualActivity} isUpdating={isUpdating}/></td>
-        <td><BasicInputCell initialValue={row.actuaTime} isUpdating={isUpdating}/></td>
-        <td><BasicInputCell initialValue={row.timeCategory} isUpdating={isUpdating}/></td>
+        <td><BasicInputCell initialValue={row.expectedActivity} isUpdating={isUpdating} timeSnippets={timeSnippets}/></td>
+        <td><BasicInputCell initialValue={row.expectedTime} isUpdating={isUpdating} timeSnippets={timeSnippets}/></td>
+        <td><BasicInputCell initialValue={row.actualActivity} isUpdating={isUpdating} timeSnippets={timeSnippets}/></td>
+        <td><BasicInputCell initialValue={row.actualTime} isUpdating={isUpdating} timeSnippets={timeSnippets}/></td>
+        <td><BasicInputCell initialValue={row.timeCategory} isUpdating={isUpdating} timeSnippets={timeSnippets}/></td>
       </tr>
     })}
     </tbody>
@@ -117,13 +197,13 @@ const TimeTrackerButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdat
     const dispatch = useDispatch();
 
     const onAddRowButtonClicked = useCallback(
-      () => dispatch(addTime({
+      () => addTime({
         expectedActivity: "Haha",
         expectedTime: "Hoho",
         acutualActivity: "Juju",
         actuaTime: "kkkk",
-        timeCategory: TimeCategory.ETC
-      })), [dispatch]
+        timeCategory: ""
+      }), [dispatch]
     );
 
     const onCompleteButtonClicked = useCallback(

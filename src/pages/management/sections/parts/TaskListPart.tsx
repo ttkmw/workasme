@@ -8,6 +8,9 @@ import {TaskListRowDto} from "src/pages/management/sections/parts/dtos/TaskListR
 import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
 import Colors from "src/constants/Colors";
 import ButtonComponent from "src/pages/components/ButtonComponent";
+import {TimeSnippet} from "src/pages/management/sections/parts/dtos/TimeSnippet";
+import {useSelector} from "react-redux";
+import {selectTime} from "src/context/timeSlice";
 
 const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
   const {marginVertical} = props;
@@ -30,7 +33,11 @@ const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertic
       checkPriority: "checkit",
       onClick: onClick
     }
-  ]);
+  ])
+
+  const onUpdate = () => {};
+
+  const timeSnippets: TimeSnippet[] = useSelector(selectTime);
 
 
   return <div css={css({
@@ -39,15 +46,47 @@ const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertic
   })}>
 
     <PartTitle marginBottom={new Pixel(20)}/>
-    <TaskTable rows={rows} isUpdating={isUpdating}/>
+    <Table striped bordered hover>
+      <thead>
+      <tr>
+        <th>Task Name</th>
+        <th>Importance Level</th>
+        <th>BottleNeck</th>
+        <th>Check Priority</th>
+      </tr>
+      </thead>
+      <tbody>
+      {rows.map((row) => {
+        return <tr>
+          <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.name} timeSnippets={timeSnippets}/></td>
+          <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.importanceLevel} timeSnippets={timeSnippets}/></td>
+          <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.stuckOn} timeSnippets={timeSnippets}/></td>
+          <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.checkPriority} timeSnippets={timeSnippets}/></td>
+        </tr>
+      })}
+      </tbody>
+    </Table>
+
+
 
     <div css={css({
       display: 'flex',
       flexDirection: "row-reverse"
     })}>
-      <TaskButtons rows={rows} setRows={setRows} isUpdating={isUpdating} setIsUpdating={setIsUpdating}/>
-    </div>
+      <div css={css({
+        display: 'flex',
+        flexDirection: "row-reverse"
+      })}>
 
+        <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+                         defaultTextColor={Colors.theme.text.button.default}
+                         hoverTextColor={Colors.theme.main.orgasme}
+                         width={new Pixel(100)} onClick={onUpdate}>
+          Update
+        </ButtonComponent>
+
+      </div>
+    </div>
   </div>
 };
 
@@ -156,26 +195,7 @@ const TaskTable: React.FC<{ rows: TaskListRowDto[], isUpdating: boolean }> = (pr
   const {rows, isUpdating} = props;
 
 
-  return <Table striped bordered hover>
-    <thead>
-    <tr>
-      <th>Task Name</th>
-      <th>Importance Level</th>
-      <th>BottleNeck</th>
-      <th>Check Priority</th>
-    </tr>
-    </thead>
-    <tbody>
-    {rows.map((row) => {
-      return <tr>
-        <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.name}/></td>
-        <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.importanceLevel}/></td>
-        <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.stuckOn}/></td>
-        <td onClick={row.onClick}><BasicInputCell isUpdating={isUpdating} initialValue={row.checkPriority}/></td>
-      </tr>
-    })}
-    </tbody>
-  </Table>
+  return <div/>
 };
 
 export default TaskListPart;
