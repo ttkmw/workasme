@@ -6,39 +6,35 @@ import {css, jsx} from "@emotion/react";
 
 import Pixel from "src/graphic/size/pixel";
 import {Accordion, Button, Card, ProgressBar} from "react-bootstrap";
+import TitleComponent from "src/pages/management/sections/parts/components/TitleComponent";
 
-const YouShouldFocusOnPriorityPart: React.FC<{marginVertical: Pixel}> = (props: {marginVertical: Pixel}) => {
+const YouShouldFocusOnPriorityPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
   const {marginVertical} = props;
   return <div css={css({
     marginTop: marginVertical.value,
     marginBottom: marginVertical.value
   })}>
-    <PartTitle marginBottom = {new Pixel(20)}/>
-    <PriorityInformationCard />
+    <TitleComponent cssObj={{
+      marginBottom: new Pixel(20).value
+    }}>
+      <h2>
+        You should focus on PRIORITY
+      </h2>
+    </TitleComponent>
+    <PriorityInformationCard/>
   </div>;
 };
 
-const PartTitle: React.FC<{marginBottom: Pixel}> = (props: {marginBottom: Pixel}) => {
-  const {marginBottom} = props;
-  return <div css={css({
-    marginBottom: marginBottom.value
-  })}>
-    <h2>
-      You should focus on PRIORITY
-    </h2>
-  </div>
-};
-
 const PriorityInformationCard: React.FC = () => {
-  return <Card style={{ width: '90%' }}>
+  return <Card style={{width: '90%'}}>
     <Card.Header>
-      <ProgressBarPart />
+      <ProgressBarPart/>
     </Card.Header>
     <Card.Body>
       <Card.Title>Research GUI Components</Card.Title>
       <Card.Subtitle className="mb-2 text-muted">ttkmw</Card.Subtitle>
 
-      <TaskContent />
+      <TaskContent/>
     </Card.Body>
   </Card>;
 };
@@ -84,7 +80,7 @@ const ProgressBarPart: React.FC = () => {
   const now = 80;
   return <div>
     <Card.Subtitle className="mb-2 text-muted">Actual / Expected Period</Card.Subtitle>
-    <ProgressBar now={now} label={`${now}%`} />
+    <ProgressBar now={now} label={`${now}%`}/>
   </div>;
 }
 

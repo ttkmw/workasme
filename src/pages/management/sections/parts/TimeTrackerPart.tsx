@@ -10,6 +10,7 @@ import BasicInputCell from "src/pages/management/sections/parts/components/table
 import ButtonComponent from "src/pages/components/ButtonComponent";
 import {useDispatch, useSelector} from "react-redux";
 import {addTime, selectTime} from "src/context/timeSlice";
+import TitleComponent from "src/pages/management/sections/parts/components/TitleComponent";
 
 // todo: props 따로 빼기
 const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
@@ -23,6 +24,13 @@ const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVer
     marginTop: marginVertical.value,
     marginBottom: marginVertical.value
   })}>
+    <TitleComponent cssObj={{
+      marginBottom: new Pixel(20).value
+    }}>
+      <h2>
+        Time Track
+      </h2>
+    </TitleComponent>
     <TimeTrackerForm />
     <TimeTrackerTable timeSnippets={timeSnippets} isUpdating={isUpdating}/>
   {/*  타임트래커 버튼을 아예 없애버*/}

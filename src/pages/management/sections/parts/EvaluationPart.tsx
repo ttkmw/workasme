@@ -5,6 +5,7 @@ import Pixel from "src/graphic/size/pixel";
 import {css, jsx} from "@emotion/react";
 import {Col, Container, Form, ListGroup, Row} from "react-bootstrap";
 import EvaluationPieChartComponent from "./components/charts/EvaluationPieChartComponent";
+import TitleComponent from "src/pages/management/sections/parts/components/TitleComponent";
 
 const EvaluationPart: React.FC<{ height: Pixel }> = (props: { height: Pixel }) => {
   const {height} = props;
@@ -12,6 +13,13 @@ const EvaluationPart: React.FC<{ height: Pixel }> = (props: { height: Pixel }) =
   return <Container css={css({
     height: height.value,
   })}>
+    <TitleComponent cssObj={{
+      marginBottom: new Pixel(20).value
+    }}>
+      <h2>
+        Feedback
+      </h2>
+    </TitleComponent>
     <Row css={css({
       alignItems: 'center'
     })}>

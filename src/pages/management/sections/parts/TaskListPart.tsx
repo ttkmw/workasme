@@ -11,6 +11,7 @@ import ButtonComponent from "src/pages/components/ButtonComponent";
 import {TimeSnippet} from "src/pages/management/sections/parts/dtos/TimeSnippet";
 import {useSelector} from "react-redux";
 import {selectTime} from "src/context/timeSlice";
+import TitleComponent from "src/pages/management/sections/parts/components/TitleComponent";
 
 const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
   const {marginVertical} = props;
@@ -45,7 +46,13 @@ const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertic
     marginBottom: marginVertical.value
   })}>
 
-    <PartTitle marginBottom={new Pixel(20)}/>
+    <TitleComponent cssObj={{
+      marginBottom: new Pixel(20).value
+    }}>
+      <h2>
+        Task List
+      </h2>
+    </TitleComponent>
     <Table striped bordered hover>
       <thead>
       <tr>
@@ -87,17 +94,6 @@ const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertic
 
       </div>
     </div>
-  </div>
-};
-
-const PartTitle: React.FC<{ marginBottom: Pixel }> = (props: { marginBottom: Pixel }) => {
-  const {marginBottom} = props;
-  return <div css={css({
-    marginBottom: marginBottom.value
-  })}>
-    <h2>
-      Task List
-    </h2>
   </div>
 };
 
