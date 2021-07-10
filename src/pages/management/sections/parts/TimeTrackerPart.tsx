@@ -11,6 +11,7 @@ import ButtonComponent from "src/pages/components/ButtonComponent";
 import {useDispatch, useSelector} from "react-redux";
 import {addTime, selectTime} from "src/context/timeSlice";
 import TitleComponent from "src/pages/management/sections/parts/components/TitleComponent";
+import Percentage from "src/graphic/size/percentage";
 
 // todo: props 따로 빼기
 const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
@@ -49,79 +50,89 @@ const TimeTrackerForm: React.FC = () => {
   const dispatch = useDispatch();
 
 
-  return <Form>
-    <Row>
+  return <div css={css({
+    marginBottom: new Pixel(30).value,
+  })}>
+    <Form>
+      <Row>
+        <Col>
+          <Form.Group controlId="formExpectedActivity">
+            <Form.Label>ExpectedActivity</Form.Label>
+            <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setExpectedActivity(e.target.value)}}
+                          type="text" />
+          </Form.Group>
+        </Col>
 
-      <Col>
-        <Form.Group controlId="formExpectedActivity">
-          <Form.Label>ExpectedActivity</Form.Label>
-          <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setExpectedActivity(e.target.value)}}
-                        type="text" />
-        </Form.Group>
-      </Col>
+        <Col>
+          <Form.Group controlId="formExpectedTime">
+            <Form.Label>ExpectedTime</Form.Label>
+            <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setExpectedTime(e.target.value)}} type="text" />
+            <Form.Text className="text-muted">
+              You have to write Number(Hour)
+            </Form.Text>
+          </Form.Group>
 
-      <Col>
-        <Form.Group controlId="formExpectedTime">
-          <Form.Label>ExpectedTime</Form.Label>
-          <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setExpectedTime(e.target.value)}} type="text" />
-          <Form.Text className="text-muted">
-            You have to write Number(Hour)
-          </Form.Text>
-        </Form.Group>
+        </Col>
+      </Row>
 
-      </Col>
-    </Row>
+      <Row>
+        <Col>
+          <Form.Group controlId="formActualActivity">
+            <Form.Label>ActualActivity</Form.Label>
+            <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setActualActivity(e.target.value)}}
+                          type="text" />
+          </Form.Group>
+        </Col>
 
-    <Row>
-      <Col>
-        <Form.Group controlId="formActualActivity">
-          <Form.Label>ActualActivity</Form.Label>
-          <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setActualActivity(e.target.value)}}
-                        type="text" />
-        </Form.Group>
-      </Col>
+        <Col>
+          <Form.Group controlId="formActualTime">
+            <Form.Label>ActualTime</Form.Label>
+            <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setActualTime(e.target.value)}} type="text" />
+            <Form.Text className="text-muted">
+              You have to write Number(Hour)
+            </Form.Text>
+          </Form.Group>
+        </Col>
+      </Row>
 
-      <Col>
-        <Form.Group controlId="formActualTime">
-          <Form.Label>ActualTime</Form.Label>
-          <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setActualTime(e.target.value)}} type="text" />
-          <Form.Text className="text-muted">
-            You have to write Number(Hour)
-          </Form.Text>
-        </Form.Group>
-      </Col>
-    </Row>
-
-    <Row css={css({
-      marginBottom: new Pixel(10).value
-    })}>
-      <Col>
-        <Form.Label>Time Category</Form.Label>
-        <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setTimeCategory(e.target.value)}} as="select" multiple>
-          <option>Intellectual</option>
-          <option>Physical</option>
-          <option>Mental</option>
-          <option>ETC</option>
-        </Form.Control>
-      </Col>
-    </Row>
-    <Row>
-      <Col css={css({
-        display: 'flex',
-        flexDirection: "row-reverse"
+      <Row css={css({
+        marginBottom: new Pixel(10).value
       })}>
-        <Button onClick={() => dispatch(addTime({
-          expectedActivity: expectedActivity,
-          expectedTime: expectedTime,
-          actualActivity: actualActivity,
-          actualTime: actualTime,
-          timeCategory: timeCategory
-        }))} variant="primary" type="button">
-          Submit
-        </Button>
-      </Col>
-    </Row>
-  </Form>
+        <Col>
+          <Form.Label>Time Category</Form.Label>
+          <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setTimeCategory(e.target.value)}} as="select" multiple>
+            <option>Intellectual</option>
+            <option>Physical</option>
+            <option>Mental</option>
+            <option>ETC</option>
+          </Form.Control>
+        </Col>
+      </Row>
+      <Row>
+        <Col css={css({
+          display: 'flex',
+          flexDirection: "row-reverse"
+        })}>
+          <ButtonComponent
+            name={"join"}
+            backgroundColor={Colors.theme.main.work}
+            defaultTextColor={Colors.theme.text.button.default}
+            hoverTextColor={Colors.theme.main.orgasme}
+            width={new Pixel(100)}
+            onClick={() => dispatch(addTime({
+              expectedActivity: expectedActivity,
+              expectedTime: expectedTime,
+              actualActivity: actualActivity,
+              actualTime: actualTime,
+              timeCategory: timeCategory
+            }))}
+          >
+            Register
+          </ButtonComponent>
+        </Col>
+      </Row>
+    </Form>
+  </div>
 };
 
 const TimeTrackerTable: React.FC<{ timeSnippets: TimeSnippet[], isUpdating: boolean }> = (props: { timeSnippets: TimeSnippet[], isUpdating: boolean } ) => {
