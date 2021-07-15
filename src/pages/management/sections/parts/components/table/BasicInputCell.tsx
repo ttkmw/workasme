@@ -1,6 +1,6 @@
 import React from "react";
-import {TimeSnippet} from "src/pages/management/sections/parts/dtos/TimeSnippet";
 import { addTime } from "src/context/timeSlice";
+import {TimeSnippet} from "src/dtos/TimeSnippet";
 
 const BasicInputCell: React.FC<{ initialValue: any, isUpdating: boolean, timeSnippets: TimeSnippet[]  }> = (props: { initialValue: string, isUpdating: boolean, timeSnippets: TimeSnippet[]}) => {
   const {initialValue, isUpdating, timeSnippets} = props;

@@ -4,14 +4,14 @@ import Pixel from "src/graphic/size/pixel";
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import {Button, Dropdown, Table} from "react-bootstrap";
-import {TaskListRowDto} from "src/pages/management/sections/parts/dtos/TaskListRowDto";
 import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
 import Colors from "src/constants/Colors";
 import ButtonComponent from "src/pages/components/ButtonComponent";
-import {TimeSnippet} from "src/pages/management/sections/parts/dtos/TimeSnippet";
 import {useSelector} from "react-redux";
 import {selectTime} from "src/context/timeSlice";
 import TitleComponent from "src/pages/management/sections/parts/components/TitleComponent";
+import {TaskListRowDto} from "src/dtos/TaskListRowDto";
+import {TimeSnippet} from "src/dtos/TimeSnippet";
 
 const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
   const {marginVertical} = props;

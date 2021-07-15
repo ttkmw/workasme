@@ -12,7 +12,8 @@ import ButtonComponent from "src/pages/components/ButtonComponent";
 import Percentage from "src/graphic/size/percentage";
 import {useDispatch, useSelector} from "react-redux";
 import {selectSign} from "src/context/signSlice";
-
+import {selectUsername} from "src/context/usernameSlice";
+import {selectPassword} from "src/context/passwordSlice";
 
 
 const Menus: React.FC<{isSigned: boolean}> = (props: {isSigned: boolean}) => {
@@ -39,7 +40,6 @@ const Menus: React.FC<{isSigned: boolean}> = (props: {isSigned: boolean}) => {
 };
 
 const Header: React.FC = () => {
-  const dispatch = useDispatch();
   const isSigned = useSelector(selectSign);
 
   const topNavigationContainerStyle = css({

@@ -8,10 +8,10 @@ import PieChart, {
   Font,
   Connector
 } from 'devextreme-react/pie-chart';
-import {TimeSnippet} from "src/pages/management/sections/parts/dtos/TimeSnippet";
 import {useSelector} from "react-redux";
 import {selectTime} from "src/context/timeSlice";
-import {TimeByCategory} from "src/pages/management/sections/parts/dtos/TimeByCaregoryDto";
+import {TimeSnippet} from "src/dtos/TimeSnippet";
+import {TimeByCategory} from "src/dtos/TimeByCaregoryDto";
 
 export const dataSource = [{
   timeCategory: 'Mental',

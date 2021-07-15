@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {TimeCategory} from "src/pages/management/sections/parts/dtos/TimeSnippet";
 
 
 const initialTimeState = {

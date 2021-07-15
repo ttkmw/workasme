@@ -1,12 +1,16 @@
 import {configureStore} from "@reduxjs/toolkit";
 import signReducer from './signSlice';
 import timeReducer from './timeSlice';
+import usernameReducer from './usernameSlice'
+import passwordReducer from  './passwordSlice'
 
 
 export const store = configureStore({
   reducer: {
     sign: signReducer,
-    time: timeReducer
+    time: timeReducer,
+    username: usernameReducer,
+    password: passwordReducer,
   },
 });
 

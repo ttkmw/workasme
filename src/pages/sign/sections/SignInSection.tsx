@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import Container from 'react-bootstrap/Container';
 /** @jsxRuntime classic */
 /** @jsx jsx */
@@ -8,6 +8,9 @@ import Colors from "src/constants/Colors";
 import {Form} from "react-bootstrap";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 import Percentage from "src/graphic/size/percentage";
+import createAxios from "src/api/adapterFactory/axiosFactory";
+import {useDispatch} from "react-redux";
+import { passwordSignIn } from "src/context/passwordSlice";
 
 const SignInSection: React.FC = () => {
   return <Container>
@@ -18,36 +21,55 @@ const SignInSection: React.FC = () => {
 };
 
 const SignInForm: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+
   return <Container>
     <Form>
-      <EmailInput/>
-      <PasswordInput/>
-      <SignInButton/>
+      <EmailInput setEmail={setEmail}/>
+      <PasswordInput setPassword={setPassword}/>
+      <SignInButton email={email} password={password}/>
     </Form>
   </Container>;
 };
 
-const EmailInput: React.FC = () => {
+const EmailInput: React.FC<{setEmail: Dispatch<SetStateAction<string>>}> = (props: {setEmail: Dispatch<SetStateAction<string>>}) => {
+  const {setEmail} = props;
   return <Form.Group controlId="formBasicEmail">
     <Form.Label>Email</Form.Label>
-    <Form.Control type="email"/>
+    <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setEmail(e.target.value)}} type="email"/>
   </Form.Group>;
 };
 
-const PasswordInput: React.FC = () => {
+const PasswordInput: React.FC<{setPassword: Dispatch<SetStateAction<string>>}> = (props: {setPassword: Dispatch<SetStateAction<string>>}) => {
+  const {setPassword} = props;
   return <Form.Group controlId="formBasicPassword">
     <Form.Label>Password</Form.Label>
-    <Form.Control type="password"/>
+    <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setPassword(e.target.value)}} type="password"/>
   </Form.Group>;
 };
 
-const SignInButton: React.FC = () => {
+const SignInButton: React.FC<{email: string, password: string}> = (props: {email: string, password: string}) => {
+  const {email, password} = props;
+  const dispatch = useDispatch();
+
+  const axiosInstance = createAxios({
+    auth: {
+      username: email,
+      password: password
+    }
+  });
   return <ButtonComponent name={"signIn"} backgroundColor={Colors.theme.main.orgasme}
                           defaultTextColor={Colors.theme.text.button.default}
                           hoverTextColor={Colors.theme.main.work}
                           width={new Percentage(100)}
-                          onClick={() => {
-                            console.log("clicked!")
+                          onClick={async () => {
+                            const response = await axiosInstance.get("http://localhost:8081/try")
+                            if (response.status === 200) {
+                              console.log("200!");
+                              dispatch(passwordSignIn("This is hahaha"));
+                            }
                           }}
   >
     Sign In

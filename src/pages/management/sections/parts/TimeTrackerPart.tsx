@@ -4,7 +4,6 @@ import Pixel from "src/graphic/size/pixel";
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Colors from "src/constants/Colors";
-import {TimeCategory, TimeSnippet} from "src/pages/management/sections/parts/dtos/TimeSnippet";
 import {Button, ButtonGroup, Col, Container, Dropdown, Form, Row, Table} from "react-bootstrap";
 import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
 import ButtonComponent from "src/pages/components/ButtonComponent";
@@ -12,6 +11,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {addTime, selectTime} from "src/context/timeSlice";
 import TitleComponent from "src/pages/management/sections/parts/components/TitleComponent";
 import Percentage from "src/graphic/size/percentage";
+import {TimeSnippet} from "src/dtos/TimeSnippet";
 
 // todo: props 따로 빼기
 const TimeTrackerPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertical: Pixel }) => {
