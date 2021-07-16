@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -9,6 +9,11 @@ import {Col, Form, Row} from "react-bootstrap";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 import Percentage from "src/graphic/size/percentage";
 import googleLogo from "src/assets/icons/google.png";
+import createAxios from "src/api/adapterFactory/axiosFactory";
+import {usernameSign} from "src/context/usernameSlice";
+import {passwordSign} from "src/context/passwordSlice";
+import {useDispatch} from "react-redux";
+import {sign} from "crypto";
 
 const SignUpSection: React.FC = () => {
   return <Container>
@@ -18,16 +23,22 @@ const SignUpSection: React.FC = () => {
 };
 
 const SignUpForm: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+
   return <Container>
     <Form>
-      <EmailInput/>
-      <PasswordInput/>
-      <FullNameInput/>
-      <WhereAreYouInInput/>
+      <EmailInput setEmail={setEmail}/>
+      <PasswordInput setPassword={setPassword}/>
+      <FullNameInput setFirstName={setFirstName} setLastName={setLastName}/>
+      {/*todo: 나중에 다 적용하기*/}
+      {/*<WhereAreYouInInput/>*/}
     </Form>
-    <CreateAccountButton/>
-    <SplitWithOrLine/>
-    <ContinueWithGoogleButton/>
+    <CreateAccountButton email={email} password={password} firstName={firstName} lastName={lastName}/>
+    {/*<SplitWithOrLine/>*/}
+    {/*<ContinueWithGoogleButton/>*/}
   </Container>;
 };
 
@@ -140,49 +151,75 @@ const ButtonContent: React.FC = () => {
 };
 
 
-const CreateAccountButton: React.FC = () => {
+const CreateAccountButton: React.FC<{email: string, password: string, firstName:string, lastName: string}> = (props: {email: string, password: string, firstName:string, lastName: string}) => {
+  const {email, password, firstName, lastName} = props;
+  const axiosInstance = createAxios({});
+
+  const signUp = async () =>  {
+    const response = await axiosInstance.post("http://localhost:8081/auth/signUp", {
+      signature: email,
+      password: password,
+      firstName: firstName,
+      lastName: lastName
+    });
+
+    if (response.status === 201) {
+      dispatch(usernameSign(email));
+      dispatch(passwordSign(password));
+    }
+  };
+
+  const dispatch = useDispatch();
+
   return <ButtonComponent name={"createAccount"} backgroundColor={Colors.theme.main.orgasme}
                           defaultTextColor={Colors.theme.text.button.default}
                           hoverTextColor={Colors.theme.main.work}
                           width={new Percentage(100)}
-                          onClick={() => {console.log("clicked!")}}
+                          onClick={signUp}
   >
     Create Account
   </ButtonComponent>;
 };
 
-const EmailInput: React.FC = () => {
+const EmailInput: React.FC<{setEmail: Dispatch<SetStateAction<string>>}> = (props: {setEmail: Dispatch<SetStateAction<string>>}) => {
+  const {setEmail} = props;
   return <Form.Group>
     <Form.Label>Email</Form.Label>
-    <Form.Control type="email" placeholder="username@example.com"/>
+    <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setEmail(e.target.value)}} type="email" placeholder="username@example.com"/>
   </Form.Group>;
 };
 
-const PasswordInput: React.FC = () => {
+const PasswordInput: React.FC<{setPassword: Dispatch<SetStateAction<string>>}> = (props: {setPassword: Dispatch<SetStateAction<string>>}) => {
+  const {setPassword} = props;
   return <Form.Group>
     <Form.Label>Password</Form.Label>
-    <Form.Control type="password"/>
+    <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setPassword(e.target.value)}} type="password"/>
   </Form.Group>;
 };
 
-const FullNameInput: React.FC = () => {
+const FullNameInput: React.FC<{setFirstName: Dispatch<SetStateAction<string>>, setLastName: Dispatch<SetStateAction<string>>}> = (props: {setFirstName: Dispatch<SetStateAction<string>>,
+  setLastName: Dispatch<SetStateAction<string>>}) => {
+
+  const {setFirstName, setLastName} = props;
+
   return <Form.Group>
     <Form.Label>Name</Form.Label>
     <Row>
       <Col>
-        <Form.Control placeholder="First"/>
+        <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setFirstName(e.target.value)}} placeholder="First"/>
       </Col>
       <Col>
-        <Form.Control placeholder="Last"/>
+        <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setLastName(e.target.value)}} placeholder="Last"/>
       </Col>
     </Row>
   </Form.Group>;
 };
 
 const WhereAreYouInInput: React.FC = () => {
+  const [selected, setSelected] = useState();
   return <Form.Group controlId="SelectBelongsTo">
     <Form.Label>Where are you in?</Form.Label>
-    <Form.Control as="select" custom>
+    <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {console.log(e.target.value)}} as="select" custom>
       <option>Independent(No where)</option>
       <option>Company</option>
       <option>Club</option>

@@ -6,14 +6,14 @@ const passwordSlice = createSlice({
     value: ''
   },
   reducers: {
-    passwordSignIn: (state,
+    passwordSign: (state,
       action) => {
       state.value = action.payload;
     }
   }
 });
 
-export const {passwordSignIn} = passwordSlice.actions;
+export const {passwordSign} = passwordSlice.actions;
 
 export const selectPassword = (state: any) => state.password.value;
 

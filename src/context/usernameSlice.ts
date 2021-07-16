@@ -7,14 +7,14 @@ const usernameSlice = createSlice({
     value: ''
   },
   reducers: {
-    usernameSignIn: (state,
+    usernameSign: (state,
              action) => {
       state.value = action.payload;
     }
   },
 });
 
-export const { usernameSignIn } = usernameSlice.actions;
+export const { usernameSign } = usernameSlice.actions;
 
 export const selectUsername = (state: any) => state.username.value;
 
