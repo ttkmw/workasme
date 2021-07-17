@@ -2,6 +2,7 @@ import React, {ReactNode} from "react";
 import {Button as BootstrapButton} from "react-bootstrap";
 import {Size} from "src/graphic/size/Size";
 import Colors from "src/constants/Colors";
+import {ButtonType} from "react-bootstrap/esm/Button";
 
 interface ButtonComponentProps {
   children: ReactNode;

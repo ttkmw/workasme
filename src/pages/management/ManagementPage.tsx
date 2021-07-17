@@ -27,7 +27,7 @@ const ManagementPage: React.FC = () => {
         </Tab>
         <Tab eventKey="task" title="Task" css={css({
           color: 'black'
-        })}>
+        })} disabled>
           <TaskManagementSection />
         </Tab>
         <Tab eventKey="Project" title="Project - Please Wait!" disabled>

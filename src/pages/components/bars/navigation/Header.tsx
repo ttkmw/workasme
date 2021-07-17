@@ -58,22 +58,6 @@ const Header: React.FC = () => {
       <Nav className="me-auto">
         <Menus isSigned={isSigned}/>
       </Nav>
-      <Nav>
-        <LinkContainer to={"/sign"}>
-          <Nav.Link>
-            <ButtonComponent
-              name={"join"}
-              backgroundColor={Colors.theme.main.work}
-              defaultTextColor={Colors.theme.text.button.default}
-              hoverTextColor={Colors.theme.main.orgasme}
-              width={new Percentage(100)}
-              onClick={() => {console.log("clicked!")}}
-            >
-              Join
-            </ButtonComponent>
-          </Nav.Link>
-        </LinkContainer>
-      </Nav>
     </Container>
   </Navbar.Collapse>;
 
