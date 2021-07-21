@@ -21,14 +21,17 @@ const EvaluationPart: React.FC<{ height: Pixel }> = (props: { height: Pixel }) =
       </h2>
     </TitleComponent>
     <Row css={css({
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'center'
+
     })}>
       <Col lg={5}>
         <EvaluationPieChartComponent/>
       </Col>
-      <Col lg={7} >
-        <FeedbackComponent/>
-      </Col>
+      {/*//todo: 나중에 하자*/}
+      {/*<Col lg={7} >*/}
+      {/*  <FeedbackComponent/>*/}
+      {/*</Col>*/}
     </Row>
   </Container>
 };

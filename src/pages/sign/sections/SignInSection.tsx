@@ -8,10 +8,10 @@ import Colors from "src/constants/Colors";
 import {Form} from "react-bootstrap";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 import Percentage from "src/graphic/size/percentage";
-import createAxios from "src/api/adapterFactory/axiosFactory";
-import {useDispatch} from "react-redux";
+import createAxios, {host} from "src/api/adapterFactory/axiosFactory";
+import {useDispatch, useSelector} from "react-redux";
 import { passwordSign } from "src/context/passwordSlice";
-import { usernameSign } from "src/context/usernameSlice";
+import {selectUsername, usernameSign} from "src/context/usernameSlice";
 
 const SignInSection: React.FC = () => {
   return <Container>
@@ -63,7 +63,7 @@ const SignInButton: React.FC<{email: string, password: string}> = (props: {email
   });
 
   const signIn = async () => {
-    const response = await axiosInstance.post("http://localhost:8081/auth/try", {
+    const response = await axiosInstance.post(`http://${host}/auth/signIn`, {
       "signature": email,
       "password": password,
     });
@@ -84,6 +84,9 @@ const SignInButton: React.FC<{email: string, password: string}> = (props: {email
 };
 
 const Title: React.FC = () => {
+  const username: string = useSelector(selectUsername);
+  console.log("hahaha");
+  console.log(username);
   return <Container>
     <h2 css={css({
       textAlign: 'center',
@@ -92,7 +95,7 @@ const Title: React.FC = () => {
       color: Colors.theme.text.default,
       fontWeight: 700
     })}>
-      Sign In
+      {username}
     </h2>
   </Container>
 };
