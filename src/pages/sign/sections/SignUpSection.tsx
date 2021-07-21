@@ -70,6 +70,10 @@ const SignUpButton: React.FC<{email: string, password: string, firstName:string,
 
   const {email, password, firstName, lastName, handleShow} = props;
   const axiosInstance = createAxios({
+    headers:{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json'
+    }
   });
   const signUp = async () =>  {
     const response = await axiosInstance.post(`http://${host}/auth/signUp`, {

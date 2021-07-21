@@ -59,6 +59,10 @@ const SignInButton: React.FC<{email: string, password: string}> = (props: {email
     auth: {
       username: email,
       password: password
+    },
+    headers:{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json'
     }
   });
 
