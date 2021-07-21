@@ -72,7 +72,9 @@ const SignUpButton: React.FC<{email: string, password: string, firstName:string,
   const axiosInstance = createAxios({
     headers:{
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin' : '*',
+      'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
     }
   });
   const signUp = async () =>  {
