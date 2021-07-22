@@ -22,6 +22,7 @@
     "bootstrap": "4.6.0",
     "devextreme": "21.1.4",
     "devextreme-react": "21.1.4",
+    "http-proxy-middleware": "^2.0.1",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.0",
     "react-dom": "^17.0.2",
@@ -63,5 +64,6 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.3.0"
-  }
+  },
+  "proxy": "http://13.124.89.189:8081"
 }
