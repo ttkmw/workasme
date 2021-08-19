@@ -72,7 +72,7 @@ const SignUpButton: React.FC<{email: string, password: string, firstName:string,
   const axiosInstance = createAxios({
   });
   const signUp = async () =>  {
-    const response = await axiosInstance.post(`http://${host}/auth/signUp`, {
+    const response = await axiosInstance.post(`https://${host}/auth/signUp`, {
       signature: email,
       password: password,
       firstName: firstName,
