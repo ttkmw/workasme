@@ -67,7 +67,6 @@ const SignUpForm: React.FC = () => {
 
 const SignUpButton: React.FC<{email: string, password: string, firstName:string, lastName: string, handleShow: () => void}>
   = (props: {email: string, password: string, firstName:string, lastName: string, handleShow: () => void}) => {
-
   const {email, password, firstName, lastName, handleShow} = props;
   const axiosInstance = createAxios({
   });
