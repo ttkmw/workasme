@@ -64,7 +64,7 @@ const SignInButton: React.FC<{email: string, password: string}> = (props: {email
 
   const signIn = async () => {
     console.log("before call")
-    const response = await axiosInstance.post(`https://${host}/auth/signIn`, {
+    const response = await axiosInstance.post(`${host}/auth/signIn`, {
       "signature": email,
       "password": password,
     });

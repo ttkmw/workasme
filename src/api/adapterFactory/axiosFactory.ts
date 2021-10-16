@@ -4,6 +4,6 @@ const createAxios = (config: AxiosRequestConfig): AxiosInstance => {
   return axios.create(config);
 };
 
-export const host = 'beyondeyesight.shop:8081';
+export const host = `${process.env.REACT_APP_WORKASME_SERVER_HOST}:${process.env.REACT_APP_WORKASME_SERVER_PORT}`;
 
 export default createAxios;
