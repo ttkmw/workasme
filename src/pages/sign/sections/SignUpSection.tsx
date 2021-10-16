@@ -9,11 +9,12 @@ import {Alert, Button, Col, Form, Modal, Nav, Row} from "react-bootstrap";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 import Percentage from "src/graphic/size/percentage";
 import googleLogo from "src/assets/icons/google.png";
-import createAxios, {host} from "src/api/adapterFactory/axiosFactory";
+import createAxios from "src/api/adapterFactory/axiosFactory";
 import {useDispatch} from "react-redux";
 import { usernameSign } from "src/context/usernameSlice";
 import { passwordSign } from "src/context/passwordSlice";
 import {LinkContainer} from "react-router-bootstrap";
+import {workasme_host} from "src/api/host/workasme";
 
 const SignUpSection: React.FC = () => {
   return <Container>
@@ -71,7 +72,7 @@ const SignUpButton: React.FC<{email: string, password: string, firstName:string,
   const axiosInstance = createAxios({
   });
   const signUp = async () =>  {
-    const response = await axiosInstance.post(`${host}/auth/signUp`, {
+    const response = await axiosInstance.post(`${workasme_host}/auth/signUp`, {
       signature: email,
       password: password,
       firstName: firstName,
