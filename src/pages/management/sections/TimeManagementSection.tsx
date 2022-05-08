@@ -1,7 +1,6 @@
 import React from "react";
 import {Col, Container, Row} from "react-bootstrap";
 import {Element} from "react-scroll";
-import YouShouldFocusOnPriorityPart from "src/pages/management/sections/parts/YouShouldFocusOnPriorityPart";
 import TaskListPart from "src/pages/management/sections/parts/TaskListPart";
 import TimeTrackerPart from "src/pages/management/sections/parts/TimeTrackerPart";
 import Pixel from "src/graphic/size/pixel";

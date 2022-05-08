@@ -1,7 +1,5 @@
 import React from "react";
 import YouShouldFocusOnPriorityPart from "src/pages/management/sections/parts/YouShouldFocusOnPriorityPart";
-import EvaluationPart from "src/pages/management/sections/parts/EvaluationPart";
-import TimeTrackerPart from "src/pages/management/sections/parts/TimeTrackerPart";
 import {Col, Container, Row} from "react-bootstrap";
 /** @jsxRuntime classic */
 /** @jsx jsx */

@@ -21,8 +21,8 @@ const Menus: React.FC<{isSigned: boolean}> = (props: {isSigned: boolean}) => {
   if (isSigned) {
     return (
       <>
-        <LinkContainer to={"/management"}>
-          <Nav.Link>Management</Nav.Link>
+        <LinkContainer to={"/time-trackers"}>
+          <Nav.Link>Time Trackers</Nav.Link>
         </LinkContainer>
         <LinkContainer to={"/contact"}>
           <Nav.Link href="/contact">Contact</Nav.Link>

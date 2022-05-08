@@ -1,4 +1,6 @@
 // eslint-disable-next-line import/no-anonymous-default-export
+import Grey from "src/graphic/color/grey";
+
 export default {
   dev: {},
   theme: {
@@ -9,6 +11,10 @@ export default {
     bar: {
       top: '#ffffff'
     },
+    table: {
+      innerLine: Grey.get('200'),
+      outLine: Grey.get('400')
+    },
     button: {
       default: '#FFFFFF'
     },
@@ -16,6 +22,9 @@ export default {
       default: "black",
       button: {
         default: "#ffffff",
+      },
+      box: {
+        number: Grey.get('400')
       },
       tab: {
         active: "#495057",

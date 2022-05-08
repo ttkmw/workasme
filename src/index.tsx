@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "src/pages/components/bars/navigation/Header";
 import HomePage from "src/pages/home/Home";
 import SignPage from "src/pages/sign/SignPage";
-import ManagementPage from "src/pages/management/ManagementPage";
+import TimeTrackersPage from "src/pages/management/TimeTrackersPage";
 import {Provider} from "react-redux";
 import {store} from "src/context/store";
 
@@ -21,7 +21,7 @@ ReactDOM.render(
         <Switch>
           <Route exact path={"/"}  component={HomePage}/>
           <Route exact path={"/sign"}  component={SignPage}/>
-          <Route exact path={"/management"}  component={ManagementPage}/>
+          <Route exact path={"/time-trackers"}  component={TimeTrackersPage}/>
         </Switch>
       </Router>
     </Provider>

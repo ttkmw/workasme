@@ -8,8 +8,9 @@ import TimeManagementSection from "src/pages/management/sections/TimeManagementS
 import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
+import WeeklySection from "src/pages/management/sections/WeeklySection";
 
-const ManagementPage: React.FC = () => {
+const TimeTrackersPage: React.FC = () => {
   return <Container>
     <>
       <style > {`
@@ -21,22 +22,24 @@ const ManagementPage: React.FC = () => {
             }
           `}
       </style>
-      <Tabs className="navlink-custom" defaultActiveKey="time" id="management">
-        <Tab className="navtab-custom"  eventKey="time" title="Time">
-          <TimeManagementSection />
+      <Tabs className="navlink-custom" defaultActiveKey="monthly" id="management">
+        <Tab className="navtab-custom"  eventKey="monthly" title="Monthly">
+
         </Tab>
-        <Tab eventKey="task" title="Task" css={css({
-          color: 'black'
-        })} disabled>
-          <TaskManagementSection />
-        </Tab>
-        <Tab eventKey="Project" title="Project - Please Wait!" disabled>
+        <Tab eventKey="weekly" title="Weekly">
+          <WeeklySection/>
         </Tab>
       </Tabs>
     </>
 
   </Container>
+
+  /*<Tab eventKey="weekly" title="Weekly" css={css({
+    color: 'black'
+  })} disabled>
+    <TaskManagementSection />
+  </Tab>*/
 };
 
 
-export default ManagementPage;
+export default TimeTrackersPage;
