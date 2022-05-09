@@ -22,7 +22,8 @@ const CheckBox: React.FC = () => {
       fontSize: "22px",
       "-webkit-user-select": "none",
       "-ms-user-select": "none",
-      "user-select": "none"
+      "user-select": "none",
+      marginLeft: '12px'
     },
 
     '.container input': {
@@ -39,7 +40,8 @@ const CheckBox: React.FC = () => {
       left: 0,
       height: '15px',
       width: '15px',
-      backgroundColor: '#eee'
+      backgroundColor: '#eee',
+      display: 'flex'
     },
 
     '.container:hover input ~ .checkmark': {
@@ -50,37 +52,33 @@ const CheckBox: React.FC = () => {
       backgroundColor: 'red'
     },
 
+
+
+    '.container input ~ .checkmark svg': {
+      display: 'none'
+    },
+
+    '.container input:checked ~ .checkmark svg': {
+      display: 'block'
+    },
+
     '.checkmark:after': {
-      content: '""',
-      backgroundImage: "url(data:image/svg+xml; utf8, <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-arrow-down-right-circle-fill\" viewBox=\"0 0 16 16\">\n" +
-        "  <path d=\"M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm5.904-2.803a.5.5 0 1 0-.707.707L9.293 10H6.525a.5.5 0 0 0 0 1H10.5a.5.5 0 0 0 .5-.5V6.525a.5.5 0 0 0-1 0v2.768L5.904 5.197z\"/>\n" +
-        "</svg>)",
-      position: "absolute",
-      display: "none",
-      backgroundColor: "black"
+      display: 'none'
 
     },
 
-  //   .checkmark:after {
-  //   content: "";
-  //   position: absolute;
-  //   display: none;
-  // }
+    //   .checkmark:after {
+    //   content: "";
+    //   position: absolute;
+    //   display: none;
+    // }
 
     '.container input:checked ~ .checkmark:after': {
       display: "block"
     },
 
     '.conainer .checkmark:after': {
-      left: '9px',
-      top: '5px',
-      width: '5px',
-      height: '5px',
-      border: "solid white",
-      borderWidth: "0 3px 3px 0",
-      '-webkit-transform': "rotate(45deg)",
-      '-ms-transform': 'rotate(45deg)',
-      'transform': 'rotate(45deg)'
+      display: 'none'
     },
 
     '.container .checkmark:after': {
@@ -99,13 +97,18 @@ const CheckBox: React.FC = () => {
   })}
   >
     <label className="container">
-      <input type="checkbox" />
-      <span className={"checkmark"}/>
+      <input type="checkbox"/>
+      <span className={"checkmark"}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check"
+                   viewBox="0 0 16 16">
+        <path
+          d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+      </svg>
+      </span>
     </label>
 
 
   </div>;
-
 
 
 }
