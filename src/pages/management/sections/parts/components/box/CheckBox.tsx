@@ -3,18 +3,23 @@ import {Size} from "src/graphic/size/Size";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import check from 'src/assets/check.svg'
+import check from 'src/assets/whiteCheck.svg'
+import Pixel from "src/graphic/size/pixel";
+import Percentage from "src/graphic/size/percentage";
 
 
-const CheckBox: React.FC<{length: Size}> = (props: {length: Size}) => {
-  const {length} = props;
+const CheckBox: React.FC<{size: Pixel, borderWidth: Pixel}> = (props: {size: Pixel, borderWidth: Pixel}) => {
+  const {size, borderWidth} = props;
+
+  const imgSize = size.minus(borderWidth.multiply(new Percentage(200)));
+
 
   return <div css={css({
-    width: length.toString(),
-    height: length.toString(),
+    width: size.toString(),
+    height: size.toString(),
     '.container': {
-      width: length.toString(),
-      height: length.toString(),
+      width: size.toString(),
+      height: size.toString(),
       display: "block",
       position: "relative",
       paddingLeft: 0,
@@ -30,24 +35,24 @@ const CheckBox: React.FC<{length: Size}> = (props: {length: Size}) => {
       position: "absolute",
       opacity: 0,
       cursor: "pointer",
-      height: length.toString(),
-      width: length.toString()
+      height: size.toString(),
+      width: size.toString()
     },
 
     '.checkmark': {
       position: 'absolute',
-      height: length.toString(),
-      width: length.toString(),
+      height: size.toString(),
+      width: size.toString(),
       display: 'flex',
       backgroundColor: "purple",
 
       borderStyle: "solid",
-      borderWidth: "0.9px",
+      borderWidth: borderWidth.toString(),
 
     },
 
     '.container input:checked ~ .checkmark': {
-      backgroundColor: 'yellow',
+      backgroundColor: 'orange',
 
     },
 
@@ -66,9 +71,7 @@ const CheckBox: React.FC<{length: Size}> = (props: {length: Size}) => {
     },
 
     '.checkmark:after': {
-      display: 'none',
-      left: -10,
-      top: -10,
+      display: 'none'
     }
 
 
@@ -77,8 +80,8 @@ const CheckBox: React.FC<{length: Size}> = (props: {length: Size}) => {
     <label className="container">
       <input type="checkbox"/>
       <span className={"checkmark"}>
-              <img src={check} alt="Check" width={"9.1px"}
-                   height={"9.1px"}/>
+              <img src={check} alt="Check" width={imgSize.toString()}
+                   height={imgSize.toString()}/>
       </span>
     </label>
 
