@@ -3,61 +3,57 @@ import {Size} from "src/graphic/size/Size";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import {Button, Form} from "react-bootstrap";
-
-// <input type="checkbox" name="genres" value="adventure" id="adventure_id">
-//   <label htmlFor="adventure_id" style="font-family: 'SExtralight'; font-size:14px;">Adventure</label>
+import check from 'src/assets/check.svg'
 
 
-const CheckBox: React.FC = () => {
+const CheckBox: React.FC<{length: Size}> = (props: {length: Size}) => {
+  const {length} = props;
+
   return <div css={css({
-    backgroundColor: "green",
-    width: "10px",
-    height: "10px",
+    width: length.toString(),
+    height: length.toString(),
     '.container': {
-      width: "10px",
-      height: "10px",
-      backgroundColor: "red",
+      width: length.toString(),
+      height: length.toString(),
       display: "block",
       position: "relative",
-      // paddingLeft: "35px",
-      // marginBottom: "12px",
       paddingLeft: 0,
       paddingRight: 0,
       cursor: "pointer",
       fontSize: "22px",
       "-webkit-user-select": "none",
       "-ms-user-select": "none",
-      "user-select": "none",
-      // marginLeft: '12px'
+      "user-select": "none"
     },
 
     '.container input': {
       position: "absolute",
-
       opacity: 0,
       cursor: "pointer",
-      height: "10px",
-      width: "10px"
+      height: length.toString(),
+      width: length.toString()
     },
 
     '.checkmark': {
       position: 'absolute',
-      height: '10px',
-      width: '10px',
-      // backgroundColor: 'blue',
-      display: 'flex'
-    },
-    '.container:hover input ~ .checkmark': {
-      backgroundColor: '#ccc'
+      height: length.toString(),
+      width: length.toString(),
+      display: 'flex',
+      backgroundColor: "purple",
+
+      borderStyle: "solid",
+      borderWidth: "0.9px",
+
     },
 
     '.container input:checked ~ .checkmark': {
-      backgroundColor: 'yellow'
+      backgroundColor: 'yellow',
+
     },
 
-    '.container input ~ .checkmark svg': {
-      display: 'none'
+    '.container input ~ .checkmark img': {
+      display: 'none',
+
     },
 
     '.container input:checked ~ .checkmark:after': {
@@ -65,12 +61,14 @@ const CheckBox: React.FC = () => {
     },
 
     //
-    '.container input:checked ~ .checkmark svg': {
+    '.container input:checked ~ .checkmark img': {
       display: 'block'
     },
 
     '.checkmark:after': {
-      display: 'none'
+      display: 'none',
+      left: -10,
+      top: -10,
     }
 
 
@@ -79,11 +77,8 @@ const CheckBox: React.FC = () => {
     <label className="container">
       <input type="checkbox"/>
       <span className={"checkmark"}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" fill="currentColor" className="bi bi-check"
-                   viewBox="0 0 16 16">
-        <path
-          d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-      </svg>
+              <img src={check} alt="Check" width={"9.1px"}
+                   height={"9.1px"}/>
       </span>
     </label>
 
