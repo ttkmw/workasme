@@ -51,11 +51,11 @@ const DayOfWeekWriteListPart: React.FC<{ date: string, dayOfWeek: string, border
     </div>
     <div css={css({
       marginTop: 0,
-      marginBottom: 0,
-      backgroundColor: "orange"
+      marginBottom: 0
     })}
     >
-      <CheckBox size={new Pixel(10)} borderWidth={new Pixel(0.9)}/>
+      <CheckBox size={new Pixel(10)} borderWidth={new Pixel(0.9)}
+                borderColor={Colors.theme.main.work} beforeColor={Colors.theme.screen.background} afterColor={Colors.theme.main.work}/>
     </div>
     <TimeBlocks />
   </div>

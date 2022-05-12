@@ -8,8 +8,8 @@ import Pixel from "src/graphic/size/pixel";
 import Percentage from "src/graphic/size/percentage";
 
 
-const CheckBox: React.FC<{size: Pixel, borderWidth: Pixel}> = (props: {size: Pixel, borderWidth: Pixel}) => {
-  const {size, borderWidth} = props;
+const CheckBox: React.FC<{size: Pixel, borderWidth: Pixel, borderColor: string, beforeColor: string, afterColor: string}> = (props: {size: Pixel, borderWidth: Pixel, borderColor: string, beforeColor: string, afterColor: string}) => {
+  const {size, borderWidth, borderColor, beforeColor, afterColor} = props;
 
   const imgSize = size.minus(borderWidth.multiply(new Percentage(200)));
 
@@ -25,7 +25,6 @@ const CheckBox: React.FC<{size: Pixel, borderWidth: Pixel}> = (props: {size: Pix
       paddingLeft: 0,
       paddingRight: 0,
       cursor: "pointer",
-      fontSize: "22px",
       "-webkit-user-select": "none",
       "-ms-user-select": "none",
       "user-select": "none"
@@ -44,15 +43,16 @@ const CheckBox: React.FC<{size: Pixel, borderWidth: Pixel}> = (props: {size: Pix
       height: size.toString(),
       width: size.toString(),
       display: 'flex',
-      backgroundColor: "purple",
+      backgroundColor: beforeColor,
 
       borderStyle: "solid",
+      borderColor: borderColor,
       borderWidth: borderWidth.toString(),
 
     },
 
     '.container input:checked ~ .checkmark': {
-      backgroundColor: 'orange',
+      backgroundColor: afterColor,
 
     },
 
