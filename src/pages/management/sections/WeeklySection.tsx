@@ -9,63 +9,77 @@ import Pixel from "src/graphic/size/pixel";
 import {Element} from "react-scroll";
 import TaskListPart from "src/pages/management/sections/parts/TaskListPart";
 import DayOfWeekWriteListPart from "src/pages/management/sections/parts/DayOfWeekWriteListPart";
+import Percentage from "src/graphic/size/percentage";
 
 
 const WeeklySection: React.FC = () => {
   const marginVertical = new Pixel(30);
   const outlineBorder = new Pixel(1);
   const noBorder = new Pixel(0);
+
+  console.log("haha")
+  console.log();
+  const width = new Pixel(window.screen.width).multiply(new Percentage(3));
   return <Container css={css({
     paddingLeft: 0,
-    paddingRight: 0,
+    paddingRight: 0
   })}>
-    <Row css={css({
+    <div css={css({
       paddingLeft: 0,
-      paddingRight: 0
+      paddingRight: 0,
+      display: "flex",
+      flexDirection: "row"
     })}>
-      <Col css={css({
-        // paddingLeft: 0,
-        paddingRight: 0
-      })}>
-        <DayOfWeekWriteListPart date={"2022-05-08"} dayOfWeek={"SUNDAY"} borderRight={outlineBorder} borderLeft={noBorder} borderBottom={outlineBorder} borderTop={outlineBorder}/>
-      </Col>
-      <Col css={css({
+      <div css={css({
+        minWidth: width.toString(),
         paddingLeft: 0,
         paddingRight: 0
       })}>
         <DayOfWeekWriteListPart date={"2022-05-08"} dayOfWeek={"SUNDAY"} borderRight={outlineBorder} borderLeft={noBorder} borderBottom={outlineBorder} borderTop={outlineBorder}/>
-      </Col>
-      <Col css={css({
+      </div>
+      <div css={css({
+        minWidth: width.toString(),
         paddingLeft: 0,
         paddingRight: 0
       })}>
         <DayOfWeekWriteListPart date={"2022-05-08"} dayOfWeek={"SUNDAY"} borderRight={outlineBorder} borderLeft={noBorder} borderBottom={outlineBorder} borderTop={outlineBorder}/>
-      </Col>
-      <Col css={css({
+      </div>
+      <div css={css({
+        minWidth: width.toString(),
         paddingLeft: 0,
         paddingRight: 0
       })}>
         <DayOfWeekWriteListPart date={"2022-05-08"} dayOfWeek={"SUNDAY"} borderRight={outlineBorder} borderLeft={noBorder} borderBottom={outlineBorder} borderTop={outlineBorder}/>
-      </Col>
-      <Col css={css({
+      </div>
+      <div css={css({
+        minWidth: width.toString(),
         paddingLeft: 0,
         paddingRight: 0
       })}>
         <DayOfWeekWriteListPart date={"2022-05-08"} dayOfWeek={"SUNDAY"} borderRight={outlineBorder} borderLeft={noBorder} borderBottom={outlineBorder} borderTop={outlineBorder}/>
-      </Col>
-      <Col css={css({
+      </div>
+      <div css={css({
+        minWidth: width.toString(),
         paddingLeft: 0,
         paddingRight: 0
       })}>
         <DayOfWeekWriteListPart date={"2022-05-08"} dayOfWeek={"SUNDAY"} borderRight={outlineBorder} borderLeft={noBorder} borderBottom={outlineBorder} borderTop={outlineBorder}/>
-      </Col>
-      <Col css={css({
+      </div>
+      <div css={css({
+        minWidth: width.toString(),
+        paddingLeft: 0,
+        paddingRight: 0
+      })}>
+        <DayOfWeekWriteListPart date={"2022-05-08"} dayOfWeek={"SUNDAY"} borderRight={outlineBorder} borderLeft={noBorder} borderBottom={outlineBorder} borderTop={outlineBorder}/>
+      </div>
+      <div css={css({
+        minWidth: width.toString(),
         paddingLeft: 0,
         paddingRight: 0
       })}>
         <DayOfWeekWriteListPart date={"2022-05-08"} dayOfWeek={"SUNDAY"} borderRight={noBorder} borderLeft={noBorder} borderBottom={outlineBorder} borderTop={outlineBorder}/>
-      </Col>
-    </Row>
+      </div>
+    </div>
   </Container>;
 }
 

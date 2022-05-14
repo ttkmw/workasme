@@ -9,10 +9,16 @@ import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
 import WeeklySection from "src/pages/management/sections/WeeklySection";
+import Percentage from "src/graphic/size/percentage";
 
 const TimeTrackersPage: React.FC = () => {
-  return <Container>
+
+  return <Container css={css({
+    // marginRight: "0px",
+    // marginLeft: "0px"
+  })}>
     <>
+
       <style > {`
             .navlink-custom > a:hover {
                 color: ${Colors.theme.text.tab.disabled};
