@@ -16,10 +16,7 @@ const WeeklySection: React.FC = () => {
   const marginVertical = new Pixel(30);
   const outlineBorder = new Pixel(1);
   const noBorder = new Pixel(0);
-
-  console.log("haha")
-  console.log();
-  const width = new Pixel(window.screen.width).multiply(new Percentage(3));
+  const width = new Pixel(window.screen.width).multiply(new Percentage(2.5));
   return <Container css={css({
     paddingLeft: 0,
     paddingRight: 0

@@ -11,6 +11,7 @@ import Grey from "src/graphic/color/grey";
 import Colors from "src/constants/Colors";
 import CheckBox from "src/pages/management/sections/parts/components/box/CheckBox";
 import Percentage from "src/graphic/size/percentage";
+import checkBox from "src/pages/management/sections/parts/components/box/CheckBox";
 
 const DayOfWeekWriteListPart: React.FC<{ date: string, dayOfWeek: string, borderRight: Pixel, borderLeft: Pixel, borderBottom: Pixel, borderTop: Pixel }> =
   (props: { date: string, dayOfWeek: string, borderRight: Pixel, borderLeft: Pixel, borderBottom: Pixel, borderTop: Pixel }) => {
@@ -22,21 +23,29 @@ const DayOfWeekWriteListPart: React.FC<{ date: string, dayOfWeek: string, border
     return <div css={css({
 
     })}>
-      <div css={css({
-        marginTop: 0,
-        marginBottom: 0,
-        backgroundColor: 'black',
-        display: 'flex',
-        justifyContent: "space-around",
-        color: "white",
-        fontSize: "12px"
-      })}>
-        <div>date</div>
-        <div>day of week</div>
-      </div>
+      <DateGuide />
       <TodoList checkBoxSize={checkBoxSize}/>
       <TimeBlocks numberSize={checkBoxSize} borderRight={borderRight} borderLeft={borderLeft} borderTop={borderTop}
                   borderBottom={borderBottom}/>
+    </div>
+  }
+  const DateGuide: React.FC = () => {
+  const fontSize = new Pixel(20);
+    return <div css={css({
+      marginTop: 0,
+      marginBottom: 0,
+      backgroundColor: 'black',
+      display: 'flex',
+      justifyContent: "space-around",
+      color: "white",
+      fontSize: "12px"
+    })}>
+      <div css={css({
+        fontSize: fontSize.toString()
+      })}>d</div>
+      <div css={css({
+        fontSize: fontSize.toString()
+      })}>day</div>
     </div>
   }
 
@@ -47,22 +56,40 @@ const TodoList: React.FC<{checkBoxSize: Pixel}> = (props: {checkBoxSize: Pixel})
     <div css={css({
       display: "flex",
       alignItems: "center",
-      marginLeft: "10px",
-      marginRight: "10px"
-      // width: "100%"
+      marginLeft: "5px",
+      marginRight: "10px",
+      flexDirection: "column",
+      paddingTop: checkBoxSize.multiply(new Percentage(50)).toString(),
+      paddingBottom: checkBoxSize.multiply(new Percentage(50)).toString()
     })}>
-      <CheckBox size={checkBoxSize} borderWidth={new Pixel(1.5)}
-                borderColor={Colors.theme.main.work} beforeColor={Colors.theme.screen.background}
-                afterColor={Colors.theme.main.work}
-      />
-      <input css={css({
-        border: 0,
-        borderBottom: 1,
-        borderBottomStyle: "solid",
-        borderBottomColor: Colors.theme.main.work,
-        width: "125px"
-      })} type={"text"}/>
+      <Todo checkBoxSize={checkBoxSize}/>
+      <Todo checkBoxSize={checkBoxSize}/>
+      <Todo checkBoxSize={checkBoxSize}/>
     </div>
+  </div>
+}
+
+const Todo: React.FC<{checkBoxSize: Pixel}> = (props: {checkBoxSize: Pixel}) => {
+  const {checkBoxSize} = props;
+  return <div css={css({
+    display: "flex",
+    alignItems: "center",
+
+    marginTop: checkBoxSize.multiply(new Percentage(25)).toString(),
+    marginBottom: checkBoxSize.multiply(new Percentage(25)).toString()
+  })}>
+    <CheckBox size={checkBoxSize} borderWidth={new Pixel(1.5)}
+              borderColor={Colors.theme.main.work} beforeColor={Colors.theme.screen.background}
+              afterColor={Colors.theme.main.work}
+    />
+    <input css={css({
+      border: 0,
+      borderBottom: 1,
+      borderBottomStyle: "solid",
+      borderBottomColor: Colors.theme.main.work,
+      marginLeft: "5%",
+      width: "90%"
+    })} type={"text"}/>
   </div>
 }
 
