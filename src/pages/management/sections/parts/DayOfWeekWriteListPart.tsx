@@ -2,50 +2,53 @@ import React from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import {Col, Container, Form, ListGroup, Row} from "react-bootstrap";
 import NumberBox from "src/pages/management/sections/parts/components/box/NumberBox";
 import Pixel from "src/graphic/size/pixel";
-import font from "src/graphic/text/font";
 import fontConfig from "src/graphic/text/font";
-import Grey from "src/graphic/color/grey";
 import Colors from "src/constants/Colors";
 import CheckBox from "src/pages/management/sections/parts/components/box/CheckBox";
 import Percentage from "src/graphic/size/percentage";
-import checkBox from "src/pages/management/sections/parts/components/box/CheckBox";
+import dayjs, {Dayjs} from 'dayjs'
+import parseDayOfWeek from "src/util/DayofweekParser"
 
-const DayOfWeekWriteListPart: React.FC<{ date: string, dayOfWeek: string, borderRight: Pixel, borderLeft: Pixel, borderBottom: Pixel, borderTop: Pixel }> =
-  (props: { date: string, dayOfWeek: string, borderRight: Pixel, borderLeft: Pixel, borderBottom: Pixel, borderTop: Pixel }) => {
+const DayOfWeekWriteListPart: React.FC<{ day: Dayjs, borderRight: Pixel, borderLeft: Pixel, borderBottom: Pixel, borderTop: Pixel }> =
+  (props: {day: Dayjs, borderRight: Pixel, borderLeft: Pixel, borderBottom: Pixel, borderTop: Pixel }) => {
 
-    const {date, dayOfWeek, borderRight, borderLeft, borderBottom, borderTop} = props;
+    const {day, borderRight, borderLeft, borderBottom, borderTop} = props;
     const checkBoxSize = new Pixel(15);
 
 
     return <div css={css({
 
     })}>
-      <DateGuide />
+      <DateGuide day={day}/>
       <TodoList checkBoxSize={checkBoxSize}/>
       <TimeBlocks numberSize={checkBoxSize} borderRight={borderRight} borderLeft={borderLeft} borderTop={borderTop}
                   borderBottom={borderBottom}/>
     </div>
   }
-  const DateGuide: React.FC = () => {
+  const DateGuide: React.FC<{day: Dayjs}> = (props: {day: Dayjs}) => {
+  const {day} = props;
+
+
   const fontSize = new Pixel(20);
     return <div css={css({
       marginTop: 0,
       marginBottom: 0,
-      backgroundColor: 'black',
+      paddingLeft: "5px",
       display: 'flex',
-      justifyContent: "space-around",
-      color: "white",
+      justifyContent: "space-between",
       fontSize: "12px"
     })}>
       <div css={css({
+        width: "50%",
+        color: Colors.theme.text.box.default,
         fontSize: fontSize.toString()
-      })}>d</div>
+      })}>{parseDayOfWeek(day.day())}</div>
       <div css={css({
+        color: Colors.theme.text.box.default,
         fontSize: fontSize.toString()
-      })}>day</div>
+      })}>{day.date()}</div>
     </div>
   }
 
@@ -79,14 +82,14 @@ const Todo: React.FC<{checkBoxSize: Pixel}> = (props: {checkBoxSize: Pixel}) => 
     marginBottom: checkBoxSize.multiply(new Percentage(25)).toString()
   })}>
     <CheckBox size={checkBoxSize} borderWidth={new Pixel(1.5)}
-              borderColor={Colors.theme.main.work} beforeColor={Colors.theme.screen.background}
-              afterColor={Colors.theme.main.work}
+              borderColor={Colors.theme.table.innerLine} beforeColor={Colors.theme.screen.background}
+              afterColor={Colors.theme.table.innerLine}
     />
     <input css={css({
       border: 0,
       borderBottom: 1,
       borderBottomStyle: "solid",
-      borderBottomColor: Colors.theme.main.work,
+      borderBottomColor: Colors.theme.table.innerLine,
       marginLeft: "5%",
       width: "90%"
     })} type={"text"}/>
@@ -104,7 +107,7 @@ const TimeBlocks: React.FC<{ numberSize: Pixel, borderRight: Pixel, borderLeft: 
     borderBottomColor: Colors.theme.table.innerLine,
   })}>
     <NumberBox number={num} numberSize={numberSize} numberFont={fontConfig.web.medium.fontFamily}
-               numberColor={Colors.theme.text.box.number} boxWidth={new Pixel(14)} boxHeight={new Pixel(35)}
+               numberColor={Colors.theme.text.box.default} boxWidth={new Pixel(14)} boxHeight={new Pixel(35)}
                boxBackgroundColor={Colors.theme.screen.background} boxRadius={0}/>
   </div>)
   return <div css={css({

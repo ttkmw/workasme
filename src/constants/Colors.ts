@@ -20,11 +20,13 @@ export default {
     },
     text: {
       default: "black",
+      soft: Grey.get('800'),
+      white: "#ffffff",
       button: {
         default: "#ffffff",
       },
       box: {
-        number: Grey.get('400')
+        default: Grey.get('400')
       },
       tab: {
         active: "#495057",

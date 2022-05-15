@@ -20,6 +20,7 @@
     "@types/react-scroll": "^1.8.2",
     "axios": "^0.24.0",
     "bootstrap": "4.6.0",
+    "dayjs": "^1.11.2",
     "devextreme": "21.1.4",
     "devextreme-react": "21.1.4",
     "env-cmd": "^10.1.0",

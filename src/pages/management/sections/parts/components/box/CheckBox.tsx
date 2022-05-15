@@ -8,7 +8,7 @@ import Pixel from "src/graphic/size/pixel";
 import Percentage from "src/graphic/size/percentage";
 
 
-const CheckBox: React.FC<{size: Pixel, borderWidth: Pixel, borderColor: string, beforeColor: string, afterColor: string}> = (props: {size: Pixel, borderWidth: Pixel, borderColor: string, beforeColor: string, afterColor: string}) => {
+const CheckBox: React.FC<{size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined}> = (props: {size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined}) => {
   const {size, borderWidth, borderColor, beforeColor, afterColor} = props;
 
   const imgSize = size.minus(borderWidth.multiply(new Percentage(200)));
