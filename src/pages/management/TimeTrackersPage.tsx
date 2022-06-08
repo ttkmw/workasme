@@ -10,6 +10,7 @@ import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
 import WeeklySection from "src/pages/management/sections/WeeklySection";
 import Percentage from "src/graphic/size/percentage";
+import TestSection from "src/pages/management/sections/TestSection";
 
 const TimeTrackersPage: React.FC = () => {
 
@@ -30,7 +31,7 @@ const TimeTrackersPage: React.FC = () => {
       </style>
       <Tabs className="navlink-custom" defaultActiveKey="monthly" id="management">
         <Tab className="navtab-custom"  eventKey="monthly" title="Monthly">
-
+          <TestSection />
         </Tab>
         <Tab eventKey="weekly" title="Weekly">
           <WeeklySection/>

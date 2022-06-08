@@ -2170,6 +2170,11 @@
   "resolved" "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.1.tgz"
   "version" "0.16.1"
 
+"@types/selectables@^1.4.1":
+  "integrity" "sha512-O6qjiCBM3NolOHeQIrMClwaE9U0PSZVnyKUZGupJ77uWTJz/qTcOhYQgvHSlT5g25+cpKZXcQtz6M3x/oXc3UQ=="
+  "resolved" "https://registry.npmjs.org/@types/selectables/-/selectables-1.4.1.tgz"
+  "version" "1.4.1"
+
 "@types/source-list-map@*":
   "integrity" "sha512-K5K+yml8LTo9bWJI/rECfIPrGgxdpeNbj+d53lwN4QjW1MCwlkhUms+gtdzigTeUyBr09+u8BwOIY3MXvHdcsA=="
   "resolved" "https://registry.npmjs.org/@types/source-list-map/-/source-list-map-0.1.2.tgz"
@@ -10131,6 +10136,11 @@
     "lodash.throttle" "^4.1.1"
     "prop-types" "^15.7.2"
 
+"react-selectable-fast@^3.4.0":
+  "integrity" "sha512-4DVrX6eTCLqt+GVtSNAEcL3S9ODUvtcPrzUL1ObjSL507D+i+HE4tCokSxUn4PqLtEsrWxXJU+CVC43XmwIVyw=="
+  "resolved" "https://registry.npmjs.org/react-selectable-fast/-/react-selectable-fast-3.4.0.tgz"
+  "version" "3.4.0"
+
 "react-slidedown@^2.4.5":
   "integrity" "sha512-zFDhgqQ1ZLfRr+rQA7p+13OTT/+zUR/+3v3JnwrnXPM8R+1KHhuTNseYHU8jYN3QfxjJXtqve0rgbWCBiFkpiw=="
   "resolved" "https://registry.npmjs.org/react-slidedown/-/react-slidedown-2.4.5.tgz"
@@ -10793,6 +10803,11 @@
   "integrity" "sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo="
   "resolved" "https://registry.npmjs.org/select-hose/-/select-hose-2.0.0.tgz"
   "version" "2.0.0"
+
+"selectables@^1.4.1":
+  "integrity" "sha1-VcZem+qkOuhP5VIHdlvm3CW2G8k="
+  "resolved" "https://registry.npmjs.org/selectables/-/selectables-1.4.1.tgz"
+  "version" "1.4.1"
 
 "selfsigned@^1.10.8":
   "integrity" "sha512-aVmbPOfViZqOZPgRBT0+3u4yZFHpmnIghLMlAcb5/xhp5ZtB/RVnKhz5vl2M32CLXAqR4kha9zfhNg0Lf/sxKA=="

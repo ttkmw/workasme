@@ -2,18 +2,11 @@ import React from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import {Col, Container, Row} from "react-bootstrap";
-import TimeTrackerPart from "src/pages/management/sections/parts/TimeTrackerPart";
-import EvaluationPart from "src/pages/management/sections/parts/EvaluationPart";
+import { Container} from "react-bootstrap";
 import Pixel from "src/graphic/size/pixel";
-import {Element} from "react-scroll";
-import TaskListPart from "src/pages/management/sections/parts/TaskListPart";
 import DayOfWeekWriteListPart from "src/pages/management/sections/parts/DayOfWeekWriteListPart";
 import Percentage from "src/graphic/size/percentage";
 import dayjs, {Dayjs} from "dayjs";
-import Colors from "src/constants/Colors";
-import NumberBox from "src/pages/management/sections/parts/components/box/NumberBox";
-import fontConfig from "src/graphic/text/font";
 
 
 function calculateWeekdaysForView(day: dayjs.Dayjs): Dayjs[] {
