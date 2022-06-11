@@ -1,8 +1,4 @@
 import React, {
-  Component, createRef,
-  forwardRef,
-  MutableRefObject,
-  ReactNode,
   RefObject, useEffect,
   useImperativeHandle,
   useRef,
@@ -20,6 +16,7 @@ import SelectableSampleComponent from './SampleComponent'
 import {unmountComponentAtNode} from "react-dom";
 import {TSelectableItem, TSelectableItemState} from "react-selectable-fast/lib/Selectable.types";
 import SampleComponent from "./SampleComponent";
+import TestPopupContainer from "src/pages/management/sections/TestPopupContainer";
 
 
 const Example: React.FC = () => {
@@ -64,6 +61,13 @@ const TestSection: React.FC = () => {
 
   }
 
+  const triggerText = 'Open form';
+  const onSubmit = (event: any) => {
+    event.preventDefault(event);
+    console.log(event.target.name.value);
+    console.log(event.target.email.value);
+  };
+
   return <div css={css({
     '.middle': {
       borderWidth: 5,
@@ -81,6 +85,7 @@ const TestSection: React.FC = () => {
       borderStyle: "solid"
     },
   })}>
+    <TestPopupContainer triggerText={triggerText} onSubmit={onSubmit} />
     <SelectAll className="selectable-button">
       <button onClick={
         () => {
