@@ -70,7 +70,7 @@ export const Modal = ({
           backgroundColor: '#ffffff',
           boxShadow: '0 0 10px 3px rgba(0, 0, 0, 0.1)',
           overflowY: "auto",
-          '-webkit-overflow-scrolling': 'touch',
+          webkitOverflowScrolling: 'touch',
 
         })} className="modal-area" ref={modalRef}>
           <button

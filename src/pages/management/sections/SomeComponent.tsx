@@ -17,10 +17,6 @@ class SomeComponent extends Component<SelectableProps> {
 
   render() {
     const {selectableRef, isSelected, isSelecting} = this.props
-    console.log("isSelected")
-    console.log(isSelected);
-    console.log("isSelecting")
-    console.log(isSelecting);
 
     function getBackgroundColor(isSelected: boolean, isSelecting: boolean) {
       if (isSelected) {

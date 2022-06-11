@@ -9,9 +9,6 @@ const SampleComponent = forwardRef((props:TSelectableItemProps, ref) => {
 
   const {selectableRef, isSelected, isSelecting} = props;
 
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!");
-  console.log(isSelected);
-  console.log(isSelecting);
 
   useImperativeHandle(ref, () => ({
 
