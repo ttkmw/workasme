@@ -1,5 +1,5 @@
 import React, {
-  Component,
+  Component, createRef,
   RefObject, useEffect,
   useImperativeHandle,
   useRef,
@@ -8,18 +8,13 @@ import React, {
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import Container from "react-bootstrap/Container";
-import Selectables from "selectables";
-import {createSelectable, DeselectAll, SelectableGroup, SelectAll, TSelectableItemProps} from "react-selectable-fast";
+import {DeselectAll, SelectableGroup, SelectAll, TSelectableItemProps} from "react-selectable-fast";
 import SelectableComponent from './SomeComponent'
 
-import SelectableSampleComponent from './SampleComponent'
-import {unmountComponentAtNode} from "react-dom";
 import {TSelectableItem, TSelectableItemState} from "react-selectable-fast/lib/Selectable.types";
-import SampleComponent from "./SampleComponent";
-import TestPopupContainer from "src/pages/management/sections/TestPopupContainer";
-import TriggerButton from "src/pages/management/sections/TriggerButton";
 import Modal from "src/pages/management/sections/Mordal";
+import {VanillaSelectableGroup} from "./selectable";
+import {ReactSelectableGroup} from "src/pages/management/sections/selectable";
 
 
 const Example: React.FC = () => {
@@ -33,9 +28,23 @@ const Example: React.FC = () => {
 }
 
 const items = ["3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "00", "1", "2"]
+
+function mousedown(e: any) {
+  console.log("mouseDown!")
+}
+
 export class TestSection extends Component<any, any> {
 
+  selectionRef = createRef<any>();
 
+  componentDidMount() {
+  }
+
+  clearSelectionUsingRef = () => {
+    if (this.selectionRef) {
+      this.selectionRef.current.clearSelection();
+    }
+  }
 
   // [top, setTop] = useState<TSelectableItem>();
   // [size, setSize] = useState<number>();
@@ -70,17 +79,6 @@ export class TestSection extends Component<any, any> {
   private TriggerButton: any;
   private modal: any;
 
-  // const selectableRefs = useRef([]);
-  // useEffect(() => {
-  //   selectableRefs.current = selectableRefs.current.slice(0, items.length);
-  // }, [items]);
-
-  // selectableRefs.current = items.map(
-  //   (ref, index) => selectableRefs.current[index] = React.createRef()
-  // )
-
-
-
 
   triggerText = 'Open form';
   onSubmit = (event: any) => {
@@ -107,14 +105,13 @@ export class TestSection extends Component<any, any> {
           borderColor: "blue",
           borderStyle: "solid"
         },
-      })}>
+      })}
+           onMouseDown={mousedown}
+      >
+        <ReactSelectableGroup />
+
         <SelectAll className="selectable-button">
-          <button onClick={
-            () => {
-            }
-          }>
-            Select all
-          </button>
+          <button onClick={this.clearSelectionUsingRef}>Clear Selection using Ref</button>
         </SelectAll>
         <DeselectAll className="selectable-button">
           <button onClick={() => {
@@ -122,24 +119,37 @@ export class TestSection extends Component<any, any> {
           </button>
         </DeselectAll>
 
+
+        <div css={css({})}
+             onMouseDown={() => {
+               console.log("mouseDown")
+             }}
+             onMouseMove={() => console.log("kkkkkk")}
+        >
+          Selectable
+        </div>
+
+        {/*document.addEventListener('mousemove', _this.updateSelectBox);*/}
+        {/*document.addEventListener('touchmove', _this.updateSelectBox);*/}
+        {/*document.addEventListener('mouseup', _this.mouseUp);*/}
+        {/*document.addEventListener('touchend', _this.mouseUp);*/}
         <SelectableGroup
           className="main"
           clickClassName="tick"
-          enableDeselect
+          enableDeselect={false}
           tolerance={0}
           globalMouse={false}
-          allowClickWithoutSelected={false}
-          duringSelection={() => {
-          }}
+          allowClickWithoutSelected={true}
+          // duringSelection={() => {
+          // }}
           onSelectionClear={() => {
             console.log("clear!")
           }}
+          ref={this.selectionRef}
           onSelectionFinish={(haha: any) => {
-
-
             const sorted = sort(haha);
 
-            sorted.map((item: TSelectableItem, i: number)=> {
+            sorted.map((item: TSelectableItem, i: number) => {
               if (i == 0) {
                 // @ts-ignore
                 item.node.classList.add('first');
@@ -153,20 +163,20 @@ export class TestSection extends Component<any, any> {
             })
 
             console.log('finish');
-            // this.showModal();
+            this.showModal();
           }}
           onSelectedItemUnmount={(event: any) => {
             event.preventDefault(event);
             console.log("unmount!")
           }}
           ignoreList={[]}
-          resetOnStart={true}
+          resetOnStart={false}
         >
           {items.map((item, i) => {
 
             return (
               // @ts-ignore
-              <SelectableComponent />
+              <SelectableComponent/>
             )
           })}
         </SelectableGroup>
