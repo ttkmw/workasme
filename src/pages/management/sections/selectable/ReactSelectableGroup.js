@@ -272,22 +272,22 @@ class ReactSelectableGroup extends Component {
         )}
         style={wrapperStyle}
       >
-        {/*{*/}
-        {/*  isBoxSelecting ?*/}
-        {/*    <div*/}
-        {/*      style={boxStyle}*/}
-        {/*      ref="selectbox"*/}
-        {/*    >*/}
-				{/*			<span*/}
-        {/*        style={spanStyle}*/}
-        {/*      />*/}
-        {/*    </div>*/}
-        {/*    : null*/}
-        {/*}*/}
-        {/*{children}*/}
-        <div>
-          hahakkkk
-        </div>
+        {
+          isBoxSelecting ?
+            <div
+              style={boxStyle}
+              ref="selectbox"
+            >
+							<span
+                style={spanStyle}
+              />
+            </div>
+            : null
+        }
+        {children}
+        {/*<div>*/}
+        {/*  hahakkkk*/}
+        {/*</div>*/}
       </Component>
     );
   }

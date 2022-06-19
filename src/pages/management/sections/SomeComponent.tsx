@@ -37,7 +37,7 @@ class SomeComponent extends Component<SelectableProps> {
       margin: "30px",
       backgroundColor: backgroundColor
     })} ref={selectableRef}>
-      haha
+      {this.props.children}
     </div>;
   }
 }
@@ -56,4 +56,4 @@ class SomeComponent extends Component<SelectableProps> {
 //   hoho
 // </div>
 
-export default createSelectable(SomeComponent);
+export default SomeComponent;

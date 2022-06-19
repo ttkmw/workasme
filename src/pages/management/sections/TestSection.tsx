@@ -8,48 +8,100 @@ import React, {
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import {DeselectAll, SelectableGroup, SelectAll, TSelectableItemProps} from "react-selectable-fast";
-import SelectableComponent from './SomeComponent'
 
-import {TSelectableItem, TSelectableItemState} from "react-selectable-fast/lib/Selectable.types";
+import {SelectableGroup, createSelectable} from 'react-selectable';
+
+import {TSelectableItem} from "react-selectable-fast/lib/Selectable.types";
 import Modal from "src/pages/management/sections/Mordal";
-import {VanillaSelectableGroup} from "./selectable";
-import {ReactSelectableGroup} from "src/pages/management/sections/selectable";
+import SomeComponent from "./SomeComponent";
+import {number, string} from "prop-types";
+import ExampleApp from "src/pages/management/sections/selectable/example/ExampleApp";
+import data from "src/pages/management/sections/selectable/example/sample-data";
 
-
-const Example: React.FC = () => {
-  return <div css={css({
-    backgroundColor: 'blue',
-    width: 200,
-    height: 200
-  })}>
-    aaaa
-  </div>
-}
 
 const items = ["3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "00", "1", "2"]
 
-function mousedown(e: any) {
-  console.log("mouseDown!")
-}
+const SelectableComponent = createSelectable(SomeComponent);
 
-export class TestSection extends Component<any, any> {
-
-  selectionRef = createRef<any>();
-
-  componentDidMount() {
+const isNodeInRoot = (node, root) => {
+  while (node) {
+    if (node === root) {
+      return true;
+    }
+    node = node.parentNode;
   }
 
-  clearSelectionUsingRef = () => {
-    if (this.selectionRef) {
-      this.selectionRef.current.clearSelection();
+  return false;
+};
+
+export class TestSection extends Component<any> {
+
+  // selectionRef = createRef<any>();
+
+
+  constructor (props) {
+    super(props)
+    this.selectableRef = React.createRef();
+    this.state = {
+      isShown: false,
+      selectedKeys: [string],
+      selectOnMouseMove: false
+    };
+
+    this.setSelectedKeys = this.setSelectedKeys.bind(this);
+    this.clearItems = this.clearItems.bind(this);
+    this.handleToleranceChange = this.handleToleranceChange.bind(this);
+    this.toggleSelectOnMouseMove = this.toggleSelectOnMouseMove.bind(this);
+    // this.state = {
+    //   isShown: false,
+    //   selectedKeys: []
+    // }
+  }
+
+  // clearSelectionUsingRef = () => {
+  //   if (this.selectionRef) {
+  //     this.selectionRef.current.clearSelection();
+  //   }
+  // }
+
+  selectableRef;
+
+
+  componentDidMount () {
+    document.addEventListener('click', this.clearItems);
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('click', this.clearItems);
+  }
+
+  setSelectedKeys = (selectedKeys) => {
+    console.log("setSelectedKeys")
+    console.log(selectedKeys)
+    this.state.selectedKeys = selectedKeys;
+  }
+
+  clearItems (e) {
+    if(!isNodeInRoot(e.target, this.selectableRef)) {
+      this.setSelectedKeys([]);
     }
   }
 
-  // [top, setTop] = useState<TSelectableItem>();
-  // [size, setSize] = useState<number>();
+  handleToleranceChange (e) {
+    this.setState({
+      tolerance: parseInt(e.target.value)
+    });
+  }
 
-  state = {isShown: false};
+  toggleSelectOnMouseMove () {
+    this.setState({
+      selectOnMouseMove: !this.state.selectOnMouseMove
+    });
+  }
+
+
+  state;
+
   showModal = () => {
     console.log('showModal');
     this.setState({isShown: true}, () => {
@@ -80,15 +132,14 @@ export class TestSection extends Component<any, any> {
   private modal: any;
 
 
-  triggerText = 'Open form';
-  onSubmit = (event: any) => {
-    event.preventDefault(event);
-    console.log(event.target.name.value);
-    console.log(event.target.email.value);
-  };
+
+  handleSelection (selectedKeys) {
+    this.setSelectedKeys(selectedKeys);
+  }
 
   render() {
     return (
+      // <ExampleApp items={data}/>
       <div css={css({
         '.middle': {
           borderWidth: 5,
@@ -105,81 +156,100 @@ export class TestSection extends Component<any, any> {
           borderColor: "blue",
           borderStyle: "solid"
         },
+        '.selectable': {
+          backgroundColor: 'blue'
+        },
+        '.selectingSelectable': {
+          backgroundColor: 'yellow'
+        }
       })}
-           onMouseDown={mousedown}
       >
-        <ReactSelectableGroup />
-
-        <SelectAll className="selectable-button">
-          <button onClick={this.clearSelectionUsingRef}>Clear Selection using Ref</button>
-        </SelectAll>
-        <DeselectAll className="selectable-button">
-          <button onClick={() => {
-          }}>Clear selection
-          </button>
-        </DeselectAll>
-
-
-        <div css={css({})}
-             onMouseDown={() => {
-               console.log("mouseDown")
-             }}
-             onMouseMove={() => console.log("kkkkkk")}
-        >
-          Selectable
-        </div>
-
-        {/*document.addEventListener('mousemove', _this.updateSelectBox);*/}
-        {/*document.addEventListener('touchmove', _this.updateSelectBox);*/}
-        {/*document.addEventListener('mouseup', _this.mouseUp);*/}
-        {/*document.addEventListener('touchend', _this.mouseUp);*/}
-        <SelectableGroup
-          className="main"
-          clickClassName="tick"
-          enableDeselect={false}
-          tolerance={0}
-          globalMouse={false}
-          allowClickWithoutSelected={true}
-          // duringSelection={() => {
-          // }}
-          onSelectionClear={() => {
-            console.log("clear!")
-          }}
-          ref={this.selectionRef}
-          onSelectionFinish={(haha: any) => {
-            const sorted = sort(haha);
-
-            sorted.map((item: TSelectableItem, i: number) => {
-              if (i == 0) {
-                // @ts-ignore
-                item.node.classList.add('first');
-              } else if (i == sorted.length - 1) {
-                // @ts-ignore
-                item.node.classList.add('last');
-              } else {
-                // @ts-ignore
-                item.node.classList.add('middle');
-              }
-            })
-
-            console.log('finish');
-            this.showModal();
-          }}
-          onSelectedItemUnmount={(event: any) => {
-            event.preventDefault(event);
-            console.log("unmount!")
-          }}
-          ignoreList={[]}
-          resetOnStart={false}
-        >
-          {items.map((item, i) => {
-
+        <SelectableGroup onSelection={this.setSelectedKeys}
+                         className={"selectable"}
+                         ref={this.selectableRef}
+                         selectingClassName={"selectingSelectable"}>
+          {this.props.items.map((item, i) => {
+            console.log("rendering!")
+            let selected = this.state.selectedKeys.indexOf(item) > -1;
+            console.log("selected?");
+            console.log(selected);
             return (
-              // @ts-ignore
-              <SelectableComponent/>
-            )
+              <SelectableComponent
+                selectableKey={i}
+                key={i}
+                selected={selected}
+                >
+                {item}
+              </SelectableComponent>
+            );
           })}
         </SelectableGroup>
+
+        {/*<SelectAll className="selectable-button">*/}
+        {/*  <button onClick={this.clearSelectionUsingRef}>Clear Selection using Ref</button>*/}
+        {/*</SelectAll>*/}
+        {/*<DeselectAll className="selectable-button">*/}
+        {/*  <button onClick={() => {*/}
+        {/*  }}>Clear selection*/}
+        {/*  </button>*/}
+        {/*</DeselectAll>*/}
+
+
+        {/*<div css={css({})}*/}
+        {/*     onMouseDown={() => {*/}
+        {/*       console.log("mouseDown")*/}
+        {/*     }}*/}
+        {/*     onMouseMove={() => console.log("kkkkkk")}*/}
+        {/*>*/}
+        {/*  Selectable*/}
+        {/*</div>*/}
+        {/*<SelectableGroup*/}
+        {/*  className="main"*/}
+        {/*  clickClassName="tick"*/}
+        {/*  enableDeselect={false}*/}
+        {/*  tolerance={0}*/}
+        {/*  globalMouse={false}*/}
+        {/*  allowClickWithoutSelected={true}*/}
+        {/*  // duringSelection={() => {*/}
+        {/*  // }}*/}
+        {/*  onSelectionClear={() => {*/}
+        {/*    console.log("clear!")*/}
+        {/*  }}*/}
+        {/*  ref={this.selectionRef}*/}
+        {/*  onSelectionFinish={(haha: any) => {*/}
+        {/*    const sorted = sort(haha);*/}
+
+        {/*    sorted.map((item: TSelectableItem, i: number) => {*/}
+        {/*      if (i == 0) {*/}
+        {/*        // @ts-ignore*/}
+        {/*        item.node.classList.add('first');*/}
+        {/*      } else if (i == sorted.length - 1) {*/}
+        {/*        // @ts-ignore*/}
+        {/*        item.node.classList.add('last');*/}
+        {/*      } else {*/}
+        {/*        // @ts-ignore*/}
+        {/*        item.node.classList.add('middle');*/}
+        {/*      }*/}
+        {/*    })*/}
+
+        {/*    console.log('finish');*/}
+        {/*    this.showModal();*/}
+        {/*  }}*/}
+        {/*  onSelectedItemUnmount={(event: any) => {*/}
+        {/*    event.preventDefault(event);*/}
+        {/*    console.log("unmount!")*/}
+        {/*  }}*/}
+        {/*  ignoreList={[]}*/}
+        {/*  resetOnStart={false}*/}
+        {/*>*/}
+        {/*  {items.map((item, i) => {*/}
+
+        {/*    return (*/}
+        {/*      // @ts-ignore*/}
+        {/*      <SelectableComponent/>*/}
+        {/*    )*/}
+        {/*  })}*/}
+        {/*</SelectableGroup>*/}
 
         <React.Fragment>
           {/*<TriggerButton*/}
@@ -226,21 +296,8 @@ function sort(haha: TSelectableItem[]) {
 //   }
 // ];
 
-const List = () => (
 
-  <div>
-    <SelectAll className="selectable-button">
-      <button>Select all</button>
-    </SelectAll>
-    <DeselectAll className="selectable-button">
-      <button>Clear selection</button>
-    </DeselectAll>
-    {items.map((item, i) => (
 
-      <SelectableComponent key={i} selectableRef={() => {
-      }} isSelected={true} isSelecting={true}/>
-    ))}
-  </div>
-)
+
 
 export default TestSection;

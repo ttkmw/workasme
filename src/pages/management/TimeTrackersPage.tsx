@@ -13,6 +13,7 @@ import Percentage from "src/graphic/size/percentage";
 import TestSection from "src/pages/management/sections/TestSection";
 
 const TimeTrackersPage: React.FC = () => {
+  const items = ["3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "00", "1", "2"]
 
   return <Container css={css({
     // marginRight: "0px",
@@ -31,7 +32,7 @@ const TimeTrackersPage: React.FC = () => {
       </style>
       <Tabs className="navlink-custom" defaultActiveKey="monthly" id="management">
         <Tab className="navtab-custom"  eventKey="monthly" title="Monthly">
-          <TestSection />
+          <TestSection items={items}/>
         </Tab>
         <Tab eventKey="weekly" title="Weekly">
           <WeeklySection/>
