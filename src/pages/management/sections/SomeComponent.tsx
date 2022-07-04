@@ -34,10 +34,23 @@ class SomeComponent extends Component<SelectableProps> {
       position: "relative",
       width: "150px",
       height: "150px",
-      margin: "30px",
+      // margin: "30px",
       backgroundColor: backgroundColor
     })} ref={selectableRef}>
       {this.props.children}
+      <div css={css({
+        width: "150px",
+        height: "100px",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        // opacity: 0.7,
+        background: "yellow",
+        zIndex: 9,
+        margin: "2px"
+      })}>
+        hoho
+      </div>
     </div>;
   }
 }

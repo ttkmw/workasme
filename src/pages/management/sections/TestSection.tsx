@@ -157,46 +157,82 @@ export class TestSection extends React.Component<any> {
           borderStyle: "solid"
         },
         '.selectable': {
-          backgroundColor: 'blue'
+          backgroundColor: 'blue',
+          width: "150px"
         },
         '.selectingSelectable': {
           backgroundColor: 'yellow'
         }
       })}
       >
-        <div>
-          <ul>
-            {this.state.selectedKeys.map((key, i) => {
-              console.log("key^^^^^^^")
-              console.log(key)
-              // return null;
+        {/*<div>*/}
+        {/*  <ul>*/}
+        {/*    {this.state.selectedKeys.map((key, i) => {*/}
+        {/*      console.log("key^^^^^^^")*/}
+        {/*      console.log(key)*/}
+        {/*      // return null;*/}
 
-              let result = this.props.items.find(item => item.id === key);
-              console.log('result!!!!!!!!!!!')
-              console.log(result);
-              return <li key={i}>{result.value}</li>
-            })}
-          </ul>
-        </div>
-        <ReactSelectableGroup onSelection={this.handleSelection}
-                              onEndSelection={this.showModal}
-                              className={"selectable"}
-                              ref={this.selectableRef}
-                              selectOnMouseMove={this.state.selectOnMouseMove}
-                              selectingClassName={"selectingSelectable"}>
-          {this.props.items.map((item, i) => {
-            let selected = this.state.selectedKeys.indexOf(item.id) > -1;
-            return (
-              <SelectableComponent
-                selectableKey={item.id}
-                key={i}
-                selected={selected}
-              >
-                {item.value}
-              </SelectableComponent>
-            );
+        {/*      let result = this.props.items.find(item => item.id === key);*/}
+        {/*      console.log('result!!!!!!!!!!!')*/}
+        {/*      console.log(result);*/}
+        {/*      return <li key={i}>{result.value}</li>*/}
+        {/*    })}*/}
+        {/*  </ul>*/}
+        {/*</div>*/}
+        <div
+          css={css({
+            flexDirection: "row",
+            display: "flex"
           })}
-        </ReactSelectableGroup>
+        >
+          <ReactSelectableGroup onSelection={this.handleSelection}
+                                onEndSelection={this.showModal}
+                                className={"selectable"}
+                                ref={this.selectableRef}
+                                selectOnMouseMove={this.state.selectOnMouseMove}
+                                selectingClassName={"selectingSelectable"}>
+            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+            {this.props.items.map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+              return (
+                <div>
+                  <SelectableComponent
+                    selectableKey={item.id}
+                    key={i}
+                    selected={selected}
+                  >
+                    {item.value}
+                  </SelectableComponent>
+
+                </div>
+              );
+            })}
+          </ReactSelectableGroup>
+          <ReactSelectableGroup onSelection={this.handleSelection}
+                                onEndSelection={this.showModal}
+                                className={"selectable"}
+                                ref={this.selectableRef}
+                                selectOnMouseMove={this.state.selectOnMouseMove}
+                                selectingClassName={"selectingSelectable"}>
+            {this.props.items.map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+              return (
+                <div>
+                  <SelectableComponent
+                    selectableKey={item.id}
+                    key={i}
+                    selected={selected}
+                  >
+                    {item.value}
+                  </SelectableComponent>
+
+                </div>
+              );
+            })}
+          </ReactSelectableGroup>
+        </div>
+
+
 
         {/*<SelectAll className="selectable-button">*/}
         {/*  <button onClick={this.clearSelectionUsingRef}>Clear Selection using Ref</button>*/}
