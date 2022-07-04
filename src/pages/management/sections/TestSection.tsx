@@ -1,5 +1,5 @@
 import React, {
-  Component, createRef,
+  Component, createRef, ReactNode,
   RefObject, useEffect,
   useImperativeHandle,
   useRef,
@@ -9,7 +9,7 @@ import React, {
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 
-import {SelectableGroup, createSelectable} from 'react-selectable';
+import {createSelectable} from 'react-selectable';
 
 import {TSelectableItem} from "react-selectable-fast/lib/Selectable.types";
 import Modal from "src/pages/management/sections/Mordal";
@@ -17,6 +17,7 @@ import SomeComponent from "./SomeComponent";
 import {number, string} from "prop-types";
 import ExampleApp from "src/pages/management/sections/selectable/example/ExampleApp";
 import data from "src/pages/management/sections/selectable/example/sample-data";
+import ReactSelectableGroup from "src/pages/management/sections/selectable/react-selectable/ReactSelectableGroup";
 
 
 const items = ["3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "00", "1", "2"]
@@ -34,21 +35,25 @@ const isNodeInRoot = (node, root) => {
   return false;
 };
 
-export class TestSection extends Component<any> {
+export class TestSection extends React.Component<any> {
 
   // selectionRef = createRef<any>();
 
 
-  constructor (props) {
-    super(props)
-    this.selectableRef = React.createRef();
-    this.state = {
-      isShown: false,
-      selectedKeys: [string],
-      selectOnMouseMove: false
-    };
+  selectableRef;
+  state;
 
-    this.setSelectedKeys = this.setSelectedKeys.bind(this);
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectedKeys: [],
+      tolerance: 0,
+      selectOnMouseMove: false,
+      haha: ""
+    };
+    this.selectableRef = React.createRef();
+
+    this.handleSelection = this.handleSelection.bind(this);
     this.clearItems = this.clearItems.bind(this);
     this.handleToleranceChange = this.handleToleranceChange.bind(this);
     this.toggleSelectOnMouseMove = this.toggleSelectOnMouseMove.bind(this);
@@ -64,63 +69,64 @@ export class TestSection extends Component<any> {
   //   }
   // }
 
-  selectableRef;
 
-
-  componentDidMount () {
-    document.addEventListener('click', this.clearItems);
+  componentDidMount() {
+    // document.addEventListener('click', this.clearItems);
+    console.log("componentDidMount")
+    console.log(this.state.haha)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     document.removeEventListener('click', this.clearItems);
   }
 
-  setSelectedKeys = (selectedKeys) => {
-    console.log("setSelectedKeys")
-    console.log(selectedKeys)
-    this.state.selectedKeys = selectedKeys;
+  handleSelection(keys) {
+
+    this.setState({
+      selectedKeys: keys
+    });
   }
 
-  clearItems (e) {
-    if(!isNodeInRoot(e.target, this.selectableRef)) {
-      this.setSelectedKeys([]);
+  clearItems(e) {
+    console.log("CLEAR ITEMS!!!!!!!!")
+    if (!isNodeInRoot(e.target, this.selectableRef)) {
+      this.setState({
+        selectedKeys: []
+      });
     }
   }
 
-  handleToleranceChange (e) {
+  handleToleranceChange(e) {
     this.setState({
       tolerance: parseInt(e.target.value)
     });
   }
 
-  toggleSelectOnMouseMove () {
+  toggleSelectOnMouseMove() {
     this.setState({
       selectOnMouseMove: !this.state.selectOnMouseMove
     });
   }
 
-
-  state;
-
   showModal = () => {
-    console.log('showModal');
     this.setState({isShown: true}, () => {
       this.closeButton.focus();
     });
     this.toggleScrollLock();
   };
-  closeModal = () => {
+  closeModal = (e) => {
+    this.clearItems(e)
     this.setState({isShown: false});
     this.toggleScrollLock();
   };
   onKeyDown = (event: any) => {
     if (event.keyCode === 27) {
-      this.closeModal();
+      this.closeModal(event);
     }
   };
   onClickOutside = (event: any) => {
     if (this.modal && this.modal.contains(event.target)) return;
-    this.closeModal();
+    this.closeModal(event);
   };
 
   toggleScrollLock = () => {
@@ -130,12 +136,6 @@ export class TestSection extends Component<any> {
   private closeButton: any;
   private TriggerButton: any;
   private modal: any;
-
-
-
-  handleSelection (selectedKeys) {
-    this.setSelectedKeys(selectedKeys);
-  }
 
   render() {
     return (
@@ -164,26 +164,39 @@ export class TestSection extends Component<any> {
         }
       })}
       >
-        <SelectableGroup onSelection={this.setSelectedKeys}
-                         className={"selectable"}
-                         ref={this.selectableRef}
-                         selectingClassName={"selectingSelectable"}>
+        <div>
+          <ul>
+            {this.state.selectedKeys.map((key, i) => {
+              console.log("key^^^^^^^")
+              console.log(key)
+              // return null;
+
+              let result = this.props.items.find(item => item.id === key);
+              console.log('result!!!!!!!!!!!')
+              console.log(result);
+              return <li key={i}>{result.value}</li>
+            })}
+          </ul>
+        </div>
+        <ReactSelectableGroup onSelection={this.handleSelection}
+                              onEndSelection={this.showModal}
+                              className={"selectable"}
+                              ref={this.selectableRef}
+                              selectOnMouseMove={this.state.selectOnMouseMove}
+                              selectingClassName={"selectingSelectable"}>
           {this.props.items.map((item, i) => {
-            console.log("rendering!")
-            let selected = this.state.selectedKeys.indexOf(item) > -1;
-            console.log("selected?");
-            console.log(selected);
+            let selected = this.state.selectedKeys.indexOf(item.id) > -1;
             return (
               <SelectableComponent
-                selectableKey={i}
+                selectableKey={item.id}
                 key={i}
                 selected={selected}
-                >
-                {item}
+              >
+                {item.value}
               </SelectableComponent>
             );
           })}
-        </SelectableGroup>
+        </ReactSelectableGroup>
 
         {/*<SelectAll className="selectable-button">*/}
         {/*  <button onClick={this.clearSelectionUsingRef}>Clear Selection using Ref</button>*/}
@@ -252,14 +265,13 @@ export class TestSection extends Component<any> {
         {/*</SelectableGroup>*/}
 
         <React.Fragment>
-          {/*<TriggerButton*/}
-          {/*  showModal={this.showModal}*/}
-          {/*  buttonRef={(n: any) => (this.TriggerButton = n)}*/}
-          {/*  triggerText={this.props.triggerText}*/}
-          {/*/>*/}
           {this.state.isShown ? (
             <Modal
-              onSubmit={this.props.onSubmit}
+              onSubmit={e => {
+                this.setState({
+                  haha: "kkkkkkkkkkkkk"
+                })
+              }}
               modalRef={(n: any) => (this.modal = n)}
               buttonRef={(n: any) => (this.closeButton = n)}
               closeModal={this.closeModal}
@@ -295,9 +307,6 @@ function sort(haha: TSelectableItem[]) {
 //     "year": "1991"
 //   }
 // ];
-
-
-
 
 
 export default TestSection;
