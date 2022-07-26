@@ -3,20 +3,26 @@ import {createSelectable, TSelectableItemProps} from "react-selectable-fast";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
+import Pixel from "src/graphic/size/pixel";
+import Percentage from "src/graphic/size/percentage";
 
 interface SelectableProps  {
   selectableRef: any,
   isSelected: boolean,
-  isSelecting: boolean
+  isSelecting: boolean,
+  isMatching: boolean
+  heightTimes: Percentage
 }
 
 class SomeComponent extends Component<SelectableProps> {
-  haha(): void {
-
-  }
-
+  private width: Pixel = new Pixel(150);
+  private height: Pixel = new Pixel(150);
   render() {
-    const {selectableRef, isSelected, isSelecting} = this.props
+    const {selectableRef, isSelected, isSelecting, isMatching, heightTimes} = this.props
+
+    if (heightTimes !== undefined) {
+      console.log("NOT UNDEFINNEDDDDDDDDDDDD")
+    }
 
     function getBackgroundColor(isSelected: boolean, isSelecting: boolean) {
       if (isSelected) {
@@ -29,18 +35,24 @@ class SomeComponent extends Component<SelectableProps> {
 
     const backgroundColor = getBackgroundColor(isSelected, isSelecting);
 
-
-    return <div  css={css({
+    return <div css={css({
       position: "relative",
-      width: "150px",
-      height: "150px",
+      width: this.width.toString(),
+      height: this.height.toString(),
       // margin: "30px",
       backgroundColor: backgroundColor
     })} ref={selectableRef}>
       {this.props.children}
-      <div css={css({
+      {SomeComponent.getDiv(isMatching, this.height.multiply(heightTimes == null ? new Percentage(100) : heightTimes))}
+    </div>;
+  }
+
+  private static getDiv(isMatching: boolean, height: Pixel) {
+    if (isMatching) {
+
+      return <div css={css({
         width: "150px",
-        height: "100px",
+        height: height.toString(),
         position: "absolute",
         top: 0,
         left: 0,
@@ -49,9 +61,9 @@ class SomeComponent extends Component<SelectableProps> {
         zIndex: 9,
         margin: "2px"
       })}>
-        hoho
-      </div>
-    </div>;
+        kkkk
+      </div>;
+    }
   }
 }
 

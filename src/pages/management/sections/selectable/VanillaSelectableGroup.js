@@ -29,7 +29,7 @@ var __values = (this && this.__values) || function(o) {
   if (o && typeof o.length === "number") return {
     next: function () {
       if (o && i >= o.length) o = void 0;
-      return { value: o && o[i++], done: !o };
+      return { alias: o && o[i++], done: !o };
     }
   };
   throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");

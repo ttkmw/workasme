@@ -18,9 +18,9 @@ import {number, string} from "prop-types";
 import ExampleApp from "src/pages/management/sections/selectable/example/ExampleApp";
 import data from "src/pages/management/sections/selectable/example/sample-data";
 import ReactSelectableGroup from "src/pages/management/sections/selectable/react-selectable/ReactSelectableGroup";
+import {start} from "repl";
+import Percentage from "src/graphic/size/percentage";
 
-
-const items = ["3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "00", "1", "2"]
 
 const SelectableComponent = createSelectable(SomeComponent);
 
@@ -34,6 +34,76 @@ const isNodeInRoot = (node, root) => {
 
   return false;
 };
+
+function match(serverData: {
+  MON: { startTime: string; endTime: string; type: string }[];
+  TUE: { startTime: string; endTime: string; type: string }[];
+  WED: { startTime: string; endTime: string; type: string }[];
+  THU: { startTime: string; endTime: string; type: string }[];
+  FRI: { startTime: string; endTime: string; type: string }[];
+  SAT: { startTime: string; endTime: string; type: string }[];
+  SUN: { startTime: string; endTime: string; type: string }[];
+}, item, dayOfWeek) {
+  const mondayData = serverData[dayOfWeek];
+
+
+  for (let i = 0; i < mondayData.length; i++) {
+    const data = mondayData[i];
+    const startTime = data.startTime.split("T")[1];
+    if (item.startTime === startTime) {
+      console.log("TRUETRUETRUE")
+      return true
+    }
+  }
+
+  return false;
+
+}
+
+function calculateHeightTimes(serverData: {
+  MON: { startTime: string; endTime: string; type: string }[];
+  TUE: { startTime: string; endTime: string; type: string }[];
+  WED: { startTime: string; endTime: string; type: string }[];
+  THU: { startTime: string; endTime: string; type: string }[];
+  FRI: { startTime: string; endTime: string; type: string }[];
+  SAT: { startTime: string; endTime: string; type: string }[];
+  SUN: { startTime: string; endTime: string; type: string }[];
+}, item, dayOfWeek) {
+  const mondayData = serverData[dayOfWeek];
+
+  for (let i = 0; i < mondayData.length; i++) {
+    const data = mondayData[i];
+
+    const startDateTime = new Date(data.startTime);
+    const startTime = data.startTime.split("T")[1];
+    if (item.startTime === startTime) {
+      const endDate = data.endTime.split("T")[0];
+      const comparable = new Date(endDate + "T" + "03:00");
+      const endDateTime = new Date(data.endTime);
+      console.log("comparable");
+      console.log(comparable.getTime());
+      console.log("endDateTime");
+      console.log(endDateTime.getTime());
+      // 일단 끄트머리(2시)에서 끊는거까진 함. 남은걸 다음 요일에 뿌려주는걸 안함.
+
+
+
+
+      let itemStartDateTime = new Date();
+      itemStartDateTime.setHours(parseInt(item.alias));
+
+      const itemEndDateTime = new Date();
+      itemEndDateTime.setHours(parseInt(item.alias) + 1);
+
+      if (comparable.getTime() < endDateTime.getTime()) {
+        return new Percentage((comparable.getTime() - startDateTime.getTime()) / (itemEndDateTime.getTime() - itemStartDateTime.getTime()) * 100);
+      }
+
+      return new Percentage((endDateTime.getTime() - startDateTime.getTime()) / (itemEndDateTime.getTime() - itemStartDateTime.getTime()) * 100);
+
+    }
+  }
+}
 
 export class TestSection extends React.Component<any> {
 
@@ -137,6 +207,123 @@ export class TestSection extends React.Component<any> {
   private TriggerButton: any;
   private modal: any;
 
+  private serverData = {
+    "MON": [
+      // {
+      //   startTime: "2022-07-11T10:00",
+      //   endTime: "2022-07-11T12:00",
+      //   type: "FREE"
+      // },
+      // {
+      //   startTime: "2022-07-11T23:00",
+      //   endTime: "2022-07-12T01:00",
+      //   type: "FREE"
+      // }
+    ],
+    "TUE": [
+      {
+        startTime: "2022-07-12T01:00",
+        endTime: "2022-07-12T04:00",
+        type: "FREE"
+      },
+      // {
+      //   startTime: "2022-07-12T10:00",
+      //   endTime: "2022-07-12T12:00",
+      //   type: "FREE"
+      // },
+      // {
+      //   startTime: "2022-07-12T23:00",
+      //   endTime: "2022-07-13T01:00",
+      //   type: "FREE"
+      // }
+    ],
+    "WED": [
+      {
+        startTime: "2022-07-13T01:00",
+        endTime: "2022-07-13T04:00",
+        type: "FREE"
+      },
+      // {
+      //   startTime: "2022-07-13T10:00",
+      //   endTime: "2022-07-13T12:00",
+      //   type: "FREE"
+      // },
+      // {
+      //   startTime: "2022-07-13T23:00",
+      //   endTime: "2022-07-14T01:00",
+      //   type: "FREE"
+      // }
+    ],
+    "THU": [
+      {
+        startTime: "2022-07-14T01:00",
+        endTime: "2022-07-14T04:00",
+        type: "FREE"
+      },
+      // {
+      //   startTime: "2022-07-14T10:00",
+      //   endTime: "2022-07-14T12:00",
+      //   type: "FREE"
+      // },
+      // {
+      //   startTime: "2022-07-14T23:00",
+      //   endTime: "2022-07-15T01:00",
+      //   type: "FREE"
+      // }
+    ],
+    "FRI": [
+      {
+        startTime: "2022-07-15T01:00",
+        endTime: "2022-07-15T04:00",
+        type: "FREE"
+      },
+      // {
+      //   startTime: "2022-07-15T10:00",
+      //   endTime: "2022-07-15T12:00",
+      //   type: "FREE"
+      // },
+      // {
+      //   startTime: "2022-07-15T23:00",
+      //   endTime: "2022-07-16T01:00",
+      //   type: "FREE"
+      // }
+    ],
+    "SAT": [
+      {
+        startTime: "2022-07-16T01:00",
+        endTime: "2022-07-16T04:00",
+        type: "FREE"
+      },
+      // {
+      //   startTime: "2022-07-16T10:00",
+      //   endTime: "2022-07-16T12:00",
+      //   type: "FREE"
+      // },
+      // {
+      //   startTime: "2022-07-16T23:00",
+      //   endTime: "2022-07-17T01:00",
+      //   type: "FREE"
+      // }
+    ],
+    "SUN": [
+      {
+        startTime: "2022-07-17T01:00",
+        endTime: "2022-07-17T04:00",
+        type: "FREE"
+      },
+      // {
+      //   startTime: "2022-07-17T10:00",
+      //   endTime: "2022-07-17T12:00",
+      //   type: "FREE"
+      // },
+      // {
+      //   startTime: "2022-07-17T23:00",
+      //   endTime: "2022-07-18T01:00",
+      //   type: "FREE"
+      // }
+    ],
+  };
+
   render() {
     return (
       // <ExampleApp items={data}/>
@@ -194,16 +381,21 @@ export class TestSection extends React.Component<any> {
             {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
             {this.props.items.map((item, i) => {
               let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+
+              const isMatching = match(this.serverData, item, 'MON');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'MON');
+
               return (
                 <div>
                   <SelectableComponent
                     selectableKey={item.id}
                     key={i}
                     selected={selected}
+                    isMatching={isMatching}
+                    heightTimes={heightTimes}
                   >
-                    {item.value}
+                    {item.alias}
                   </SelectableComponent>
-
                 </div>
               );
             })}
@@ -214,24 +406,173 @@ export class TestSection extends React.Component<any> {
                                 ref={this.selectableRef}
                                 selectOnMouseMove={this.state.selectOnMouseMove}
                                 selectingClassName={"selectingSelectable"}>
+            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
             {this.props.items.map((item, i) => {
               let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+
+              const isMatching = match(this.serverData, item, 'TUE');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'TUE');
+
               return (
                 <div>
                   <SelectableComponent
                     selectableKey={item.id}
                     key={i}
                     selected={selected}
+                    isMatching={isMatching}
+                    heightTimes={heightTimes}
                   >
-                    {item.value}
+                    {item.alias}
                   </SelectableComponent>
+                </div>
+              );
+            })}
+          </ReactSelectableGroup>
+          <ReactSelectableGroup onSelection={this.handleSelection}
+                                onEndSelection={this.showModal}
+                                className={"selectable"}
+                                ref={this.selectableRef}
+                                selectOnMouseMove={this.state.selectOnMouseMove}
+                                selectingClassName={"selectingSelectable"}>
+            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+            {this.props.items.map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
 
+              const isMatching = match(this.serverData, item, 'WED');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'WED');
+
+              return (
+                <div>
+                  <SelectableComponent
+                    selectableKey={item.id}
+                    key={i}
+                    selected={selected}
+                    isMatching={isMatching}
+                    heightTimes={heightTimes}
+                  >
+                    {item.alias}
+                  </SelectableComponent>
+                </div>
+              );
+            })}
+          </ReactSelectableGroup>
+
+          <ReactSelectableGroup onSelection={this.handleSelection}
+                                onEndSelection={this.showModal}
+                                className={"selectable"}
+                                ref={this.selectableRef}
+                                selectOnMouseMove={this.state.selectOnMouseMove}
+                                selectingClassName={"selectingSelectable"}>
+            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+            {this.props.items.map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+
+              const isMatching = match(this.serverData, item, 'THU');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'THU');
+
+
+              return (
+                <div>
+                  <SelectableComponent
+                    selectableKey={item.id}
+                    key={i}
+                    selected={selected}
+                    isMatching={isMatching}
+                    heightTimes={heightTimes}
+                  >
+                    {item.alias}
+                  </SelectableComponent>
+                </div>
+              );
+            })}
+          </ReactSelectableGroup>
+          <ReactSelectableGroup onSelection={this.handleSelection}
+                                onEndSelection={this.showModal}
+                                className={"selectable"}
+                                ref={this.selectableRef}
+                                selectOnMouseMove={this.state.selectOnMouseMove}
+                                selectingClassName={"selectingSelectable"}>
+            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+            {this.props.items.map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+
+              const isMatching = match(this.serverData, item, 'FRI');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'FRI');
+
+
+              return (
+                <div>
+                  <SelectableComponent
+                    selectableKey={item.id}
+                    key={i}
+                    selected={selected}
+                    isMatching={isMatching}
+                    heightTimes={heightTimes}
+                  >
+                    {item.alias}
+                  </SelectableComponent>
+                </div>
+              );
+            })}
+          </ReactSelectableGroup>
+          <ReactSelectableGroup onSelection={this.handleSelection}
+                                onEndSelection={this.showModal}
+                                className={"selectable"}
+                                ref={this.selectableRef}
+                                selectOnMouseMove={this.state.selectOnMouseMove}
+                                selectingClassName={"selectingSelectable"}>
+            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+            {this.props.items.map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+
+              const isMatching = match(this.serverData, item, 'SAT');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'SAT');
+
+
+              return (
+                <div>
+                  <SelectableComponent
+                    selectableKey={item.id}
+                    key={i}
+                    selected={selected}
+                    isMatching={isMatching}
+                    heightTimes={heightTimes}
+                  >
+                    {item.alias}
+                  </SelectableComponent>
+                </div>
+              );
+            })}
+          </ReactSelectableGroup>
+          <ReactSelectableGroup onSelection={this.handleSelection}
+                                onEndSelection={this.showModal}
+                                className={"selectable"}
+                                ref={this.selectableRef}
+                                selectOnMouseMove={this.state.selectOnMouseMove}
+                                selectingClassName={"selectingSelectable"}>
+            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+            {this.props.items.map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+
+              const isMatching = match(this.serverData, item, 'SUN');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'SUN');
+
+              return (
+                <div>
+                  <SelectableComponent
+                    selectableKey={item.id}
+                    key={i}
+                    selected={selected}
+                    isMatching={isMatching}
+                    heightTimes={heightTimes}
+                  >
+                    {item.alias}
+                  </SelectableComponent>
                 </div>
               );
             })}
           </ReactSelectableGroup>
         </div>
-
 
 
         {/*<SelectAll className="selectable-button">*/}

@@ -269,7 +269,7 @@ process.umask = function () {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * 
+ *
  */
 
 function makeEmptyFunction(arg) {
@@ -821,7 +821,7 @@ module.exports = EventListener;
  * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
- * 
+ *
  */
 
 /*eslint-disable no-self-compare */
@@ -895,7 +895,7 @@ module.exports = shallowEqual;
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * 
+ *
  */
 
 var isTextNode = __webpack_require__(20);
@@ -1191,7 +1191,7 @@ if (process.env.NODE_ENV !== "production") {
      * LICENSE file in the root directory of this source tree.
      *
      * @providesModule reactProdInvariant
-     * 
+     *
      */
 
     {
@@ -1477,7 +1477,7 @@ if (process.env.NODE_ENV !== "production") {
      * LICENSE file in the root directory of this source tree.
      *
      * @providesModule ReactCurrentOwner
-     * 
+     *
      */
 
     /**
@@ -1827,7 +1827,7 @@ if (process.env.NODE_ENV !== "production") {
      * LICENSE file in the root directory of this source tree.
      *
      * @providesModule ReactDebugCurrentFrame
-     * 
+     *
      */
 
     var ReactDebugCurrentFrame = {};
@@ -2191,7 +2191,7 @@ if (process.env.NODE_ENV !== "production") {
      * This source code is licensed under the MIT license found in the
      * LICENSE file in the root directory of this source tree.
      *
-     * 
+     *
      * @providesModule describeComponentFrame
      */
 
@@ -2206,7 +2206,7 @@ if (process.env.NODE_ENV !== "production") {
      * LICENSE file in the root directory of this source tree.
      *
      * @providesModule getComponentName
-     * 
+     *
      */
 
     function getComponentName$1(instanceOrFiber) {
@@ -3387,20 +3387,20 @@ var kc = { current: null, phase: null, resetCurrentFiber: function resetCurrentF
     lc = kc,
     mc = { getHostProps: function getHostProps(a, b) {
     var c = b.value,
-        d = b.checked;return n({ type: void 0, step: void 0, min: void 0, max: void 0 }, b, { defaultChecked: void 0, defaultValue: void 0, value: null != c ? c : a._wrapperState.initialValue, checked: null != d ? d : a._wrapperState.initialChecked });
+        d = b.checked;return n({ type: void 0, step: void 0, min: void 0, max: void 0 }, b, { defaultChecked: void 0, defaultValue: void 0, alias: null != c ? c : a._wrapperState.initialValue, checked: null != d ? d : a._wrapperState.initialChecked });
   }, initWrapperState: function initWrapperState(a, b) {
     var c = b.defaultValue;a._wrapperState = { initialChecked: null != b.checked ? b.checked : b.defaultChecked, initialValue: null != b.value ? b.value : c, controlled: "checkbox" === b.type || "radio" === b.type ? null != b.checked : null != b.value };
   }, updateWrapper: function updateWrapper(a, b) {
     var c = b.checked;null != c && hc.setValueForProperty(a, "checked", c || !1);c = b.value;if (null != c) {
-      if (0 === c && "" === a.value) a.value = "0";else if ("number" === b.type) {
-        if (b = parseFloat(a.value) || 0, c != b || c == b && a.value != c) a.value = "" + c;
-      } else a.value !== "" + c && (a.value = "" + c);
+      if (0 === c && "" === a.alias) a.value = "0";else if ("number" === b.type) {
+        if (b = parseFloat(a.alias) || 0, c != b || c == b && a.alias != c) a.value = "" + c;
+      } else a.alias !== "" + c && (a.value = "" + c);
     } else null == b.value && null != b.defaultValue && a.defaultValue !== "" + b.defaultValue && (a.defaultValue = "" + b.defaultValue), null == b.checked && null != b.defaultChecked && (a.defaultChecked = !!b.defaultChecked);
   }, postMountWrapper: function postMountWrapper(a, b) {
     switch (b.type) {case "submit":case "reset":
         break;case "color":case "date":case "datetime":case "datetime-local":case "month":case "time":case "week":
         a.value = "";a.value = a.defaultValue;break;default:
-        a.value = a.value;}b = a.name;"" !== b && (a.name = "");a.defaultChecked = !a.defaultChecked;a.defaultChecked = !a.defaultChecked;"" !== b && (a.name = b);
+        a.value = a.alias;}b = a.name;"" !== b && (a.name = "");a.defaultChecked = !a.defaultChecked;a.defaultChecked = !a.defaultChecked;"" !== b && (a.name = b);
   }, restoreControlledState: function restoreControlledState(a, b) {
     mc.updateWrapper(a, b);var c = b.name;if ("radio" === b.type && null != c) {
       for (b = a; b.parentNode;) {
@@ -3438,7 +3438,7 @@ function tc(a, b, c) {
   }
 }
 var uc = { getHostProps: function getHostProps(a, b) {
-    return n({}, b, { value: void 0 });
+    return n({}, b, { alias: void 0 });
   }, initWrapperState: function initWrapperState(a, b) {
     var c = b.value;a._wrapperState = { initialValue: null != c ? c : b.defaultValue, wasMultiple: !!b.multiple };
   }, postMountWrapper: function postMountWrapper(a, b) {
@@ -3450,12 +3450,12 @@ var uc = { getHostProps: function getHostProps(a, b) {
     var c = b.value;null != c && tc(a, !!b.multiple, c);
   } },
     vc = { getHostProps: function getHostProps(a, b) {
-    null != b.dangerouslySetInnerHTML ? w("91") : void 0;return n({}, b, { value: void 0, defaultValue: void 0, children: "" + a._wrapperState.initialValue });
+    null != b.dangerouslySetInnerHTML ? w("91") : void 0;return n({}, b, { alias: void 0, defaultValue: void 0, children: "" + a._wrapperState.initialValue });
   }, initWrapperState: function initWrapperState(a, b) {
     var c = b.value,
         d = c;null == c && (c = b.defaultValue, b = b.children, null != b && (null != c ? w("92") : void 0, Array.isArray(b) && (1 >= b.length ? void 0 : w("93"), b = b[0]), c = "" + b), null == c && (c = ""), d = c);a._wrapperState = { initialValue: "" + d };
   }, updateWrapper: function updateWrapper(a, b) {
-    var c = b.value;null != c && (c = "" + c, c !== a.value && (a.value = c), null == b.defaultValue && (a.defaultValue = c));null != b.defaultValue && (a.defaultValue = b.defaultValue);
+    var c = b.value;null != c && (c = "" + c, c !== a.alias && (a.value = c), null == b.defaultValue && (a.defaultValue = c));null != b.defaultValue && (a.defaultValue = b.defaultValue);
   }, postMountWrapper: function postMountWrapper(a) {
     var b = a.textContent;b === a._wrapperState.initialValue && (a.value = b);
   }, restoreControlledState: function restoreControlledState(a, b) {
@@ -3489,7 +3489,7 @@ var Bc = { _getTrackerFromNode: function _getTrackerFromNode(a) {
   }, track: function track(a) {
     a._valueTracker || (a._valueTracker = Ac(a));
   }, updateValueIfChanged: function updateValueIfChanged(a) {
-    if (!a) return !1;var b = a._valueTracker;if (!b) return !0;var c = b.getValue();var d = "";a && (d = zc(a) ? a.checked ? "true" : "false" : a.value);a = d;return a !== c ? (b.setValue(a), !0) : !1;
+    if (!a) return !1;var b = a._valueTracker;if (!b) return !0;var c = b.getValue();var d = "";a && (d = zc(a) ? a.checked ? "true" : "false" : a.alias);a = d;return a !== c ? (b.setValue(a), !0) : !1;
   }, stopTracking: function stopTracking(a) {
     (a = a._valueTracker) && a.stopTracking();
   } };
@@ -3833,7 +3833,7 @@ var de = { createWorkInProgress: function createWorkInProgress(a, b) {
 var le = { createCoroutine: function createCoroutine(a, b, c) {
     var d = 3 < arguments.length && void 0 !== arguments[3] ? arguments[3] : null;return { $$typeof: je, key: null == d ? null : "" + d, children: a, handler: b, props: c };
   }, createYield: function createYield(a) {
-    return { $$typeof: ke, value: a };
+    return { $$typeof: ke, alias: a };
   }, isCoroutine: function isCoroutine(a) {
     return "object" === (typeof a === "undefined" ? "undefined" : _typeof(a)) && null !== a && a.$$typeof === je;
   }, isYield: function isYield(a) {
@@ -4777,7 +4777,7 @@ var wh = { getOffsets: function getOffsets(a) {
     return ("selectionStart" in a ? { start: a.selectionStart, end: a.selectionEnd } : wh.getOffsets(a)) || { start: 0, end: 0 };
   }, setSelection: function setSelection(a, b) {
     var c = b.start,
-        d = b.end;void 0 === d && (d = c);"selectionStart" in a ? (a.selectionStart = c, a.selectionEnd = Math.min(d, a.value.length)) : wh.setOffsets(a, b);
+        d = b.end;void 0 === d && (d = c);"selectionStart" in a ? (a.selectionStart = c, a.selectionEnd = Math.min(d, a.alias.length)) : wh.setOffsets(a, b);
   } },
     zh = yh,
     Ah = F.ELEMENT_NODE;function Bh() {
@@ -5102,7 +5102,7 @@ var sj = A.injection.MUST_USE_PROPERTY,
     uj = A.injection.HAS_POSITIVE_NUMERIC_VALUE,
     vj = A.injection.HAS_STRING_BOOLEAN_VALUE,
     wj = { Properties: { allowFullScreen: Z, allowTransparency: vj, async: Z, autoPlay: Z, capture: Z, checked: sj | Z, cols: uj, contentEditable: vj, controls: Z, "default": Z, defer: Z, disabled: Z, download: A.injection.HAS_OVERLOADED_BOOLEAN_VALUE, draggable: vj, formNoValidate: Z, hidden: Z, loop: Z, multiple: sj | Z, muted: sj | Z, noValidate: Z, open: Z, playsInline: Z,
-    readOnly: Z, required: Z, reversed: Z, rows: uj, rowSpan: tj, scoped: Z, seamless: Z, selected: sj | Z, size: uj, start: tj, span: uj, spellCheck: vj, style: 0, itemScope: Z, acceptCharset: 0, className: 0, htmlFor: 0, httpEquiv: 0, value: vj }, DOMAttributeNames: { acceptCharset: "accept-charset", className: "class", htmlFor: "for", httpEquiv: "http-equiv" }, DOMMutationMethods: { value: function value(a, b) {
+    readOnly: Z, required: Z, reversed: Z, rows: uj, rowSpan: tj, scoped: Z, seamless: Z, selected: sj | Z, size: uj, start: tj, span: uj, spellCheck: vj, style: 0, itemScope: Z, acceptCharset: 0, className: 0, htmlFor: 0, httpEquiv: 0, alias: vj }, DOMAttributeNames: { acceptCharset: "accept-charset", className: "class", htmlFor: "for", httpEquiv: "http-equiv" }, DOMMutationMethods: { alias: function value(a, b) {
       if (null == b) return a.removeAttribute("value");"number" !== a.type || !1 === a.hasAttribute("value") ? a.setAttribute("value", "" + b) : a.validity && !a.validity.badInput && a.ownerDocument.activeElement !== a && a.setAttribute("value", "" + b);
     } } },
     xj = A.injection.HAS_STRING_BOOLEAN_VALUE,
@@ -5336,7 +5336,7 @@ module.exports = isNode;
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule reactProdInvariant
- * 
+ *
  *//**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -5344,7 +5344,7 @@ module.exports = isNode;
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule checkReact
- * 
+ *
  */!react?invariant(false,'ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.'):void 0;/**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -5510,7 +5510,7 @@ return false;}},getPropertyInfo:function getPropertyInfo(name){return DOMPropert
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule ReactTypeOfWork
- * 
+ *
  */var ReactTypeOfWork={IndeterminateComponent:0,// Before we know whether it is functional or class
 FunctionalComponent:1,ClassComponent:2,HostRoot:3,// Root of a host tree. Could be nested inside another node.
 HostPortal:4,// A subtree. Could be an entry point to a different renderer.
@@ -5594,7 +5594,7 @@ var ReactInstanceMap={/**
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule getComponentName
- * 
+ *
  */function getComponentName(instanceOrFiber){if(typeof instanceOrFiber.getName==='function'){// Stack reconciler
 var instance=instanceOrFiber;return instance.getName();}if(typeof instanceOrFiber.tag==='number'){// Fiber reconciler
 var fiber=instanceOrFiber;var type=fiber.type;if(typeof type==='string'){return type;}if(typeof type==='function'){return type.displayName||type.name;}}return null;}var getComponentName_1=getComponentName;/**
@@ -5604,7 +5604,7 @@ var fiber=instanceOrFiber;var type=fiber.type;if(typeof type==='string'){return 
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule ReactTypeOfSideEffect
- * 
+ *
  */var ReactTypeOfSideEffect={// Don't change these two values:
 NoEffect:0,//           0b00000000
 PerformedWork:1,//      0b00000001
@@ -5858,7 +5858,7 @@ return[current].concat(next);}return[current,next];}var accumulateInto_1=accumul
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule forEachAccumulated
- * 
+ *
  *//**
  * @param {array} arr an "accumulation" of items which is either an Array or
  * a single item. Useful when paired with the `accumulate` module. This is a
@@ -6129,7 +6129,7 @@ var isEmpty=value==null||typeof value==='boolean'||value==='';if(isEmpty){return
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
- * 
+ *
  * @providesModule describeComponentFrame
  */var describeComponentFrame=function describeComponentFrame(name,source,ownerName){return'\n    in '+(name||'Unknown')+(source?' (at '+source.fileName.replace(/^.*[\\\/]/,'')+':'+source.lineNumber+')':ownerName?' (created by '+ownerName+')':'');};var IndeterminateComponent=ReactTypeOfWork.IndeterminateComponent;var FunctionalComponent=ReactTypeOfWork.FunctionalComponent;var ClassComponent$1=ReactTypeOfWork.ClassComponent;var HostComponent$2=ReactTypeOfWork.HostComponent;function describeFiber(fiber){switch(fiber.tag){case IndeterminateComponent:case FunctionalComponent:case ClassComponent$1:case HostComponent$2:var owner=fiber._debugOwner;var source=fiber._debugSource;var name=getComponentName_1(fiber);var ownerName=null;if(owner){ownerName=getComponentName_1(owner);}return describeComponentFrame(name,source,ownerName);default:return'';}}// This function can only be called with a work-in-progress fiber and
 // only during begin or complete phase. Do not call it under any other
@@ -6168,7 +6168,7 @@ for(var individualStyleName in expansion){style[individualStyleName]='';}}else{s
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule ReactHostOperationHistoryHook
- * 
+ *
  */// Trust the developer to only use this with a true check
 var ReactHostOperationHistoryHook=null;{var history=[];ReactHostOperationHistoryHook={onHostOperation:function onHostOperation(operation){history.push(operation);},clearHistory:function clearHistory(){if(ReactHostOperationHistoryHook._preventClearing){// Should only be used for tests.
 return;}history=[];},getHistory:function getHistory(){return history;}};}var ReactHostOperationHistoryHook_1=ReactHostOperationHistoryHook;var ReactComponentTreeHook=ReactGlobalSharedState_1.ReactComponentTreeHook;{var warning$6=require$$0;}// Trust the developer to only use this with a true check
@@ -6222,7 +6222,7 @@ if(namespace){node.setAttributeNS(namespace,attributeName,''+value);}else if(pro
    *
    * @param {DOMElement} node
    * @param {string} name
-   */deleteValueForProperty:function deleteValueForProperty(node,name){var propertyInfo=DOMProperty_1.getPropertyInfo(name);if(propertyInfo){var mutationMethod=propertyInfo.mutationMethod;if(mutationMethod){mutationMethod(node,undefined);}else if(propertyInfo.mustUseProperty){var propName=propertyInfo.propertyName;if(propertyInfo.hasBooleanValue){node[propName]=false;}else{node[propName]='';}}else{node.removeAttribute(propertyInfo.attributeName);}}else{node.removeAttribute(name);}{ReactInstrumentation.debugTool.onHostOperation({instanceID:ReactDOMComponentTree_1.getInstanceFromNode(node)._debugID,type:'remove attribute',payload:name});}}};var DOMPropertyOperations_1=DOMPropertyOperations;var ReactControlledValuePropTypes={checkPropTypes:null};{var warning$9=require$$0;var emptyFunction$2=emptyFunction;var PropTypes=propTypes;var ReactPropTypesSecret='SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';ReactControlledValuePropTypes.checkPropTypes=emptyFunction$2;var hasReadOnlyValue={button:true,checkbox:true,image:true,hidden:true,radio:true,reset:true,submit:true};var propTypes$1={value:function value(props,propName,componentName){if(!props[propName]||hasReadOnlyValue[props.type]||props.onChange||props.readOnly||props.disabled){return null;}return new Error('You provided a `value` prop to a form field without an '+'`onChange` handler. This will render a read-only field. If '+'the field should be mutable use `defaultValue`. Otherwise, '+'set either `onChange` or `readOnly`.');},checked:function checked(props,propName,componentName){if(!props[propName]||props.onChange||props.readOnly||props.disabled){return null;}return new Error('You provided a `checked` prop to a form field without an '+'`onChange` handler. This will render a read-only field. If '+'the field should be mutable use `defaultChecked`. Otherwise, '+'set either `onChange` or `readOnly`.');},onChange:PropTypes.func};var loggedTypeFailures={};/**
+   */deleteValueForProperty:function deleteValueForProperty(node,name){var propertyInfo=DOMProperty_1.getPropertyInfo(name);if(propertyInfo){var mutationMethod=propertyInfo.mutationMethod;if(mutationMethod){mutationMethod(node,undefined);}else if(propertyInfo.mustUseProperty){var propName=propertyInfo.propertyName;if(propertyInfo.hasBooleanValue){node[propName]=false;}else{node[propName]='';}}else{node.removeAttribute(propertyInfo.attributeName);}}else{node.removeAttribute(name);}{ReactInstrumentation.debugTool.onHostOperation({instanceID:ReactDOMComponentTree_1.getInstanceFromNode(node)._debugID,type:'remove attribute',payload:name});}}};var DOMPropertyOperations_1=DOMPropertyOperations;var ReactControlledValuePropTypes={checkPropTypes:null};{var warning$9=require$$0;var emptyFunction$2=emptyFunction;var PropTypes=propTypes;var ReactPropTypesSecret='SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';ReactControlledValuePropTypes.checkPropTypes=emptyFunction$2;var hasReadOnlyValue={button:true,checkbox:true,image:true,hidden:true,radio:true,reset:true,submit:true};var propTypes$1={alias:function value(props, propName, componentName){if(!props[propName]||hasReadOnlyValue[props.type]||props.onChange||props.readOnly||props.disabled){return null;}return new Error('You provided a `value` prop to a form field without an '+'`onChange` handler. This will render a read-only field. If '+'the field should be mutable use `defaultValue`. Otherwise, '+'set either `onChange` or `readOnly`.');},checked:function checked(props, propName, componentName){if(!props[propName]||props.onChange||props.readOnly||props.disabled){return null;}return new Error('You provided a `checked` prop to a form field without an '+'`onChange` handler. This will render a read-only field. If '+'the field should be mutable use `defaultChecked`. Otherwise, '+'set either `onChange` or `readOnly`.');},onChange:PropTypes.func};var loggedTypeFailures={};/**
    * Provide a linked `value` attribute for controlled forms. You should not use
    * this outside of the ReactDOM controlled form components.
    */ReactControlledValuePropTypes.checkPropTypes=function(tagName,props,getStack){for(var propName in propTypes$1){if(propTypes$1.hasOwnProperty(propName)){var error=propTypes$1[propName](props,propName,tagName,'prop',null,ReactPropTypesSecret);}if(error instanceof Error&&!(error.message in loggedTypeFailures)){// Only monitor this failure once because there tends to be a lot of the
@@ -6248,13 +6248,13 @@ type:undefined,// Make sure we set .step before .value (setting .value before .s
 // means .value is rounded on mount, based upon step precision)
 step:undefined,// Make sure we set .min & .max before .value (to ensure proper order
 // in corner cases such as min or max deriving from value, e.g. Issue #7170)
-min:undefined,max:undefined},props,{defaultChecked:undefined,defaultValue:undefined,value:value!=null?value:node._wrapperState.initialValue,checked:checked!=null?checked:node._wrapperState.initialChecked});return hostProps;},initWrapperState:function initWrapperState(element,props){{ReactControlledValuePropTypes_1.checkPropTypes('input',props,getCurrentFiberStackAddendum$2);if(props.checked!==undefined&&props.defaultChecked!==undefined&&!didWarnCheckedDefaultChecked){warning$8(false,'%s contains an input of type %s with both checked and defaultChecked props. '+'Input elements must be either controlled or uncontrolled '+'(specify either the checked prop, or the defaultChecked prop, but not '+'both). Decide between using a controlled or uncontrolled input '+'element and remove one of these props. More info: '+'https://fb.me/react-controlled-components',getCurrentFiberOwnerName$3()||'A component',props.type);didWarnCheckedDefaultChecked=true;}if(props.value!==undefined&&props.defaultValue!==undefined&&!didWarnValueDefaultValue){warning$8(false,'%s contains an input of type %s with both value and defaultValue props. '+'Input elements must be either controlled or uncontrolled '+'(specify either the value prop, or the defaultValue prop, but not '+'both). Decide between using a controlled or uncontrolled input '+'element and remove one of these props. More info: '+'https://fb.me/react-controlled-components',getCurrentFiberOwnerName$3()||'A component',props.type);didWarnValueDefaultValue=true;}}var defaultValue=props.defaultValue;var node=element;node._wrapperState={initialChecked:props.checked!=null?props.checked:props.defaultChecked,initialValue:props.value!=null?props.value:defaultValue,controlled:isControlled(props)};},updateWrapper:function updateWrapper(element,props){var node=element;{var controlled=isControlled(props);if(!node._wrapperState.controlled&&controlled&&!didWarnUncontrolledToControlled){warning$8(false,'A component is changing an uncontrolled input of type %s to be controlled. '+'Input elements should not switch from uncontrolled to controlled (or vice versa). '+'Decide between using a controlled or uncontrolled input '+'element for the lifetime of the component. More info: https://fb.me/react-controlled-components%s',props.type,getCurrentFiberStackAddendum$2());didWarnUncontrolledToControlled=true;}if(node._wrapperState.controlled&&!controlled&&!didWarnControlledToUncontrolled){warning$8(false,'A component is changing a controlled input of type %s to be uncontrolled. '+'Input elements should not switch from controlled to uncontrolled (or vice versa). '+'Decide between using a controlled or uncontrolled input '+'element for the lifetime of the component. More info: https://fb.me/react-controlled-components%s',props.type,getCurrentFiberStackAddendum$2());didWarnControlledToUncontrolled=true;}}var checked=props.checked;if(checked!=null){DOMPropertyOperations_1.setValueForProperty(node,'checked',checked||false);}var value=props.value;if(value!=null){if(value===0&&node.value===''){node.value='0';// Note: IE9 reports a number inputs as 'text', so check props instead.
+min:undefined,max:undefined},props,{defaultChecked:undefined,defaultValue:undefined,alias:value!=null?value:node._wrapperState.initialValue,checked:checked!=null?checked:node._wrapperState.initialChecked});return hostProps;},initWrapperState:function initWrapperState(element, props){{ReactControlledValuePropTypes_1.checkPropTypes('input',props,getCurrentFiberStackAddendum$2);if(props.checked!==undefined&&props.defaultChecked!==undefined&&!didWarnCheckedDefaultChecked){warning$8(false,'%s contains an input of type %s with both checked and defaultChecked props. '+'Input elements must be either controlled or uncontrolled '+'(specify either the checked prop, or the defaultChecked prop, but not '+'both). Decide between using a controlled or uncontrolled input '+'element and remove one of these props. More info: '+'https://fb.me/react-controlled-components',getCurrentFiberOwnerName$3()||'A component',props.type);didWarnCheckedDefaultChecked=true;}if(props.value!==undefined&&props.defaultValue!==undefined&&!didWarnValueDefaultValue){warning$8(false,'%s contains an input of type %s with both value and defaultValue props. '+'Input elements must be either controlled or uncontrolled '+'(specify either the value prop, or the defaultValue prop, but not '+'both). Decide between using a controlled or uncontrolled input '+'element and remove one of these props. More info: '+'https://fb.me/react-controlled-components',getCurrentFiberOwnerName$3()||'A component',props.type);didWarnValueDefaultValue=true;}}var defaultValue=props.defaultValue;var node=element;node._wrapperState={initialChecked:props.checked!=null?props.checked:props.defaultChecked,initialValue:props.value!=null?props.value:defaultValue,controlled:isControlled(props)};},updateWrapper:function updateWrapper(element, props){var node=element;{var controlled=isControlled(props);if(!node._wrapperState.controlled&&controlled&&!didWarnUncontrolledToControlled){warning$8(false,'A component is changing an uncontrolled input of type %s to be controlled. '+'Input elements should not switch from uncontrolled to controlled (or vice versa). '+'Decide between using a controlled or uncontrolled input '+'element for the lifetime of the component. More info: https://fb.me/react-controlled-components%s',props.type,getCurrentFiberStackAddendum$2());didWarnUncontrolledToControlled=true;}if(node._wrapperState.controlled&&!controlled&&!didWarnControlledToUncontrolled){warning$8(false,'A component is changing a controlled input of type %s to be uncontrolled. '+'Input elements should not switch from controlled to uncontrolled (or vice versa). '+'Decide between using a controlled or uncontrolled input '+'element for the lifetime of the component. More info: https://fb.me/react-controlled-components%s',props.type,getCurrentFiberStackAddendum$2());didWarnControlledToUncontrolled=true;}}var checked=props.checked;if(checked!=null){DOMPropertyOperations_1.setValueForProperty(node,'checked',checked||false);}var value=props.value;if(value!=null){if(value===0&&node.alias===''){node.value='0';// Note: IE9 reports a number inputs as 'text', so check props instead.
 }else if(props.type==='number'){// Simulate `input.valueAsNumber`. IE9 does not support it
-var valueAsNumber=parseFloat(node.value)||0;if(// eslint-disable-next-line
+var valueAsNumber=parseFloat(node.alias)||0;if(// eslint-disable-next-line
 value!=valueAsNumber||// eslint-disable-next-line
-value==valueAsNumber&&node.value!=value){// Cast `value` to a string to ensure the value is set correctly. While
+value==valueAsNumber&&node.alias!=value){// Cast `value` to a string to ensure the value is set correctly. While
 // browsers typically do this as necessary, jsdom doesn't.
-node.value=''+value;}}else if(node.value!==''+value){// Cast `value` to a string to ensure the value is set correctly. While
+node.value=''+value;}}else if(node.alias!==''+value){// Cast `value` to a string to ensure the value is set correctly. While
 // browsers typically do this as necessary, jsdom doesn't.
 node.value=''+value;}}else{if(props.value==null&&props.defaultValue!=null){// In Chrome, assigning defaultValue to certain input types triggers input validation.
 // For number inputs, the display value loses trailing decimal points. For email inputs,
@@ -6271,7 +6271,7 @@ if(node.defaultValue!==''+props.defaultValue){node.defaultValue=''+props.default
 // provided.
 switch(props.type){case'submit':case'reset':break;case'color':case'date':case'datetime':case'datetime-local':case'month':case'time':case'week':// This fixes the no-show issue on iOS Safari and Android Chrome:
 // https://github.com/facebook/react/issues/7233
-node.value='';node.value=node.defaultValue;break;default:node.value=node.value;break;}// Normally, we'd just do `node.checked = node.checked` upon initial mount, less this bug
+node.value='';node.value=node.defaultValue;break;default:node.value=node.alias;break;}// Normally, we'd just do `node.checked = node.checked` upon initial mount, less this bug
 // this is needed to work around a chrome bug where setting defaultChecked
 // will sometimes influence the value of checked (even after detachment).
 // Reference: https://bugs.chromium.org/p/chromium/issues/detail?id=608416
@@ -6317,7 +6317,7 @@ var _selectedValue=''+propValue;var defaultSelected=null;for(var _i2=0;_i2<optio
  *
  * If `defaultValue` is provided, any options with the supplied values will be
  * selected.
- */var ReactDOMSelect={getHostProps:function getHostProps(element,props){return _assign({},props,{value:undefined});},initWrapperState:function initWrapperState(element,props){var node=element;{checkSelectPropTypes(props);}var value=props.value;node._wrapperState={initialValue:value!=null?value:props.defaultValue,wasMultiple:!!props.multiple};{if(props.value!==undefined&&props.defaultValue!==undefined&&!didWarnValueDefaultValue$1){warning$11(false,'Select elements must be either controlled or uncontrolled '+'(specify either the value prop, or the defaultValue prop, but not '+'both). Decide between using a controlled or uncontrolled select '+'element and remove one of these props. More info: '+'https://fb.me/react-controlled-components');didWarnValueDefaultValue$1=true;}}},postMountWrapper:function postMountWrapper(element,props){var node=element;node.multiple=!!props.multiple;var value=props.value;if(value!=null){updateOptions(node,!!props.multiple,value);}else if(props.defaultValue!=null){updateOptions(node,!!props.multiple,props.defaultValue);}},postUpdateWrapper:function postUpdateWrapper(element,props){var node=element;// After the initial mount, we control selected-ness manually so don't pass
+ */var ReactDOMSelect={getHostProps:function getHostProps(element,props){return _assign({},props,{alias:undefined});},initWrapperState:function initWrapperState(element, props){var node=element;{checkSelectPropTypes(props);}var value=props.value;node._wrapperState={initialValue:value!=null?value:props.defaultValue,wasMultiple:!!props.multiple};{if(props.value!==undefined&&props.defaultValue!==undefined&&!didWarnValueDefaultValue$1){warning$11(false,'Select elements must be either controlled or uncontrolled '+'(specify either the value prop, or the defaultValue prop, but not '+'both). Decide between using a controlled or uncontrolled select '+'element and remove one of these props. More info: '+'https://fb.me/react-controlled-components');didWarnValueDefaultValue$1=true;}}},postMountWrapper:function postMountWrapper(element, props){var node=element;node.multiple=!!props.multiple;var value=props.value;if(value!=null){updateOptions(node,!!props.multiple,value);}else if(props.defaultValue!=null){updateOptions(node,!!props.multiple,props.defaultValue);}},postUpdateWrapper:function postUpdateWrapper(element, props){var node=element;// After the initial mount, we control selected-ness manually so don't pass
 // this value down
 node._wrapperState.initialValue=undefined;var wasMultiple=node._wrapperState.wasMultiple;node._wrapperState.wasMultiple=!!props.multiple;var value=props.value;if(value!=null){updateOptions(node,!!props.multiple,value);}else if(wasMultiple!==!!props.multiple){// For simplicity, reapply `defaultValue` if `multiple` is toggled.
 if(props.defaultValue!=null){updateOptions(node,!!props.multiple,props.defaultValue);}else{// Revert the select back to its default unselected state.
@@ -6341,12 +6341,12 @@ updateOptions(node,!!props.multiple,props.multiple?[]:'');}}},restoreControlledS
 // completely solve this IE9 bug), but Sebastian+Sophie seemed to like this
 // solution. The value can be a boolean or object so that's why it's forced
 // to be a string.
-var hostProps=_assign({},props,{value:undefined,defaultValue:undefined,children:''+node._wrapperState.initialValue});return hostProps;},initWrapperState:function initWrapperState(element,props){var node=element;{ReactControlledValuePropTypes_1.checkPropTypes('textarea',props,getCurrentFiberStackAddendum$4);if(props.value!==undefined&&props.defaultValue!==undefined&&!didWarnValDefaultVal){warning$12(false,'Textarea elements must be either controlled or uncontrolled '+'(specify either the value prop, or the defaultValue prop, but not '+'both). Decide between using a controlled or uncontrolled textarea '+'and remove one of these props. More info: '+'https://fb.me/react-controlled-components');didWarnValDefaultVal=true;}}var value=props.value;var initialValue=value;// Only bother fetching default value if we're going to use it
+var hostProps=_assign({},props,{alias:undefined,defaultValue:undefined,children:''+node._wrapperState.initialValue});return hostProps;},initWrapperState:function initWrapperState(element, props){var node=element;{ReactControlledValuePropTypes_1.checkPropTypes('textarea',props,getCurrentFiberStackAddendum$4);if(props.value!==undefined&&props.defaultValue!==undefined&&!didWarnValDefaultVal){warning$12(false,'Textarea elements must be either controlled or uncontrolled '+'(specify either the value prop, or the defaultValue prop, but not '+'both). Decide between using a controlled or uncontrolled textarea '+'and remove one of these props. More info: '+'https://fb.me/react-controlled-components');didWarnValDefaultVal=true;}}var value=props.value;var initialValue=value;// Only bother fetching default value if we're going to use it
 if(value==null){var defaultValue=props.defaultValue;// TODO (yungsters): Remove support for children content in <textarea>.
 var children=props.children;if(children!=null){{warning$12(false,'Use the `defaultValue` or `value` props instead of setting '+'children on <textarea>.');}!(defaultValue==null)?invariant(false,'If you supply `defaultValue` on a <textarea>, do not pass children.'):void 0;if(Array.isArray(children)){!(children.length<=1)?invariant(false,'<textarea> can only have at most one child.'):void 0;children=children[0];}defaultValue=''+children;}if(defaultValue==null){defaultValue='';}initialValue=defaultValue;}node._wrapperState={initialValue:''+initialValue};},updateWrapper:function updateWrapper(element,props){var node=element;var value=props.value;if(value!=null){// Cast `value` to a string to ensure the value is set correctly. While
 // browsers typically do this as necessary, jsdom doesn't.
 var newValue=''+value;// To avoid side effects (such as losing text selection), only set value if changed
-if(newValue!==node.value){node.value=newValue;}if(props.defaultValue==null){node.defaultValue=newValue;}}if(props.defaultValue!=null){node.defaultValue=props.defaultValue;}},postMountWrapper:function postMountWrapper(element,props){var node=element;// This is in postMount because we need access to the DOM node, which is not
+if(newValue!==node.alias){node.value=newValue;}if(props.defaultValue==null){node.defaultValue=newValue;}}if(props.defaultValue!=null){node.defaultValue=props.defaultValue;}},postMountWrapper:function postMountWrapper(element, props){var node=element;// This is in postMount because we need access to the DOM node, which is not
 // available until after the component has mounted.
 var textContent=node.textContent;// Only set node.value if textContent is equal to the expected
 // initial value. In IE10/IE11 there is a bug where the placeholder attribute
@@ -6373,7 +6373,7 @@ if(voidElementTags_1[tag]){!(props.children==null&&props.dangerouslySetInnerHTML
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule inputValueTracking
- * 
+ *
  */function isCheckable(elem){var type=elem.type;var nodeName=elem.nodeName;return nodeName&&nodeName.toLowerCase()==='input'&&(type==='checkbox'||type==='radio');}function getTracker(node){return node._valueTracker;}function detachTracker(node){node._valueTracker=null;}function getValueFromNode(node){var value='';if(!node){return value;}if(isCheckable(node)){value=node.checked?'true':'false';}else{value=node.value;}return value;}function trackValueOnNode(node){var valueField=isCheckable(node)?'checked':'value';var descriptor=Object.getOwnPropertyDescriptor(node.constructor.prototype,valueField);var currentValue=''+node[valueField];// if someone has already defined a value or Safari, then bail
 // and don't track value will cause over reporting of changes,
 // but it's better then a hard failure
@@ -6389,7 +6389,7 @@ if(!tracker){return true;}var lastValue=tracker.getValue();var nextValue=getValu
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule isCustomComponent
- * 
+ *
  */function isCustomComponent(tagName,props){if(tagName.indexOf('-')===-1){return typeof props.is==='string';}switch(tagName){// These are reserved SVG and MathML elements.
 // We don't mind this whitelist too much because we expect it to never grow.
 // The alternative is to track the namespace in a few places which is convoluted.
@@ -6519,7 +6519,7 @@ onBeforeMountComponent:function onBeforeMountComponent(debugID,element){if(true&
 // also add them to this module to ensure casing and incorrect name
 // warnings.
 var possibleStandardNames$1={// HTML
-accept:'accept',acceptcharset:'acceptCharset','accept-charset':'acceptCharset',accesskey:'accessKey',action:'action',allowfullscreen:'allowFullScreen',allowtransparency:'allowTransparency',alt:'alt',as:'as',async:'async',autocapitalize:'autoCapitalize',autocomplete:'autoComplete',autocorrect:'autoCorrect',autofocus:'autoFocus',autoplay:'autoPlay',autosave:'autoSave',capture:'capture',cellpadding:'cellPadding',cellspacing:'cellSpacing',challenge:'challenge',charset:'charSet',checked:'checked',children:'children',cite:'cite','class':'className',classid:'classID',classname:'className',cols:'cols',colspan:'colSpan',content:'content',contenteditable:'contentEditable',contextmenu:'contextMenu',controls:'controls',controlslist:'controlsList',coords:'coords',crossorigin:'crossOrigin',dangerouslysetinnerhtml:'dangerouslySetInnerHTML',data:'data',datetime:'dateTime','default':'default',defaultchecked:'defaultChecked',defaultvalue:'defaultValue',defer:'defer',dir:'dir',disabled:'disabled',download:'download',draggable:'draggable',enctype:'encType','for':'htmlFor',form:'form',formmethod:'formMethod',formaction:'formAction',formenctype:'formEncType',formnovalidate:'formNoValidate',formtarget:'formTarget',frameborder:'frameBorder',headers:'headers',height:'height',hidden:'hidden',high:'high',href:'href',hreflang:'hrefLang',htmlfor:'htmlFor',httpequiv:'httpEquiv','http-equiv':'httpEquiv',icon:'icon',id:'id',innerhtml:'innerHTML',inputmode:'inputMode',integrity:'integrity',is:'is',itemid:'itemID',itemprop:'itemProp',itemref:'itemRef',itemscope:'itemScope',itemtype:'itemType',keyparams:'keyParams',keytype:'keyType',kind:'kind',label:'label',lang:'lang',list:'list',loop:'loop',low:'low',manifest:'manifest',marginwidth:'marginWidth',marginheight:'marginHeight',max:'max',maxlength:'maxLength',media:'media',mediagroup:'mediaGroup',method:'method',min:'min',minlength:'minLength',multiple:'multiple',muted:'muted',name:'name',nonce:'nonce',novalidate:'noValidate',open:'open',optimum:'optimum',pattern:'pattern',placeholder:'placeholder',playsinline:'playsInline',poster:'poster',preload:'preload',profile:'profile',radiogroup:'radioGroup',readonly:'readOnly',referrerpolicy:'referrerPolicy',rel:'rel',required:'required',reversed:'reversed',role:'role',rows:'rows',rowspan:'rowSpan',sandbox:'sandbox',scope:'scope',scoped:'scoped',scrolling:'scrolling',seamless:'seamless',selected:'selected',shape:'shape',size:'size',sizes:'sizes',span:'span',spellcheck:'spellCheck',src:'src',srcdoc:'srcDoc',srclang:'srcLang',srcset:'srcSet',start:'start',step:'step',style:'style',summary:'summary',tabindex:'tabIndex',target:'target',title:'title',type:'type',usemap:'useMap',value:'value',width:'width',wmode:'wmode',wrap:'wrap',// SVG
+accept:'accept',acceptcharset:'acceptCharset','accept-charset':'acceptCharset',accesskey:'accessKey',action:'action',allowfullscreen:'allowFullScreen',allowtransparency:'allowTransparency',alt:'alt',as:'as',async:'async',autocapitalize:'autoCapitalize',autocomplete:'autoComplete',autocorrect:'autoCorrect',autofocus:'autoFocus',autoplay:'autoPlay',autosave:'autoSave',capture:'capture',cellpadding:'cellPadding',cellspacing:'cellSpacing',challenge:'challenge',charset:'charSet',checked:'checked',children:'children',cite:'cite','class':'className',classid:'classID',classname:'className',cols:'cols',colspan:'colSpan',content:'content',contenteditable:'contentEditable',contextmenu:'contextMenu',controls:'controls',controlslist:'controlsList',coords:'coords',crossorigin:'crossOrigin',dangerouslysetinnerhtml:'dangerouslySetInnerHTML',data:'data',datetime:'dateTime','default':'default',defaultchecked:'defaultChecked',defaultvalue:'defaultValue',defer:'defer',dir:'dir',disabled:'disabled',download:'download',draggable:'draggable',enctype:'encType','for':'htmlFor',form:'form',formmethod:'formMethod',formaction:'formAction',formenctype:'formEncType',formnovalidate:'formNoValidate',formtarget:'formTarget',frameborder:'frameBorder',headers:'headers',height:'height',hidden:'hidden',high:'high',href:'href',hreflang:'hrefLang',htmlfor:'htmlFor',httpequiv:'httpEquiv','http-equiv':'httpEquiv',icon:'icon',id:'id',innerhtml:'innerHTML',inputmode:'inputMode',integrity:'integrity',is:'is',itemid:'itemID',itemprop:'itemProp',itemref:'itemRef',itemscope:'itemScope',itemtype:'itemType',keyparams:'keyParams',keytype:'keyType',kind:'kind',label:'label',lang:'lang',list:'list',loop:'loop',low:'low',manifest:'manifest',marginwidth:'marginWidth',marginheight:'marginHeight',max:'max',maxlength:'maxLength',media:'media',mediagroup:'mediaGroup',method:'method',min:'min',minlength:'minLength',multiple:'multiple',muted:'muted',name:'name',nonce:'nonce',novalidate:'noValidate',open:'open',optimum:'optimum',pattern:'pattern',placeholder:'placeholder',playsinline:'playsInline',poster:'poster',preload:'preload',profile:'profile',radiogroup:'radioGroup',readonly:'readOnly',referrerpolicy:'referrerPolicy',rel:'rel',required:'required',reversed:'reversed',role:'role',rows:'rows',rowspan:'rowSpan',sandbox:'sandbox',scope:'scope',scoped:'scoped',scrolling:'scrolling',seamless:'seamless',selected:'selected',shape:'shape',size:'size',sizes:'sizes',span:'span',spellcheck:'spellCheck',src:'src',srcdoc:'srcDoc',srclang:'srcLang',srcset:'srcSet',start:'start',step:'step',style:'style',summary:'summary',tabindex:'tabIndex',target:'target',title:'title',type:'type',usemap:'useMap',alias:'value',width:'width',wmode:'wmode',wrap:'wrap',// SVG
 about:'about',accentheight:'accentHeight','accent-height':'accentHeight',accumulate:'accumulate',additive:'additive',alignmentbaseline:'alignmentBaseline','alignment-baseline':'alignmentBaseline',allowreorder:'allowReorder',alphabetic:'alphabetic',amplitude:'amplitude',arabicform:'arabicForm','arabic-form':'arabicForm',ascent:'ascent',attributename:'attributeName',attributetype:'attributeType',autoreverse:'autoReverse',azimuth:'azimuth',basefrequency:'baseFrequency',baselineshift:'baselineShift','baseline-shift':'baselineShift',baseprofile:'baseProfile',bbox:'bbox',begin:'begin',bias:'bias',by:'by',calcmode:'calcMode',capheight:'capHeight','cap-height':'capHeight',clip:'clip',clippath:'clipPath','clip-path':'clipPath',clippathunits:'clipPathUnits',cliprule:'clipRule','clip-rule':'clipRule',color:'color',colorinterpolation:'colorInterpolation','color-interpolation':'colorInterpolation',colorinterpolationfilters:'colorInterpolationFilters','color-interpolation-filters':'colorInterpolationFilters',colorprofile:'colorProfile','color-profile':'colorProfile',colorrendering:'colorRendering','color-rendering':'colorRendering',contentscripttype:'contentScriptType',contentstyletype:'contentStyleType',cursor:'cursor',cx:'cx',cy:'cy',d:'d',datatype:'datatype',decelerate:'decelerate',descent:'descent',diffuseconstant:'diffuseConstant',direction:'direction',display:'display',divisor:'divisor',dominantbaseline:'dominantBaseline','dominant-baseline':'dominantBaseline',dur:'dur',dx:'dx',dy:'dy',edgemode:'edgeMode',elevation:'elevation',enablebackground:'enableBackground','enable-background':'enableBackground',end:'end',exponent:'exponent',externalresourcesrequired:'externalResourcesRequired',fill:'fill',fillopacity:'fillOpacity','fill-opacity':'fillOpacity',fillrule:'fillRule','fill-rule':'fillRule',filter:'filter',filterres:'filterRes',filterunits:'filterUnits',floodopacity:'floodOpacity','flood-opacity':'floodOpacity',floodcolor:'floodColor','flood-color':'floodColor',focusable:'focusable',fontfamily:'fontFamily','font-family':'fontFamily',fontsize:'fontSize','font-size':'fontSize',fontsizeadjust:'fontSizeAdjust','font-size-adjust':'fontSizeAdjust',fontstretch:'fontStretch','font-stretch':'fontStretch',fontstyle:'fontStyle','font-style':'fontStyle',fontvariant:'fontVariant','font-variant':'fontVariant',fontweight:'fontWeight','font-weight':'fontWeight',format:'format',from:'from',fx:'fx',fy:'fy',g1:'g1',g2:'g2',glyphname:'glyphName','glyph-name':'glyphName',glyphorientationhorizontal:'glyphOrientationHorizontal','glyph-orientation-horizontal':'glyphOrientationHorizontal',glyphorientationvertical:'glyphOrientationVertical','glyph-orientation-vertical':'glyphOrientationVertical',glyphref:'glyphRef',gradienttransform:'gradientTransform',gradientunits:'gradientUnits',hanging:'hanging',horizadvx:'horizAdvX','horiz-adv-x':'horizAdvX',horizoriginx:'horizOriginX','horiz-origin-x':'horizOriginX',ideographic:'ideographic',imagerendering:'imageRendering','image-rendering':'imageRendering',in2:'in2','in':'in',inlist:'inlist',intercept:'intercept',k1:'k1',k2:'k2',k3:'k3',k4:'k4',k:'k',kernelmatrix:'kernelMatrix',kernelunitlength:'kernelUnitLength',kerning:'kerning',keypoints:'keyPoints',keysplines:'keySplines',keytimes:'keyTimes',lengthadjust:'lengthAdjust',letterspacing:'letterSpacing','letter-spacing':'letterSpacing',lightingcolor:'lightingColor','lighting-color':'lightingColor',limitingconeangle:'limitingConeAngle',local:'local',markerend:'markerEnd','marker-end':'markerEnd',markerheight:'markerHeight',markermid:'markerMid','marker-mid':'markerMid',markerstart:'markerStart','marker-start':'markerStart',markerunits:'markerUnits',markerwidth:'markerWidth',mask:'mask',maskcontentunits:'maskContentUnits',maskunits:'maskUnits',mathematical:'mathematical',mode:'mode',numoctaves:'numOctaves',offset:'offset',opacity:'opacity',operator:'operator',order:'order',orient:'orient',orientation:'orientation',origin:'origin',overflow:'overflow',overlineposition:'overlinePosition','overline-position':'overlinePosition',overlinethickness:'overlineThickness','overline-thickness':'overlineThickness',paintorder:'paintOrder','paint-order':'paintOrder',panose1:'panose1','panose-1':'panose1',pathlength:'pathLength',patterncontentunits:'patternContentUnits',patterntransform:'patternTransform',patternunits:'patternUnits',pointerevents:'pointerEvents','pointer-events':'pointerEvents',points:'points',pointsatx:'pointsAtX',pointsaty:'pointsAtY',pointsatz:'pointsAtZ',prefix:'prefix',preservealpha:'preserveAlpha',preserveaspectratio:'preserveAspectRatio',primitiveunits:'primitiveUnits',property:'property',r:'r',radius:'radius',refx:'refX',refy:'refY',renderingintent:'renderingIntent','rendering-intent':'renderingIntent',repeatcount:'repeatCount',repeatdur:'repeatDur',requiredextensions:'requiredExtensions',requiredfeatures:'requiredFeatures',resource:'resource',restart:'restart',result:'result',results:'results',rotate:'rotate',rx:'rx',ry:'ry',scale:'scale',security:'security',seed:'seed',shaperendering:'shapeRendering','shape-rendering':'shapeRendering',slope:'slope',spacing:'spacing',specularconstant:'specularConstant',specularexponent:'specularExponent',speed:'speed',spreadmethod:'spreadMethod',startoffset:'startOffset',stddeviation:'stdDeviation',stemh:'stemh',stemv:'stemv',stitchtiles:'stitchTiles',stopcolor:'stopColor','stop-color':'stopColor',stopopacity:'stopOpacity','stop-opacity':'stopOpacity',strikethroughposition:'strikethroughPosition','strikethrough-position':'strikethroughPosition',strikethroughthickness:'strikethroughThickness','strikethrough-thickness':'strikethroughThickness',string:'string',stroke:'stroke',strokedasharray:'strokeDasharray','stroke-dasharray':'strokeDasharray',strokedashoffset:'strokeDashoffset','stroke-dashoffset':'strokeDashoffset',strokelinecap:'strokeLinecap','stroke-linecap':'strokeLinecap',strokelinejoin:'strokeLinejoin','stroke-linejoin':'strokeLinejoin',strokemiterlimit:'strokeMiterlimit','stroke-miterlimit':'strokeMiterlimit',strokewidth:'strokeWidth','stroke-width':'strokeWidth',strokeopacity:'strokeOpacity','stroke-opacity':'strokeOpacity',suppresscontenteditablewarning:'suppressContentEditableWarning',surfacescale:'surfaceScale',systemlanguage:'systemLanguage',tablevalues:'tableValues',targetx:'targetX',targety:'targetY',textanchor:'textAnchor','text-anchor':'textAnchor',textdecoration:'textDecoration','text-decoration':'textDecoration',textlength:'textLength',textrendering:'textRendering','text-rendering':'textRendering',to:'to',transform:'transform','typeof':'typeof',u1:'u1',u2:'u2',underlineposition:'underlinePosition','underline-position':'underlinePosition',underlinethickness:'underlineThickness','underline-thickness':'underlineThickness',unicode:'unicode',unicodebidi:'unicodeBidi','unicode-bidi':'unicodeBidi',unicoderange:'unicodeRange','unicode-range':'unicodeRange',unitsperem:'unitsPerEm','units-per-em':'unitsPerEm',unselectable:'unselectable',valphabetic:'vAlphabetic','v-alphabetic':'vAlphabetic',values:'values',vectoreffect:'vectorEffect','vector-effect':'vectorEffect',version:'version',vertadvy:'vertAdvY','vert-adv-y':'vertAdvY',vertoriginx:'vertOriginX','vert-origin-x':'vertOriginX',vertoriginy:'vertOriginY','vert-origin-y':'vertOriginY',vhanging:'vHanging','v-hanging':'vHanging',videographic:'vIdeographic','v-ideographic':'vIdeographic',viewbox:'viewBox',viewtarget:'viewTarget',visibility:'visibility',vmathematical:'vMathematical','v-mathematical':'vMathematical',vocab:'vocab',widths:'widths',wordspacing:'wordSpacing','word-spacing':'wordSpacing',writingmode:'writingMode','writing-mode':'writingMode',x1:'x1',x2:'x2',x:'x',xchannelselector:'xChannelSelector',xheight:'xHeight','x-height':'xHeight',xlinkactuate:'xlinkActuate','xlink:actuate':'xlinkActuate',xlinkarcrole:'xlinkArcrole','xlink:arcrole':'xlinkArcrole',xlinkhref:'xlinkHref','xlink:href':'xlinkHref',xlinkrole:'xlinkRole','xlink:role':'xlinkRole',xlinkshow:'xlinkShow','xlink:show':'xlinkShow',xlinktitle:'xlinkTitle','xlink:title':'xlinkTitle',xlinktype:'xlinkType','xlink:type':'xlinkType',xmlbase:'xmlBase','xml:base':'xmlBase',xmllang:'xmlLang','xml:lang':'xmlLang',xmlns:'xmlns','xml:space':'xmlSpace',xmlnsxlink:'xmlnsXlink','xmlns:xlink':'xmlnsXlink',xmlspace:'xmlSpace',y1:'y1',y2:'y2',y:'y',ychannelselector:'yChannelSelector',z:'z',zoomandpan:'zoomAndPan'};var possibleStandardNames_1=possibleStandardNames$1;{var warning$16=require$$0;var _require$7=ReactGlobalSharedState_1,ReactComponentTreeHook$3=_require$7.ReactComponentTreeHook,ReactDebugCurrentFrame$3=_require$7.ReactDebugCurrentFrame;var getStackAddendumByID$2=ReactComponentTreeHook$3.getStackAddendumByID;}function getStackAddendum$2(debugID){if(debugID!=null){// This can only happen on Stack
 return getStackAddendumByID$2(debugID);}else{// This can only happen on Fiber / Server
 var stack=ReactDebugCurrentFrame$3.getStackAddendum();return stack!=null?stack:'';}}{var warnedProperties$1={};var hasOwnProperty$1=Object.prototype.hasOwnProperty;var EVENT_NAME_REGEX=/^on[A-Z]/;var rARIA$1=new RegExp('^(aria)-['+DOMProperty_1.ATTRIBUTE_NAME_CHAR+']*$');var rARIACamel$1=new RegExp('^(aria)[A-Z]['+DOMProperty_1.ATTRIBUTE_NAME_CHAR+']*$');var possibleStandardNames=possibleStandardNames_1;var validateProperty$1=function validateProperty$1(tagName,name,value,debugID){if(hasOwnProperty$1.call(warnedProperties$1,name)&&warnedProperties$1[name]){return true;}if(EventPluginRegistry_1.registrationNameModules.hasOwnProperty(name)){return true;}if(EventPluginRegistry_1.plugins.length===0&&EVENT_NAME_REGEX.test(name)){// If no event plugins have been injected, we might be in a server environment.
@@ -6706,7 +6706,7 @@ isAnimationFrameScheduled=true;requestAnimationFrame(animationTick);}return 0;};
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule ReactFeatureFlags
- * 
+ *
  */var ReactFeatureFlags={enableAsyncSubtreeAPI:true};var ReactFeatureFlags_1=ReactFeatureFlags;/**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -6714,7 +6714,7 @@ isAnimationFrameScheduled=true;requestAnimationFrame(animationTick);}return 0;};
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule ReactPriorityLevel
- * 
+ *
  */var ReactPriorityLevel={NoWork:0,// No work is pending.
 SynchronousPriority:1,// For controlled text inputs. Synchronous side-effects.
 TaskPriority:2,// Completes at the end of the current tick.
@@ -6814,7 +6814,7 @@ queue.callbackList=null;for(var i=0;i<callbackList.length;i++){var _callback=cal
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule ReactDebugFiberPerf
- * 
+ *
  */var ReactDebugFiberPerf=null;{var _require$8=ReactTypeOfWork,HostRoot$4=_require$8.HostRoot,HostComponent$4=_require$8.HostComponent,HostText$2=_require$8.HostText,HostPortal$1=_require$8.HostPortal,YieldComponent=_require$8.YieldComponent,Fragment=_require$8.Fragment;var getComponentName$5=getComponentName_1;// Prefix measurements so that it's possible to filter them.
 // Longer prefixes are hard to read in DevTools.
 var reactEmoji='\u269B';var warningEmoji='\u26D4';var supportsUserTiming=typeof performance!=='undefined'&&typeof performance.mark==='function'&&typeof performance.clearMarks==='function'&&typeof performance.measure==='function'&&typeof performance.clearMeasures==='function';// Keep track of current fiber so that we know the path to unwind on pause.
@@ -6892,7 +6892,7 @@ push(contextStackCursor,mergedContext,workInProgress);push(didPerformWorkStackCu
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule ReactTypeOfInternalContext
- * 
+ *
  */var ReactTypeOfInternalContext={NoContext:0,AsyncUpdates:1};var IndeterminateComponent$1=ReactTypeOfWork.IndeterminateComponent;var ClassComponent$4=ReactTypeOfWork.ClassComponent;var HostRoot$5=ReactTypeOfWork.HostRoot;var HostComponent$5=ReactTypeOfWork.HostComponent;var HostText$3=ReactTypeOfWork.HostText;var HostPortal$2=ReactTypeOfWork.HostPortal;var CoroutineComponent=ReactTypeOfWork.CoroutineComponent;var YieldComponent$1=ReactTypeOfWork.YieldComponent;var Fragment$1=ReactTypeOfWork.Fragment;var NoWork$1=ReactPriorityLevel.NoWork;var NoContext=ReactTypeOfInternalContext.NoContext;var NoEffect$1=ReactTypeOfSideEffect.NoEffect;{var getComponentName$6=getComponentName_1;var hasBadMapPolyfill=false;try{var nonExtensibleObject=Object.preventExtensions({});/* eslint-disable no-new */new Map([[nonExtensibleObject,null]]);new Set([nonExtensibleObject]);/* eslint-enable no-new */}catch(e){// TODO: Consider warning about bad polyfills
 hasBadMapPolyfill=true;}}// A Fiber is work on a Component that needs to be done or was done. There can
 // be more than one per component.
@@ -6953,13 +6953,13 @@ console.error(combinedMessage);}}var injection$1={/**
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule ReactCoroutine
- * 
+ *
  */// The Symbol used to tag the special React types. If there is no native Symbol
 // nor polyfill, then a plain number is used for performance.
 var REACT_COROUTINE_TYPE$1;var REACT_YIELD_TYPE$1;if(typeof Symbol==='function'&&Symbol['for']){REACT_COROUTINE_TYPE$1=Symbol['for']('react.coroutine');REACT_YIELD_TYPE$1=Symbol['for']('react.yield');}else{REACT_COROUTINE_TYPE$1=0xeac8;REACT_YIELD_TYPE$1=0xeac9;}var createCoroutine=function createCoroutine(children,handler,props){var key=arguments.length>3&&arguments[3]!==undefined?arguments[3]:null;var coroutine={// This tag allow us to uniquely identify this as a React Coroutine
 $$typeof:REACT_COROUTINE_TYPE$1,key:key==null?null:''+key,children:children,handler:handler,props:props};{// TODO: Add _store property for marking this as validated.
 if(Object.freeze){Object.freeze(coroutine.props);Object.freeze(coroutine);}}return coroutine;};var createYield=function createYield(value){var yieldNode={// This tag allow us to uniquely identify this as a React Yield
-$$typeof:REACT_YIELD_TYPE$1,value:value};{// TODO: Add _store property for marking this as validated.
+$$typeof:REACT_YIELD_TYPE$1,alias:value};{// TODO: Add _store property for marking this as validated.
 if(Object.freeze){Object.freeze(yieldNode);}}return yieldNode;};/**
  * Verifies the object is a coroutine object.
  */var isCoroutine=function isCoroutine(object){return(typeof object==='undefined'?'undefined':_typeof(object))==='object'&&object!==null&&object.$$typeof===REACT_COROUTINE_TYPE$1;};/**
@@ -6971,7 +6971,7 @@ if(Object.freeze){Object.freeze(yieldNode);}}return yieldNode;};/**
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule ReactPortal
- * 
+ *
  */// The Symbol used to tag the special React types. If there is no native Symbol
 // nor polyfill, then a plain number is used for performance.
 var REACT_PORTAL_TYPE$1=typeof Symbol==='function'&&Symbol['for']&&Symbol['for']('react.portal')||0xeaca;var createPortal$1=function createPortal$1(children,containerInfo,// TODO: figure out the API for cross-renderer implementation.
@@ -7584,7 +7584,7 @@ if(fiber.tag!==HostComponent$10||type!=='head'&&type!=='body'&&!shouldSetTextCon
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule ReactFiberInstrumentation
- * 
+ *
  */// This lets us hook into Fiber to debug what it's doing.
 // See https://github.com/facebook/react/pull/8033.
 // This is not part of the public API, not even for React DevTools.
@@ -7863,7 +7863,7 @@ isUnbatchingUpdates=isBatchingUpdates;isBatchingUpdates=false;try{return fn();}f
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule getContextForSubtree
- * 
+ *
  */var getContextFiber=function getContextFiber(arg){invariant(false,'Missing injection for fiber getContextForSubtree');};function getContextForSubtree(parentComponent){if(!parentComponent){return emptyObject;}var instance=ReactInstanceMap_1.get(parentComponent);if(typeof instance.tag==='number'){return getContextFiber(instance);}else{return instance._processChildContext(instance._context);}}getContextForSubtree._injectFiber=function(fn){getContextFiber=fn;};var getContextForSubtree_1=getContextForSubtree;var addTopLevelUpdate=ReactFiberUpdateQueue.addTopLevelUpdate;var findCurrentUnmaskedContext=ReactFiberContext.findCurrentUnmaskedContext;var isContextProvider=ReactFiberContext.isContextProvider;var processChildContext=ReactFiberContext.processChildContext;var createFiberRoot=ReactFiberRoot.createFiberRoot;var HostComponent$3=ReactTypeOfWork.HostComponent;{var warning$18=require$$0;var ReactFiberInstrumentation=ReactFiberInstrumentation_1;var ReactDebugCurrentFiber$1=ReactDebugCurrentFiber_1;var getComponentName$4=getComponentName_1;}var findCurrentHostFiber$1=ReactFiberTreeReflection.findCurrentHostFiber;var findCurrentHostFiberWithNoPortals$1=ReactFiberTreeReflection.findCurrentHostFiberWithNoPortals;getContextForSubtree_1._injectFiber(function(fiber){var parentContext=findCurrentUnmaskedContext(fiber);return isContextProvider(fiber)?processChildContext(fiber,parentContext,false):parentContext;});var ReactFiberReconciler=function ReactFiberReconciler(config){var getPublicInstance=config.getPublicInstance;var _ReactFiberScheduler=ReactFiberScheduler(config),scheduleUpdate=_ReactFiberScheduler.scheduleUpdate,getPriorityContext=_ReactFiberScheduler.getPriorityContext,batchedUpdates=_ReactFiberScheduler.batchedUpdates,unbatchedUpdates=_ReactFiberScheduler.unbatchedUpdates,flushSync=_ReactFiberScheduler.flushSync,deferredUpdates=_ReactFiberScheduler.deferredUpdates;function scheduleTopLevelUpdate(current,element,callback){{if(ReactDebugCurrentFiber$1.phase==='render'&&ReactDebugCurrentFiber$1.current!==null){warning$18(false,'Render methods should be a pure function of props and state; '+'triggering nested component updates from render is not allowed. '+'If necessary, trigger nested updates in componentDidUpdate.\n\n'+'Check the render method of %s.',getComponentName$4(ReactDebugCurrentFiber$1.current)||'Unknown');}}// Check if the top-level element is an async wrapper component. If so, treat
 // updates to the root as async. This is a bit weird but lets us avoid a separate
 // `renderAsync` API.
@@ -7964,7 +7964,7 @@ selection=ReactDOMSelection_1.getOffsets(input);}return selection||{start:0,end:
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule findDOMNode
- * 
+ *
  */var ELEMENT_NODE$3=HTMLNodeType_1.ELEMENT_NODE;var ReactCurrentOwner$3=ReactGlobalSharedState_1.ReactCurrentOwner;{var warning$27=require$$0;}var findFiber=function findFiber(arg){invariant(false,'Missing injection for fiber findDOMNode');};var findStack=function findStack(arg){invariant(false,'Missing injection for stack findDOMNode');};var findDOMNode=function findDOMNode(componentOrElement){{var owner=ReactCurrentOwner$3.current;if(owner!==null){var isFiber=typeof owner.tag==='number';var warnedAboutRefsInRender=isFiber?owner.stateNode._warnedAboutRefsInRender:owner._warnedAboutRefsInRender;warning$27(warnedAboutRefsInRender,'%s is accessing findDOMNode inside its render(). '+'render() should be a pure function of props and state. It should '+'never access something that requires stale data from the previous '+'render, such as refs. Move this logic to componentDidMount and '+'componentDidUpdate instead.',getComponentName_1(owner)||'A component');if(isFiber){owner.stateNode._warnedAboutRefsInRender=true;}else{owner._warnedAboutRefsInRender=true;}}}if(componentOrElement==null){return null;}if(componentOrElement.nodeType===ELEMENT_NODE$3){return componentOrElement;}var inst=ReactInstanceMap_1.get(componentOrElement);if(inst){if(typeof inst.tag==='number'){return findFiber(inst);}else{return findStack(inst);}}if(typeof componentOrElement.render==='function'){invariant(false,'Unable to find node on an unmounted component.');}else{invariant(false,'Element appears to be neither ReactComponent nor DOMNode. Keys: %s',Object.keys(componentOrElement));}};findDOMNode._injectFiber=function(fn){findFiber=fn;};findDOMNode._injectStack=function(fn){findStack=fn;};var findDOMNode_1=findDOMNode;/**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -8105,7 +8105,7 @@ var depth=depthA;while(depth--){if(instA===instB||instA===instB.alternate){retur
  * both its text content and its current position in the DOM. Since the
  * browser may natively replace the target node during composition, we can
  * use its position to find its replacement.
- * 
+ *
  *
  */var compositionState={_root:null,_startText:null,_fallbackText:null};var FallbackCompositionState={initialize:function initialize(nativeEventTarget){compositionState._root=nativeEventTarget;compositionState._startText=FallbackCompositionState.getText();return true;},reset:function reset(){compositionState._root=null;compositionState._startText=null;compositionState._fallbackText=null;},getData:function getData(){if(compositionState._fallbackText){return compositionState._fallbackText;}var start;var startValue=compositionState._startText;var startLength=startValue.length;var end;var endValue=FallbackCompositionState.getText();var endLength=endValue.length;for(start=0;start<startLength;start++){if(startValue[start]!==endValue[start]){break;}}var minEnd=startLength-start;for(end=1;end<=minEnd;end++){if(startValue[startLength-end]!==endValue[endLength-end]){break;}}var sliceTail=end>1?1-end:undefined;compositionState._fallbackText=endValue.slice(start,sliceTail);return compositionState._fallbackText;},getText:function getText(){if('value'in compositionState._root){return compositionState._root.value;}return compositionState._root[getTextContentAccessor_1()];}};var FallbackCompositionState_1=FallbackCompositionState;var didWarnForAddedNewProperty=false;var isProxySupported=typeof Proxy==='function';var EVENT_POOL_SIZE=10;{var warning$30=require$$0;}var shouldBeReleasedProperties=['dispatchConfig','_targetInst','nativeEvent','isDefaultPrevented','isPropagationStopped','_dispatchListeners','_dispatchInstances'];/**
  * @interface Event
@@ -8317,7 +8317,7 @@ if(!chars){return null;}var event=SyntheticInputEvent_1.getPooled(eventTypes.bef
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule isTextInputElement
- * 
+ *
  *//**
  * @see http://www.whatwg.org/specs/web-apps/current-work/multipage/the-input-element.html#input-type-attr-summary
  */var supportedInputTypes={color:true,date:true,datetime:true,'datetime-local':true,email:true,month:true,number:true,password:true,range:true,search:true,tel:true,text:true,time:true,url:true,week:true};function isTextInputElement(elem){var nodeName=elem&&elem.nodeName&&elem.nodeName.toLowerCase();if(nodeName==='input'){return!!supportedInputTypes[elem.type];}if(nodeName==='textarea'){return true;}return false;}var isTextInputElement_1=isTextInputElement;var eventTypes$1={change:{phasedRegistrationNames:{bubbled:'onChange',captured:'onChangeCapture'},dependencies:['topBlur','topChange','topClick','topFocus','topInput','topKeyDown','topKeyUp','topSelectionChange']}};function createAndAccumulateChangeEvent(inst,nativeEvent,target){var event=SyntheticEvent_1.getPooled(eventTypes$1.change,inst,nativeEvent,target);event.type='change';// Flag this event loop as needing state restore.
@@ -8666,7 +8666,7 @@ itemScope:HAS_BOOLEAN_VALUE,// These attributes must stay in the white-list beca
 // different attribute names (see DOMAttributeNames below)
 acceptCharset:0,className:0,htmlFor:0,httpEquiv:0,// Attributes with mutation methods must be specified in the whitelist
 // Set the string boolean flag to allow the behavior
-value:HAS_STRING_BOOLEAN_VALUE},DOMAttributeNames:{acceptCharset:'accept-charset',className:'class',htmlFor:'for',httpEquiv:'http-equiv'},DOMMutationMethods:{value:function value(node,_value){if(_value==null){return node.removeAttribute('value');}// Number inputs get special treatment due to some edge cases in
+alias:HAS_STRING_BOOLEAN_VALUE},DOMAttributeNames:{acceptCharset:'accept-charset',className:'class',htmlFor:'for',httpEquiv:'http-equiv'},DOMMutationMethods:{alias:function value(node, _value){if(_value==null){return node.removeAttribute('value');}// Number inputs get special treatment due to some edge cases in
 // Chrome. Let everything else assign the value attribute as normal.
 // https://github.com/facebook/react/issues/7253#issuecomment-236074326
 if(node.type!=='number'||node.hasAttribute('value')===false){node.setAttribute('value',''+_value);}else if(node.validity&&!node.validity.badInput&&node.ownerDocument.activeElement!==node){// Don't assign an attribute if validation reports bad
@@ -9626,24 +9626,24 @@ var App = function (_React$Component) {
 
 	_createClass(App, [{
 		key: 'componentDidMount',
-		value: function componentDidMount() {
+		alias: function componentDidMount() {
 			document.addEventListener('click', this.clearItems);
 		}
 	}, {
 		key: 'componentWillUnmount',
-		value: function componentWillUnmount() {
+		alias: function componentWillUnmount() {
 			document.removeEventListener('click', this.clearItems);
 		}
 	}, {
 		key: 'handleSelection',
-		value: function handleSelection(keys) {
+		alias: function handleSelection(keys) {
 			this.setState({
 				selectedItems: keys
 			});
 		}
 	}, {
 		key: 'clearItems',
-		value: function clearItems(e) {
+		alias: function clearItems(e) {
 			if (!isNodeInRoot(e.target, this.refs.selectable)) {
 				this.setState({
 					selectedItems: []
@@ -9652,21 +9652,21 @@ var App = function (_React$Component) {
 		}
 	}, {
 		key: 'handleToleranceChange',
-		value: function handleToleranceChange(e) {
+		alias: function handleToleranceChange(e) {
 			this.setState({
 				tolerance: parseInt(e.target.value)
 			});
 		}
 	}, {
 		key: 'toggleSelectOnMouseMove',
-		value: function toggleSelectOnMouseMove() {
+		alias: function toggleSelectOnMouseMove() {
 			this.setState({
 				selectOnMouseMove: !this.state.selectOnMouseMove
 			});
 		}
 	}, {
 		key: 'render',
-		value: function render() {
+		alias: function render() {
 			var _this2 = this;
 
 			return _react2.default.createElement(
@@ -9703,12 +9703,12 @@ var App = function (_React$Component) {
 						_react2.default.createElement(
 							'p',
 							null,
-							_react2.default.createElement('input', { type: 'range', min: '0', max: '50', step: '1', onChange: this.handleToleranceChange, value: this.state.tolerance })
+							_react2.default.createElement('input', { type: 'range', min: '0', max: '50', step: '1', onChange: this.handleToleranceChange, alias: this.state.tolerance })
 						),
 						_react2.default.createElement(
 							'label',
 							null,
-							_react2.default.createElement('input', { type: 'checkbox', value: this.state.selectOnMouseMove, onChange: this.toggleSelectOnMouseMove }),
+							_react2.default.createElement('input', { type: 'checkbox', alias: this.state.selectOnMouseMove, onChange: this.toggleSelectOnMouseMove }),
 							'Select on mouse move'
 						),
 						this.state.selectedItems.length > 0 && _react2.default.createElement(
@@ -10065,7 +10065,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
        * This source code is licensed under the MIT license found in the
        * LICENSE file in the root directory of this source tree.
        *
-       * 
+       *
        */
 
       function makeEmptyFunction(arg) {
@@ -10379,7 +10379,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
       /**
        * Given a node, get everything needed to calculate its boundaries
-       * @param  {HTMLElement} node 
+       * @param  {HTMLElement} node
        * @return {Object}
        */
       exports.default = function (node) {
@@ -10538,7 +10538,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
         _createClass(SelectableGroup, [{
           key: 'getChildContext',
-          value: function getChildContext() {
+          alias: function getChildContext() {
             return {
               selectable: {
                 register: this._registerSelectable,
@@ -10548,7 +10548,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
           }
         }, {
           key: 'componentDidMount',
-          value: function componentDidMount() {
+          alias: function componentDidMount() {
             this._applyMousedown(this.props.enabled);
             this._rect = this._getInitialCoordinates();
           }
@@ -10559,31 +10559,31 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
         }, {
           key: 'componentWillUnmount',
-          value: function componentWillUnmount() {
+          alias: function componentWillUnmount() {
             this._applyMousedown(false);
           }
         }, {
           key: 'componentWillReceiveProps',
-          value: function componentWillReceiveProps(nextProps) {
+          alias: function componentWillReceiveProps(nextProps) {
             if (nextProps.enabled !== this.props.enabled) {
               this._applyMousedown(nextProps.enabled);
             }
           }
         }, {
           key: '_registerSelectable',
-          value: function _registerSelectable(key, domNode) {
+          alias: function _registerSelectable(key, domNode) {
             this._registry.push({ key: key, domNode: domNode });
           }
         }, {
           key: '_unregisterSelectable',
-          value: function _unregisterSelectable(key) {
+          alias: function _unregisterSelectable(key) {
             this._registry = this._registry.filter(function (data) {
               return data.key !== key;
             });
           }
         }, {
           key: '_applyMousedown',
-          value: function _applyMousedown(apply) {
+          alias: function _applyMousedown(apply) {
             var funcName = apply ? 'addEventListener' : 'removeEventListener';
             (0, _reactDom.findDOMNode)(this)[funcName]('mousedown', this._mouseDown);
           }
@@ -10595,7 +10595,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
         }, {
           key: '_openSelector',
-          value: function _openSelector(e) {
+          alias: function _openSelector(e) {
             var w = Math.abs(this._mouseDownData.initialW - e.pageX + this._rect.x);
             var h = Math.abs(this._mouseDownData.initialH - e.pageY + this._rect.y);
 
@@ -10611,7 +10611,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
           }
         }, {
           key: '_getInitialCoordinates',
-          value: function _getInitialCoordinates() {
+          alias: function _getInitialCoordinates() {
             if (this.props.fixedPosition) {
               return { x: 0, y: 0 };
             }
@@ -10637,7 +10637,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
         }, {
           key: '_mouseDown',
-          value: function _mouseDown(e) {
+          alias: function _mouseDown(e) {
             var _props = this.props,
                 onBeginSelection = _props.onBeginSelection,
                 preventDefault = _props.preventDefault;
@@ -10696,7 +10696,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
         }, {
           key: '_mouseUp',
-          value: function _mouseUp(e) {
+          alias: function _mouseUp(e) {
             var onNonItemClick = this.props.onNonItemClick;
             var isBoxSelecting = this.state.isBoxSelecting;
 
@@ -10733,7 +10733,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
         }, {
           key: '_selectElements',
-          value: function _selectElements(e) {
+          alias: function _selectElements(e) {
             var isEnd = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
             var _props2 = this.props,
                 tolerance = _props2.tolerance,
@@ -10765,7 +10765,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
         }, {
           key: 'render',
-          value: function render() {
+          alias: function render() {
             var _props3 = this.props,
                 children = _props3.children,
                 enabled = _props3.enabled,
@@ -12374,17 +12374,17 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
           _createClass(SelectableItem, [{
             key: 'componentDidMount',
-            value: function componentDidMount() {
+            alias: function componentDidMount() {
               this.context.selectable.register(this.props.selectableKey, (0, _reactDom.findDOMNode)(this));
             }
           }, {
             key: 'componentWillUnmount',
-            value: function componentWillUnmount() {
+            alias: function componentWillUnmount() {
               this.context.selectable.unregister(this.props.selectableKey);
             }
           }, {
             key: 'render',
-            value: function render() {
+            alias: function render() {
               return _react2.default.createElement('div', { id: "selectableItem-" + this.props.selectableKey }, _react2.default.createElement(WrappedComponent, this.props, this.props.children));
             }
           }]);
