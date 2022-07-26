@@ -35,7 +35,26 @@ const isNodeInRoot = (node, root) => {
   return false;
 };
 
+function exceedsYesterday(lastOfYesterdayData: { startTime: string; endTime: string; type: string } | undefined) {
+  if (lastOfYesterdayData === undefined) {
+    return false;
+  }
+
+  console.log("exceedsYesterday");
+  console.log(lastOfYesterdayData);
+
+  const yesterdayDate = lastOfYesterdayData.endTime.split("T")[0];
+  const comparable = new Date(yesterdayDate + "T" + "02:00");
+  const endDateTime = new Date(lastOfYesterdayData.endTime);
+  return comparable.getTime() < endDateTime.getTime();
+}
+
+function getLastOfYesterdayData(yesterdayData: { startTime: string; endTime: string; type: string }[]) {
+  return yesterdayData.pop();
+}
+
 function match(serverData: {
+  EX_SUN: { startTime: string; endTime: string; type: string }[];
   MON: { startTime: string; endTime: string; type: string }[];
   TUE: { startTime: string; endTime: string; type: string }[];
   WED: { startTime: string; endTime: string; type: string }[];
@@ -43,15 +62,26 @@ function match(serverData: {
   FRI: { startTime: string; endTime: string; type: string }[];
   SAT: { startTime: string; endTime: string; type: string }[];
   SUN: { startTime: string; endTime: string; type: string }[];
-}, item, dayOfWeek) {
-  const mondayData = serverData[dayOfWeek];
+}, item, todayDayOfWeek, yesterdayDayOfWeek) {
+
+  const yesterdayData = serverData[yesterdayDayOfWeek];
+
+  const lastOfYesterdayData = getLastOfYesterdayData(yesterdayData);
+  if (item.startTime === '03:00') {
+    console.log('03:00!!!!!!!!!!!!!!!!');
+    console.log(lastOfYesterdayData)
+  }
+  if (item.startTime === '03:00' && exceedsYesterday(lastOfYesterdayData)) {
+    console.log("match!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    return true;
+  }
 
 
-  for (let i = 0; i < mondayData.length; i++) {
-    const data = mondayData[i];
+  const todayData = serverData[todayDayOfWeek];
+  for (let i = 0; i < todayData.length; i++) {
+    const data = todayData[i];
     const startTime = data.startTime.split("T")[1];
     if (item.startTime === startTime) {
-      console.log("TRUETRUETRUE")
       return true
     }
   }
@@ -68,11 +98,28 @@ function calculateHeightTimes(serverData: {
   FRI: { startTime: string; endTime: string; type: string }[];
   SAT: { startTime: string; endTime: string; type: string }[];
   SUN: { startTime: string; endTime: string; type: string }[];
-}, item, dayOfWeek) {
-  const mondayData = serverData[dayOfWeek];
+}, item, todayDayOfWeek, yesterdayDayOfWeek) {
 
-  for (let i = 0; i < mondayData.length; i++) {
-    const data = mondayData[i];
+  const yesterdayData = serverData[yesterdayDayOfWeek];
+  const lastOfYesterdayData = getLastOfYesterdayData(yesterdayData);
+
+  let itemStartDateTime = new Date();
+  itemStartDateTime.setHours(parseInt(item.alias));
+
+  const itemEndDateTime = new Date();
+  itemEndDateTime.setHours(parseInt(item.alias) + 1);
+
+  if (lastOfYesterdayData !== undefined && item.startTime === '03:00' && exceedsYesterday(lastOfYesterdayData)) {
+    const endDate = lastOfYesterdayData.endTime.split("T")[0];
+    const comparable = new Date(endDate + "T" + "03:00");
+    const endDateTime = new Date(lastOfYesterdayData.endTime);
+    return new Percentage((endDateTime.getTime() - comparable.getTime()) / (itemEndDateTime.getTime() - itemStartDateTime.getTime()) * 100);
+  }
+
+  const todayData = serverData[todayDayOfWeek];
+
+  for (let i = 0; i < todayData.length; i++) {
+    const data = todayData[i];
 
     const startDateTime = new Date(data.startTime);
     const startTime = data.startTime.split("T")[1];
@@ -86,14 +133,6 @@ function calculateHeightTimes(serverData: {
       console.log(endDateTime.getTime());
       // 일단 끄트머리(2시)에서 끊는거까진 함. 남은걸 다음 요일에 뿌려주는걸 안함.
 
-
-
-
-      let itemStartDateTime = new Date();
-      itemStartDateTime.setHours(parseInt(item.alias));
-
-      const itemEndDateTime = new Date();
-      itemEndDateTime.setHours(parseInt(item.alias) + 1);
 
       if (comparable.getTime() < endDateTime.getTime()) {
         return new Percentage((comparable.getTime() - startDateTime.getTime()) / (itemEndDateTime.getTime() - itemStartDateTime.getTime()) * 100);
@@ -208,6 +247,7 @@ export class TestSection extends React.Component<any> {
   private modal: any;
 
   private serverData = {
+    "EX_SUN": [],
     "MON": [
       // {
       //   startTime: "2022-07-11T10:00",
@@ -366,24 +406,24 @@ export class TestSection extends React.Component<any> {
         {/*    })}*/}
         {/*  </ul>*/}
         {/*</div>*/}
-        <div
-          css={css({
-            flexDirection: "row",
-            display: "flex"
-          })}
+        <ReactSelectableGroup onSelection={this.handleSelection}
+                              onEndSelection={this.showModal}
+                              className={"selectable"}
+                              ref={this.selectableRef}
+                              selectOnMouseMove={this.state.selectOnMouseMove}
+                              selectingClassName={"selectingSelectable"}
+                              css={css({
+                                flexDirection: "row",
+                                display: "flex"
+                              })}
         >
-          <ReactSelectableGroup onSelection={this.handleSelection}
-                                onEndSelection={this.showModal}
-                                className={"selectable"}
-                                ref={this.selectableRef}
-                                selectOnMouseMove={this.state.selectOnMouseMove}
-                                selectingClassName={"selectingSelectable"}>
-            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          <div>
             {this.props.items.map((item, i) => {
               let selected = this.state.selectedKeys.indexOf(item.id) > -1;
 
-              const isMatching = match(this.serverData, item, 'MON');
-              const heightTimes = calculateHeightTimes(this.serverData, item, 'MON');
+              const isMatching = match(this.serverData, item, 'MON', 'EX_SUN');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'MON', 'EX_SUN');
 
               return (
                 <div>
@@ -399,19 +439,14 @@ export class TestSection extends React.Component<any> {
                 </div>
               );
             })}
-          </ReactSelectableGroup>
-          <ReactSelectableGroup onSelection={this.handleSelection}
-                                onEndSelection={this.showModal}
-                                className={"selectable"}
-                                ref={this.selectableRef}
-                                selectOnMouseMove={this.state.selectOnMouseMove}
-                                selectingClassName={"selectingSelectable"}>
-            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          </div>
+          {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          <div>
             {this.props.items.map((item, i) => {
               let selected = this.state.selectedKeys.indexOf(item.id) > -1;
 
-              const isMatching = match(this.serverData, item, 'TUE');
-              const heightTimes = calculateHeightTimes(this.serverData, item, 'TUE');
+              const isMatching = match(this.serverData, item, 'TUE', 'MON');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'TUE', 'MON');
 
               return (
                 <div>
@@ -427,19 +462,14 @@ export class TestSection extends React.Component<any> {
                 </div>
               );
             })}
-          </ReactSelectableGroup>
-          <ReactSelectableGroup onSelection={this.handleSelection}
-                                onEndSelection={this.showModal}
-                                className={"selectable"}
-                                ref={this.selectableRef}
-                                selectOnMouseMove={this.state.selectOnMouseMove}
-                                selectingClassName={"selectingSelectable"}>
-            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          </div>
+          {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          <div>
             {this.props.items.map((item, i) => {
               let selected = this.state.selectedKeys.indexOf(item.id) > -1;
 
-              const isMatching = match(this.serverData, item, 'WED');
-              const heightTimes = calculateHeightTimes(this.serverData, item, 'WED');
+              const isMatching = match(this.serverData, item, 'WED', 'TUE');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'WED', 'TUE');
 
               return (
                 <div>
@@ -455,20 +485,14 @@ export class TestSection extends React.Component<any> {
                 </div>
               );
             })}
-          </ReactSelectableGroup>
-
-          <ReactSelectableGroup onSelection={this.handleSelection}
-                                onEndSelection={this.showModal}
-                                className={"selectable"}
-                                ref={this.selectableRef}
-                                selectOnMouseMove={this.state.selectOnMouseMove}
-                                selectingClassName={"selectingSelectable"}>
-            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          </div>
+          {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          <div>
             {this.props.items.map((item, i) => {
               let selected = this.state.selectedKeys.indexOf(item.id) > -1;
 
-              const isMatching = match(this.serverData, item, 'THU');
-              const heightTimes = calculateHeightTimes(this.serverData, item, 'THU');
+              const isMatching = match(this.serverData, item, 'THU', 'WED');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'THU', 'WED');
 
 
               return (
@@ -485,19 +509,14 @@ export class TestSection extends React.Component<any> {
                 </div>
               );
             })}
-          </ReactSelectableGroup>
-          <ReactSelectableGroup onSelection={this.handleSelection}
-                                onEndSelection={this.showModal}
-                                className={"selectable"}
-                                ref={this.selectableRef}
-                                selectOnMouseMove={this.state.selectOnMouseMove}
-                                selectingClassName={"selectingSelectable"}>
-            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          </div>
+          {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          <div>
             {this.props.items.map((item, i) => {
               let selected = this.state.selectedKeys.indexOf(item.id) > -1;
 
-              const isMatching = match(this.serverData, item, 'FRI');
-              const heightTimes = calculateHeightTimes(this.serverData, item, 'FRI');
+              const isMatching = match(this.serverData, item, 'FRI', 'THU');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'FRI', 'THU');
 
 
               return (
@@ -514,19 +533,14 @@ export class TestSection extends React.Component<any> {
                 </div>
               );
             })}
-          </ReactSelectableGroup>
-          <ReactSelectableGroup onSelection={this.handleSelection}
-                                onEndSelection={this.showModal}
-                                className={"selectable"}
-                                ref={this.selectableRef}
-                                selectOnMouseMove={this.state.selectOnMouseMove}
-                                selectingClassName={"selectingSelectable"}>
-            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          </div>
+          {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          <div>
             {this.props.items.map((item, i) => {
               let selected = this.state.selectedKeys.indexOf(item.id) > -1;
 
-              const isMatching = match(this.serverData, item, 'SAT');
-              const heightTimes = calculateHeightTimes(this.serverData, item, 'SAT');
+              const isMatching = match(this.serverData, item, 'SAT', 'FRI');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'SAT', 'FRI');
 
 
               return (
@@ -543,19 +557,14 @@ export class TestSection extends React.Component<any> {
                 </div>
               );
             })}
-          </ReactSelectableGroup>
-          <ReactSelectableGroup onSelection={this.handleSelection}
-                                onEndSelection={this.showModal}
-                                className={"selectable"}
-                                ref={this.selectableRef}
-                                selectOnMouseMove={this.state.selectOnMouseMove}
-                                selectingClassName={"selectingSelectable"}>
-            {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          </div>
+          {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
+          <div>
             {this.props.items.map((item, i) => {
               let selected = this.state.selectedKeys.indexOf(item.id) > -1;
 
-              const isMatching = match(this.serverData, item, 'SUN');
-              const heightTimes = calculateHeightTimes(this.serverData, item, 'SUN');
+              const isMatching = match(this.serverData, item, 'SUN', 'SAT');
+              const heightTimes = calculateHeightTimes(this.serverData, item, 'SUN', 'SAT');
 
               return (
                 <div>
@@ -571,8 +580,8 @@ export class TestSection extends React.Component<any> {
                 </div>
               );
             })}
-          </ReactSelectableGroup>
-        </div>
+          </div>
+        </ReactSelectableGroup>
 
 
         {/*<SelectAll className="selectable-button">*/}
