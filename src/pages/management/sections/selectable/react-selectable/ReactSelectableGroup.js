@@ -62,7 +62,6 @@ class ReactSelectableGroup extends Component {
 
 
   _unregisterSelectable (key) {
-    console.log("UNREGISTER!!!!")
     this._registry = this._registry.filter(data => data.key !== key);
   }
 
@@ -76,10 +75,8 @@ class ReactSelectableGroup extends Component {
    * of the selection box
    */
   _openSelector (e) {
-    // console.log("_openSelector")
     const w = Math.abs(this._mouseDownData.initialW - e.pageX + this._rect.x);
     const h = Math.abs(this._mouseDownData.initialH - e.pageY + this._rect.y);
-    // console.log(w, h);
 
     this.setState({
       isBoxSelecting: true,
@@ -119,7 +116,6 @@ class ReactSelectableGroup extends Component {
    */
   _mouseDown (e) {
     const {onBeginSelection, preventDefault} = this.props;
-    console.log("onBeginSelection", onBeginSelection);
 
     // Disable if target is control by react-dnd
     if (isNodeIn(e.target, node => !!node.draggable)) return;
@@ -137,7 +133,6 @@ class ReactSelectableGroup extends Component {
     if (e.which === 3 || e.button === 2) return;
 
     if (!isNodeInRoot(e.target, node)) {
-      console.log("isNotNodeInRoot");
       offsetData = getBoundsForNode(node);
       collides = doObjectsCollide(
         {
@@ -156,7 +151,7 @@ class ReactSelectableGroup extends Component {
       if (!collides) return;
     }
     this._rect = this._getInitialCoordinates();
-    console.log("_rect", this._rect);
+    // console.log("_rect", this._rect);
 
     this._mouseDownData = {
       boxLeft: e.pageX - this._rect.x,
@@ -165,7 +160,7 @@ class ReactSelectableGroup extends Component {
       initialH: e.pageY - this._rect.y
     };
 
-    console.log("_mouseDownData", this._mouseDownData);
+    // console.log("_mouseDownData", this._mouseDownData);
 
     if (preventDefault) e.preventDefault();
 
@@ -178,7 +173,7 @@ class ReactSelectableGroup extends Component {
    */
   _mouseUp (e) {
 
-    console.log("_mouseUp")
+    // console.log("_mouseUp")
     const {onNonItemClick} = this.props;
     const {isBoxSelecting} = this.state;
 
@@ -196,7 +191,6 @@ class ReactSelectableGroup extends Component {
       }
     }
 
-    console.log("mouse up _selectElements!!!!!")
     this._selectElements(e, true);
 
     this._mouseDownData = null;
@@ -214,13 +208,13 @@ class ReactSelectableGroup extends Component {
   _selectElements (e, isEnd = false) {
     const {tolerance, onSelection, onEndSelection} = this.props;
 
-    console.log("_selectElements", e)
+    // console.log("_selectElements", e)
 
     const currentItems = [];
     const _selectbox = findDOMNode(this.refs.selectbox);
 
-    console.log("_selectbox");
-    console.log(_selectbox);
+
+    // console.log(_selectbox);
 
     if (!_selectbox) return;
 

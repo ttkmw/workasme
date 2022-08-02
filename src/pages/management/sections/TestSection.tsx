@@ -40,8 +40,6 @@ function exceedsYesterday(lastOfYesterdayData: { startTime: string; endTime: str
     return false;
   }
 
-  console.log("exceedsYesterday");
-  console.log(lastOfYesterdayData);
 
   const yesterdayDate = lastOfYesterdayData.endTime.split("T")[0];
   const comparable = new Date(yesterdayDate + "T" + "02:00");
@@ -50,7 +48,7 @@ function exceedsYesterday(lastOfYesterdayData: { startTime: string; endTime: str
 }
 
 function getLastOfYesterdayData(yesterdayData: { startTime: string; endTime: string; type: string }[]) {
-  return yesterdayData.pop();
+  return yesterdayData[yesterdayData.length - 1];
 }
 
 function match(serverData: {
@@ -67,12 +65,8 @@ function match(serverData: {
   const yesterdayData = serverData[yesterdayDayOfWeek];
 
   const lastOfYesterdayData = getLastOfYesterdayData(yesterdayData);
-  if (item.startTime === '03:00') {
-    console.log('03:00!!!!!!!!!!!!!!!!');
-    console.log(lastOfYesterdayData)
-  }
+
   if (item.startTime === '03:00' && exceedsYesterday(lastOfYesterdayData)) {
-    console.log("match!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     return true;
   }
 
@@ -127,10 +121,6 @@ function calculateHeightTimes(serverData: {
       const endDate = data.endTime.split("T")[0];
       const comparable = new Date(endDate + "T" + "03:00");
       const endDateTime = new Date(data.endTime);
-      console.log("comparable");
-      console.log(comparable.getTime());
-      console.log("endDateTime");
-      console.log(endDateTime.getTime());
       // 일단 끄트머리(2시)에서 끊는거까진 함. 남은걸 다음 요일에 뿌려주는걸 안함.
 
 
@@ -142,6 +132,44 @@ function calculateHeightTimes(serverData: {
 
     }
   }
+}
+
+function isIdInSelectedKeys(id, selectedKeys: number[]) {
+  function getBiggest(selectedKeys: number[]) {
+    let biggest: number | undefined = undefined;
+    console.log("selectedKeys", selectedKeys);
+    for (let i = 0; i < selectedKeys.length; i++) {
+      const selectedKey = selectedKeys[i];
+      if (biggest === undefined || biggest < selectedKey) {
+        biggest = selectedKey;
+      }
+    }
+
+
+    return biggest!;
+  }
+
+  function getSmallest(selectedKeys: number[]) {
+    let smallest: number | undefined = undefined;
+
+    for (let i = 0; i < selectedKeys.length; i++) {
+      const selectedKey = selectedKeys[i];
+      if (smallest === undefined || selectedKey < smallest ) {
+        smallest = selectedKey;
+      }
+    }
+
+    return smallest!;
+  }
+
+  const biggest = getBiggest(selectedKeys);
+  console.log("id", id);
+  console.log("biggest", biggest);
+
+
+  const smallest = getSmallest(selectedKeys);
+
+  return id <= biggest && smallest <= id;
 }
 
 export class TestSection extends React.Component<any> {
@@ -181,8 +209,6 @@ export class TestSection extends React.Component<any> {
 
   componentDidMount() {
     // document.addEventListener('click', this.clearItems);
-    console.log("componentDidMount")
-    console.log(this.state.haha)
   }
 
   componentWillUnmount() {
@@ -197,7 +223,6 @@ export class TestSection extends React.Component<any> {
   }
 
   clearItems(e) {
-    console.log("CLEAR ITEMS!!!!!!!!")
     if (!isNodeInRoot(e.target, this.selectableRef)) {
       this.setState({
         selectedKeys: []
@@ -392,20 +417,6 @@ export class TestSection extends React.Component<any> {
         }
       })}
       >
-        {/*<div>*/}
-        {/*  <ul>*/}
-        {/*    {this.state.selectedKeys.map((key, i) => {*/}
-        {/*      console.log("key^^^^^^^")*/}
-        {/*      console.log(key)*/}
-        {/*      // return null;*/}
-
-        {/*      let result = this.props.items.find(item => item.id === key);*/}
-        {/*      console.log('result!!!!!!!!!!!')*/}
-        {/*      console.log(result);*/}
-        {/*      return <li key={i}>{result.value}</li>*/}
-        {/*    })}*/}
-        {/*  </ul>*/}
-        {/*</div>*/}
         <ReactSelectableGroup onSelection={this.handleSelection}
                               onEndSelection={this.showModal}
                               className={"selectable"}
@@ -419,31 +430,36 @@ export class TestSection extends React.Component<any> {
         >
           {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
           <div>
-            {this.props.items.map((item, i) => {
-              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
 
-              const isMatching = match(this.serverData, item, 'MON', 'EX_SUN');
-              const heightTimes = calculateHeightTimes(this.serverData, item, 'MON', 'EX_SUN');
+            {
 
-              return (
-                <div>
-                  <SelectableComponent
-                    selectableKey={item.id}
-                    key={i}
-                    selected={selected}
-                    isMatching={isMatching}
-                    heightTimes={heightTimes}
-                  >
-                    {item.alias}
-                  </SelectableComponent>
-                </div>
-              );
-            })}
+              this.props.items['MON'].map((item, i) => {
+                let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);
+
+                const isMatching = match(this.serverData, item, 'MON', 'EX_SUN');
+
+                const heightTimes = calculateHeightTimes(this.serverData, item, 'MON', 'EX_SUN');
+
+                return (
+                  <div>
+                    <SelectableComponent
+                      selectableKey={item.id}
+                      key={item.id}
+                      isSelected={selected}
+                      isMatching={isMatching}
+                      heightTimes={heightTimes}
+                    >
+                      {item.alias}
+                    </SelectableComponent>
+                  </div>
+                );
+              })}
           </div>
           {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
           <div>
-            {this.props.items.map((item, i) => {
-              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+            {this.props.items['TUE'].map((item, i) => {
+
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);
 
               const isMatching = match(this.serverData, item, 'TUE', 'MON');
               const heightTimes = calculateHeightTimes(this.serverData, item, 'TUE', 'MON');
@@ -452,8 +468,8 @@ export class TestSection extends React.Component<any> {
                 <div>
                   <SelectableComponent
                     selectableKey={item.id}
-                    key={i}
-                    selected={selected}
+                    key={item.id}
+                    isSelected={selected}
                     isMatching={isMatching}
                     heightTimes={heightTimes}
                   >
@@ -465,8 +481,8 @@ export class TestSection extends React.Component<any> {
           </div>
           {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
           <div>
-            {this.props.items.map((item, i) => {
-              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+            {this.props.items['WED'].map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);
 
               const isMatching = match(this.serverData, item, 'WED', 'TUE');
               const heightTimes = calculateHeightTimes(this.serverData, item, 'WED', 'TUE');
@@ -475,8 +491,8 @@ export class TestSection extends React.Component<any> {
                 <div>
                   <SelectableComponent
                     selectableKey={item.id}
-                    key={i}
-                    selected={selected}
+                    key={item.id}
+                    isSelected={selected}
                     isMatching={isMatching}
                     heightTimes={heightTimes}
                   >
@@ -488,10 +504,11 @@ export class TestSection extends React.Component<any> {
           </div>
           {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
           <div>
-            {this.props.items.map((item, i) => {
-              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+            {this.props.items['THU'].map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);
 
               const isMatching = match(this.serverData, item, 'THU', 'WED');
+
               const heightTimes = calculateHeightTimes(this.serverData, item, 'THU', 'WED');
 
 
@@ -499,8 +516,8 @@ export class TestSection extends React.Component<any> {
                 <div>
                   <SelectableComponent
                     selectableKey={item.id}
-                    key={i}
-                    selected={selected}
+                    key={item.id}
+                    isSelected={selected}
                     isMatching={isMatching}
                     heightTimes={heightTimes}
                   >
@@ -512,10 +529,11 @@ export class TestSection extends React.Component<any> {
           </div>
           {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
           <div>
-            {this.props.items.map((item, i) => {
-              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+            {this.props.items['FRI'].map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);
 
               const isMatching = match(this.serverData, item, 'FRI', 'THU');
+
               const heightTimes = calculateHeightTimes(this.serverData, item, 'FRI', 'THU');
 
 
@@ -523,8 +541,8 @@ export class TestSection extends React.Component<any> {
                 <div>
                   <SelectableComponent
                     selectableKey={item.id}
-                    key={i}
-                    selected={selected}
+                    key={item.id}
+                    isSelected={selected}
                     isMatching={isMatching}
                     heightTimes={heightTimes}
                   >
@@ -536,10 +554,11 @@ export class TestSection extends React.Component<any> {
           </div>
           {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
           <div>
-            {this.props.items.map((item, i) => {
-              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+            {this.props.items['SAT'].map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);
 
               const isMatching = match(this.serverData, item, 'SAT', 'FRI');
+
               const heightTimes = calculateHeightTimes(this.serverData, item, 'SAT', 'FRI');
 
 
@@ -547,8 +566,8 @@ export class TestSection extends React.Component<any> {
                 <div>
                   <SelectableComponent
                     selectableKey={item.id}
-                    key={i}
-                    selected={selected}
+                    key={item.id}
+                    isSelected={selected}
                     isMatching={isMatching}
                     heightTimes={heightTimes}
                   >
@@ -560,18 +579,19 @@ export class TestSection extends React.Component<any> {
           </div>
           {/*여기 for문 돌 때 요일, 날짜, 시간 정보를 다 가지고 있음. 그래서 서버에서 얻은 정보와 match할 수 있음. match 결과에 따라 몇시간짜리인지를 넘겨주면, 그에 따라 차일드가 보임.*/}
           <div>
-            {this.props.items.map((item, i) => {
-              let selected = this.state.selectedKeys.indexOf(item.id) > -1;
+            {this.props.items['SUN'].map((item, i) => {
+              let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);
 
               const isMatching = match(this.serverData, item, 'SUN', 'SAT');
+
               const heightTimes = calculateHeightTimes(this.serverData, item, 'SUN', 'SAT');
 
               return (
                 <div>
                   <SelectableComponent
                     selectableKey={item.id}
-                    key={i}
-                    selected={selected}
+                    key={item.id}
+                    isSelected={selected}
                     isMatching={isMatching}
                     heightTimes={heightTimes}
                   >

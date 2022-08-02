@@ -64,19 +64,14 @@ const SignInButton: React.FC<{email: string, password: string}> = (props: {email
   });
 
   const signIn = async () => {
-    console.log("before call")
     const response = await axiosInstance.post(`${workasme_host}/auth/signIn`, {
       "signature": email,
       "password": password,
     });
 
-    console.log("after call")
-    console.log(response.status);
-
     if (response.status === 201) {
       dispatch(usernameSign(email));
       dispatch(passwordSign(password));
-      console.log("signIn");
     }
   };
 
@@ -92,8 +87,6 @@ const SignInButton: React.FC<{email: string, password: string}> = (props: {email
 
 const Title: React.FC = () => {
   const username: string = useSelector(selectUsername);
-  console.log("hahaha");
-  console.log(username);
   return <Container>
     <h2 css={css({
       textAlign: 'center',

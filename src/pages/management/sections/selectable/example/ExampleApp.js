@@ -44,8 +44,6 @@ class ExampleApp extends React.Component {
 
 
 	handleSelection (keys) {
-    console.log("selecting");
-    console.log(keys);
 		this.setState({
 			selectedItems: keys
 		});
@@ -109,10 +107,7 @@ class ExampleApp extends React.Component {
 					selectOnMouseMove={this.state.selectOnMouseMove}>
 
 				{this.props.items.map((item, i) => {
-          console.log("example app rendering")
 					const selected = this.state.selectedItems.indexOf(i) > -1;
-          console.log("selected");
-          console.log(selected);
 					return (
 						<SelectableAlbum
 							selectableKey={i}

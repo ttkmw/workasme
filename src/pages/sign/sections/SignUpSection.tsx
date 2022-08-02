@@ -208,7 +208,7 @@ const ContinueWithGoogleButton: React.FC = () => {
                           hoverTextColor={Colors.theme.main.orgasme}
                           borderColor={Colors.theme.main.orgasme}
                           width={new Percentage(100)}
-                          onClick={() => {console.log("clicked!")}}
+                          onClick={() => {}}
   >
     <ButtonContent/>
   </ButtonComponent>;
@@ -235,7 +235,7 @@ const WhereAreYouInInput: React.FC = () => {
   const [selected, setSelected] = useState();
   return <Form.Group controlId="SelectBelongsTo">
     <Form.Label>Where are you in?</Form.Label>
-    <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {console.log(e.target.value)}} as="select" custom>
+    <Form.Control onChange={(e: React.ChangeEvent<HTMLInputElement>) => {}} as="select" custom>
       <option>Independent(No where)</option>
       <option>Company</option>
       <option>Club</option>

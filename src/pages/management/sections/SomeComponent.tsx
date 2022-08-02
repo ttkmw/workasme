@@ -5,8 +5,9 @@ import {createSelectable, TSelectableItemProps} from "react-selectable-fast";
 import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Percentage from "src/graphic/size/percentage";
+import {ReactSelectableComponentProps} from "react-selectable";
 
-interface SelectableProps  {
+interface SelectableProps extends ReactSelectableComponentProps {
   selectableRef: any,
   isSelected: boolean,
   isSelecting: boolean,
@@ -20,13 +21,9 @@ class SomeComponent extends Component<SelectableProps> {
   render() {
     const {selectableRef, isSelected, isSelecting, isMatching, heightTimes} = this.props
 
-    if (heightTimes !== undefined) {
-      console.log("NOT UNDEFINNEDDDDDDDDDDDD")
-    }
-
     function getBackgroundColor(isSelected: boolean, isSelecting: boolean) {
       if (isSelected) {
-        return 'yellow'
+        return 'orange'
       } else if (isSelecting) {
         return 'blue'
       } else
@@ -57,7 +54,7 @@ class SomeComponent extends Component<SelectableProps> {
         top: 0,
         left: 0,
         // opacity: 0.7,
-        background: "yellow",
+        background: "purple",
         zIndex: 9,
         margin: "2px"
       })}>

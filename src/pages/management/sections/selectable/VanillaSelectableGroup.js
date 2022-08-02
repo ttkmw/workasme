@@ -73,7 +73,6 @@ const VanillaSelectableGroup = (function (_super) {
   function VanillaSelectableGroup() {
     const _this = _super !== null && _super.apply(this, arguments) || this;
     _this.mouseDown = function (e) {
-      console.log("vanilla selectable group mouse down!")
     }
     _this.vanillaSelectableGroup = null;
     _this.getGroupRef = function (ref) {

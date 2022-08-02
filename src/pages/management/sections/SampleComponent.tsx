@@ -13,8 +13,6 @@ const SampleComponent = forwardRef((props:TSelectableItemProps, ref) => {
   useImperativeHandle(ref, () => ({
 
     getAlert() {
-      console.log("getAlert!!!!!")
-
       setChild(
         <div css={css({
           width: "100%",
