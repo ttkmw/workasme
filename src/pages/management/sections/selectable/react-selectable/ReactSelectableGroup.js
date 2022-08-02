@@ -213,6 +213,8 @@ class ReactSelectableGroup extends Component {
     const currentItems = [];
     const _selectbox = findDOMNode(this.refs.selectbox);
 
+    console.log("selectBox", _selectbox);
+
 
     // console.log(_selectbox);
 

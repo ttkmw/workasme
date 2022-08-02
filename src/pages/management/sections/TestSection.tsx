@@ -137,7 +137,6 @@ function calculateHeightTimes(serverData: {
 function isIdInSelectedKeys(id, selectedKeys: number[]) {
   function getBiggest(selectedKeys: number[]) {
     let biggest: number | undefined = undefined;
-    console.log("selectedKeys", selectedKeys);
     for (let i = 0; i < selectedKeys.length; i++) {
       const selectedKey = selectedKeys[i];
       if (biggest === undefined || biggest < selectedKey) {
@@ -163,8 +162,6 @@ function isIdInSelectedKeys(id, selectedKeys: number[]) {
   }
 
   const biggest = getBiggest(selectedKeys);
-  console.log("id", id);
-  console.log("biggest", biggest);
 
 
   const smallest = getSmallest(selectedKeys);
