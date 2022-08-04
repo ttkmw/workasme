@@ -1,24 +1,14 @@
-import React, {
-  Component, createRef, ReactNode,
-  RefObject, useEffect,
-  useImperativeHandle,
-  useRef,
-  useState
-} from "react";
+import React from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import {css, jsx} from "@emotion/react";
+import {css} from "@emotion/react";
 
 import {createSelectable} from 'react-selectable';
 
 import {TSelectableItem} from "react-selectable-fast/lib/Selectable.types";
 import Modal from "src/pages/management/sections/Mordal";
 import SomeComponent from "./SomeComponent";
-import {number, string} from "prop-types";
-import ExampleApp from "src/pages/management/sections/selectable/example/ExampleApp";
-import data from "src/pages/management/sections/selectable/example/sample-data";
 import ReactSelectableGroup from "src/pages/management/sections/selectable/react-selectable/ReactSelectableGroup";
-import {start} from "repl";
 import Percentage from "src/graphic/size/percentage";
 
 
@@ -68,6 +58,16 @@ function match(serverData: {
 
   if (item.startTime === '03:00' && exceedsYesterday(lastOfYesterdayData)) {
     return true;
+  }
+
+  {
+    "week": {
+    "MONDAY":[],
+      "TUESDAY": []
+  },
+    "lastDayOfLasyWeek": {
+
+  }
   }
 
 
