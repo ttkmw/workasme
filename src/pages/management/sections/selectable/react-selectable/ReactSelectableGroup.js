@@ -86,7 +86,8 @@ class ReactSelectableGroup extends Component {
       boxTop: Math.min(e.pageY - this._rect.y, this._mouseDownData.initialH)
     });
 
-    this._selectElements(e);
+
+    this._selectElements(e, false, this._mouseDownData.initialW, this._mouseDownData.initialH, Math.min(e.pageX - this._rect.x, this._mouseDownData.initialW), Math.min(e.pageY - this._rect.y, this._mouseDownData.initialH));
     // this._throttledSelect(e);
   }
 
@@ -151,13 +152,12 @@ class ReactSelectableGroup extends Component {
       if (!collides) return;
     }
     this._rect = this._getInitialCoordinates();
-    // console.log("_rect", this._rect);
 
     this._mouseDownData = {
       boxLeft: e.pageX - this._rect.x,
       boxTop: e.pageY - this._rect.y,
-      initialW: e.pageX - this._rect.x,
-      initialH: e.pageY - this._rect.y
+      initialW: e.x,
+      initialH: e.y
     };
 
     // console.log("_mouseDownData", this._mouseDownData);
@@ -191,7 +191,7 @@ class ReactSelectableGroup extends Component {
       }
     }
 
-    this._selectElements(e, true);
+    this._selectElements(e, true, this._mouseDownData.initialW, this._mouseDownData.initialH, Math.min(e.pageX - this._rect.x, this._mouseDownData.initialW), Math.min(e.pageY - this._rect.y, this._mouseDownData.initialH));
 
     this._mouseDownData = null;
     this.setState({
@@ -205,7 +205,7 @@ class ReactSelectableGroup extends Component {
   /**
    * Selects multiple children given x/y coords of the mouse
    */
-  _selectElements (e, isEnd = false) {
+  _selectElements (e, isEnd = false, initialW, initialH, lastW, lastH) {
     const {tolerance, onSelection, onEndSelection} = this.props;
 
     // console.log("_selectElements", e)
@@ -213,17 +213,18 @@ class ReactSelectableGroup extends Component {
     const currentItems = [];
     const _selectbox = findDOMNode(this.refs.selectbox);
 
-    console.log("selectBox", _selectbox);
-
 
     // console.log(_selectbox);
 
     if (!_selectbox) return;
 
+
+    // const aObj = (_selectbox instanceof HTMLElement) ? getBoundsForNode(_selectbox) : _selectbox;
+    // console.log("aObj", aObj.left, aObj.top)
     this._registry.forEach(itemData => {
       if (
         itemData.domNode
-        && doObjectsCollide(_selectbox, itemData.domNode, tolerance)
+        && doObjectsCollide(initialW, initialH, e.x, e.y, itemData.domNode, tolerance)
         && !currentItems.includes(itemData.key)
       ) {
         currentItems.push(itemData.key);

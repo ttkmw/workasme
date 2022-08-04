@@ -245,19 +245,19 @@ export class TestSection extends React.Component<any> {
     });
     this.toggleScrollLock();
   };
-  closeModal = (e) => {
+  onClose = (e) => {
     this.clearItems(e)
     this.setState({isShown: false});
     this.toggleScrollLock();
   };
   onKeyDown = (event: any) => {
     if (event.keyCode === 27) {
-      this.closeModal(event);
+      this.onClose(event);
     }
   };
   onClickOutside = (event: any) => {
     if (this.modal && this.modal.contains(event.target)) return;
-    this.closeModal(event);
+    this.onClose(event);
   };
 
   toggleScrollLock = () => {
@@ -599,85 +599,28 @@ export class TestSection extends React.Component<any> {
             })}
           </div>
         </ReactSelectableGroup>
-
-
-        {/*<SelectAll className="selectable-button">*/}
-        {/*  <button onClick={this.clearSelectionUsingRef}>Clear Selection using Ref</button>*/}
-        {/*</SelectAll>*/}
-        {/*<DeselectAll className="selectable-button">*/}
-        {/*  <button onClick={() => {*/}
-        {/*  }}>Clear selection*/}
-        {/*  </button>*/}
-        {/*</DeselectAll>*/}
-
-
-        {/*<div css={css({})}*/}
-        {/*     onMouseDown={() => {*/}
-        {/*       console.log("mouseDown")*/}
-        {/*     }}*/}
-        {/*     onMouseMove={() => console.log("kkkkkk")}*/}
-        {/*>*/}
-        {/*  Selectable*/}
-        {/*</div>*/}
-        {/*<SelectableGroup*/}
-        {/*  className="main"*/}
-        {/*  clickClassName="tick"*/}
-        {/*  enableDeselect={false}*/}
-        {/*  tolerance={0}*/}
-        {/*  globalMouse={false}*/}
-        {/*  allowClickWithoutSelected={true}*/}
-        {/*  // duringSelection={() => {*/}
-        {/*  // }}*/}
-        {/*  onSelectionClear={() => {*/}
-        {/*    console.log("clear!")*/}
-        {/*  }}*/}
-        {/*  ref={this.selectionRef}*/}
-        {/*  onSelectionFinish={(haha: any) => {*/}
-        {/*    const sorted = sort(haha);*/}
-
-        {/*    sorted.map((item: TSelectableItem, i: number) => {*/}
-        {/*      if (i == 0) {*/}
-        {/*        // @ts-ignore*/}
-        {/*        item.node.classList.add('first');*/}
-        {/*      } else if (i == sorted.length - 1) {*/}
-        {/*        // @ts-ignore*/}
-        {/*        item.node.classList.add('last');*/}
-        {/*      } else {*/}
-        {/*        // @ts-ignore*/}
-        {/*        item.node.classList.add('middle');*/}
-        {/*      }*/}
-        {/*    })*/}
-
-        {/*    console.log('finish');*/}
-        {/*    this.showModal();*/}
-        {/*  }}*/}
-        {/*  onSelectedItemUnmount={(event: any) => {*/}
-        {/*    event.preventDefault(event);*/}
-        {/*    console.log("unmount!")*/}
-        {/*  }}*/}
-        {/*  ignoreList={[]}*/}
-        {/*  resetOnStart={false}*/}
-        {/*>*/}
-        {/*  {items.map((item, i) => {*/}
-
-        {/*    return (*/}
-        {/*      // @ts-ignore*/}
-        {/*      <SelectableComponent/>*/}
-        {/*    )*/}
-        {/*  })}*/}
-        {/*</SelectableGroup>*/}
-
         <React.Fragment>
           {this.state.isShown ? (
             <Modal
               onSubmit={e => {
-                this.setState({
-                  haha: "kkkkkkkkkkkkk"
-                })
-              }}
+                const allSelectKeys: number[] = [];
+                for (let key in this.props.items) {
+                  this.props.items[key].map((item, i) => {
+                    if (isIdInSelectedKeys(item.id, this.state.selectedKeys)) {
+                      allSelectKeys.push(item.id);
+                    }
+                  })
+                }
+                console.log("allSelectedKeys")
+
+                    let firstField = e.currentTarget[0];
+                    assertIsFormFieldElement(firstField);
+                    console.log(firstField.value);
+                  }}
+              onClick={() => console.log("kkkkk")}
               modalRef={(n: any) => (this.modal = n)}
               buttonRef={(n: any) => (this.closeButton = n)}
-              closeModal={this.closeModal}
+              closeModal={this.onClose}
               onKeyDown={this.onKeyDown}
               onClickOutside={this.onClickOutside}
             />
@@ -686,6 +629,13 @@ export class TestSection extends React.Component<any> {
 
       </div>
     )
+  }
+}
+
+function assertIsFormFieldElement(element: Element): asserts element is HTMLInputElement | HTMLSelectElement | HTMLButtonElement {
+// Customize this list as necessary −−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  if (!("value" in element)) {
+    throw new Error(`Element is not a form field element`);
   }
 }
 

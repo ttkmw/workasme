@@ -1,11 +1,13 @@
 import React from 'react';
 
-export const Form = ({ onSubmit }: any) => {
+
+
+export const Form = ({onSubmit}: any) => {
   return (
-    <form onSubmit={onSubmit}>
+    <form onClick= {onSubmit}>
       <div className="form-group">
         <label htmlFor="name">Name</label>
-        <input className="form-control" id="name" />
+        <input className="form-control" id="name"/>
       </div>
       <div className="form-group">
         <label htmlFor="email">Email address</label>
@@ -17,7 +19,7 @@ export const Form = ({ onSubmit }: any) => {
         />
       </div>
       <div className="form-group">
-        <button className="form-control btn btn-primary" type="submit">
+        <button className="form-control btn btn-primary" type="button">
           Submit
         </button>
       </div>
