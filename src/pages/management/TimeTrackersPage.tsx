@@ -14,7 +14,7 @@ import TestSection from "src/pages/management/sections/TestSection";
 
 const TimeTrackersPage: React.FC = () => {
   const items = {
-    "MON": [
+    "SUNDAY": [
       {id: 1, alias: "3", startTime: "03:00"},
       {id: 2, alias: "4", startTime: "04:00"},
       {id: 3, alias: "5", startTime: "05:00"},
@@ -40,7 +40,7 @@ const TimeTrackersPage: React.FC = () => {
       {id: 23, alias: "1", startTime: "01:00"},
       {id: 24, alias: "2", startTime: "02:00"},
     ],
-    "TUE": [
+    "MONDAY": [
       {id: 25, alias: "3", startTime: "03:00"},
       {id: 26, alias: "4", startTime: "04:00"},
       {id: 27, alias: "5", startTime: "05:00"},
@@ -66,7 +66,7 @@ const TimeTrackersPage: React.FC = () => {
       {id: 47, alias: "1", startTime: "01:00"},
       {id: 48, alias: "2", startTime: "02:00"},
     ],
-    "WED": [
+    "TUESDAY": [
       {id: 49, alias: "3", startTime: "03:00"},
       {id: 50, alias: "4", startTime: "04:00"},
       {id: 51, alias: "5", startTime: "05:00"},
@@ -92,7 +92,7 @@ const TimeTrackersPage: React.FC = () => {
       {id: 71, alias: "1", startTime: "01:00"},
       {id: 72, alias: "2", startTime: "02:00"},
     ],
-    "THU": [
+    "WEDNESDAY": [
       {id: 73, alias: "3", startTime: "03:00"},
       {id: 74, alias: "4", startTime: "04:00"},
       {id: 75, alias: "5", startTime: "05:00"},
@@ -118,7 +118,7 @@ const TimeTrackersPage: React.FC = () => {
       {id: 95, alias: "1", startTime: "01:00"},
       {id: 96, alias: "2", startTime: "02:00"},
     ],
-    "FRI": [
+    "THURSDAY": [
       {id: 97, alias: "3", startTime: "03:00"},
       {id: 98, alias: "4", startTime: "04:00"},
       {id: 99, alias: "5", startTime: "05:00"},
@@ -144,7 +144,7 @@ const TimeTrackersPage: React.FC = () => {
       {id: 119, alias: "1", startTime: "01:00"},
       {id: 120, alias: "2", startTime: "02:00"},
     ],
-    "SAT": [
+    "FRIDAY": [
       {id: 121, alias: "3", startTime: "03:00"},
       {id: 122, alias: "4", startTime: "04:00"},
       {id: 123, alias: "5", startTime: "05:00"},
@@ -170,7 +170,7 @@ const TimeTrackersPage: React.FC = () => {
       {id: 143, alias: "1", startTime: "01:00"},
       {id: 144, alias: "2", startTime: "02:00"},
     ],
-    "SUN": [
+    "SATURDAY": [
       {id: 145, alias: "3", startTime: "03:00"},
       {id: 146, alias: "4", startTime: "04:00"},
       {id: 147, alias: "5", startTime: "05:00"},

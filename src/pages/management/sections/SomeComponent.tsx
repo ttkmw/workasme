@@ -45,6 +45,7 @@ class SomeComponent extends Component<SelectableProps> {
   }
 
   private static getDiv(isMatching: boolean, height: Pixel) {
+
     if (isMatching) {
 
       return <div css={css({

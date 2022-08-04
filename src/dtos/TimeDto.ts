@@ -1,6 +1,8 @@
+import {DateTime} from "src/model/DateTime";
+
 export interface TimeDto {
-  readonly startDateTime: Date;
-  readonly endDateTime: Date
+  readonly startDateTime: DateTime;
+  readonly endDateTime: DateTime
   //todo: to enum
   readonly type: string
 }
