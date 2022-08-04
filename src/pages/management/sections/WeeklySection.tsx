@@ -44,7 +44,6 @@ function calculateWeekdaysForView(day: dayjs.Dayjs): Dayjs[] {
     result.push(startDate.add(i, 'day'))
   }
 
-
   return result;
 }
 

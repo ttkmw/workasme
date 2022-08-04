@@ -1,5 +1,5 @@
 
-const parseDayOfWeek = (number: number): string => {
+export const parseDayOfWeekAlias = (number: number): string => {
   if (number === 0) {
     return "SUN"
   }
@@ -26,4 +26,33 @@ const parseDayOfWeek = (number: number): string => {
   return "SAT"
 }
 
-export default parseDayOfWeek;
+export const parseDayOfWeek = (number: number): string => {
+  if (number === 0) {
+    return "SUNDAY"
+  }
+  if (number === 1) {
+    return "MONDAY"
+  }
+
+  if (number === 2) {
+    return "TUESDAY"
+  }
+
+  if (number === 3) {
+    return "WEDNESDAY"
+  }
+
+  if (number === 4) {
+    return "THURSDAY"
+  }
+
+  if (number === 5) {
+    return "FRIDAY"
+  }
+
+  return "SATURDAY"
+}
+
+
+
+export default {parseDayOfWeekAlias, parseDayOfWeek};

@@ -9,7 +9,7 @@ import Colors from "src/constants/Colors";
 import CheckBox from "src/pages/management/sections/parts/components/box/CheckBox";
 import Percentage from "src/graphic/size/percentage";
 import dayjs, {Dayjs} from 'dayjs'
-import parseDayOfWeek from "src/util/DayofweekParser"
+import {parseDayOfWeekAlias} from "src/util/DayofweekParser"
 
 const DayOfWeekWriteListPart: React.FC<{ day: Dayjs, borderRight: Pixel, borderLeft: Pixel, borderBottom: Pixel, borderTop: Pixel }> =
   (props: {day: Dayjs, borderRight: Pixel, borderLeft: Pixel, borderBottom: Pixel, borderTop: Pixel }) => {
@@ -44,7 +44,7 @@ const DayOfWeekWriteListPart: React.FC<{ day: Dayjs, borderRight: Pixel, borderL
         width: "50%",
         color: Colors.theme.text.box.default,
         fontSize: fontSize.toString()
-      })}>{parseDayOfWeek(day.day())}</div>
+      })}>{parseDayOfWeekAlias(day.day())}</div>
       <div css={css({
         color: Colors.theme.text.box.default,
         fontSize: fontSize.toString()
