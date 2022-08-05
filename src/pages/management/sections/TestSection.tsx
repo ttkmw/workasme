@@ -188,6 +188,18 @@ const WeekView: React.FC<{ weekDays: Dayjs[] }> = (props: { weekDays: Dayjs[] })
   return <div></div>;
 }
 
+function createAllTimeRecordsOnWeekView():TimeRecordOnWeekView[] {
+  const allTimeRecordsOnWeekView: TimeRecordOnWeekView[] = [];
+  const weekdays = calculateWeekdaysForView(dayjs());
+
+  weekdays.map((day, i) => {
+    timeRecordTemplates.map((timeRecordTemplate, j) => {
+      allTimeRecordsOnWeekView.push(new TimeRecordOnWeekView(Number(i.toString() + getIdOfTemplate(j)),day, timeRecordTemplate))
+    })
+  })
+  return allTimeRecordsOnWeekView;
+}
+
 export class TestSection extends React.Component<any> {
   selectableRef;
   state;
@@ -209,6 +221,7 @@ export class TestSection extends React.Component<any> {
   }
 
   private weekDays: Dayjs[] = calculateWeekdaysForView(dayjs());
+  private allTimeRecordsOnWeekView: TimeRecordOnWeekView[] = createAllTimeRecordsOnWeekView();
 
   // clearSelectionUsingRef = () => {
   //   if (this.selectionRef) {
@@ -377,12 +390,8 @@ export class TestSection extends React.Component<any> {
 
                 const timeRecordsOnWeekView: TimeRecordOnWeekView[] = [];
 
-                function getDateTime(recordTemplate: TimeRecordTemplate): DateTime {
-                  return new DateTime(day.year() + "-" + String(day.month() + 1) + "-" + day.date() + "T" + recordTemplate)
-                }
 
                 timeRecordTemplates.map((recordTemplate, j) => {
-                  getDateTime(recordTemplate);
                   timeRecordsOnWeekView.push(new TimeRecordOnWeekView(Number(i.toString() + getIdOfTemplate(j)),day, recordTemplate))
                 })
 
@@ -581,15 +590,31 @@ export class TestSection extends React.Component<any> {
           {this.state.isShown ? (
             <Modal
               onSubmit={e => {
-                console.log("kkkkk!!!")
+                console.log("onSubmit!");
+                // console.log(this.allTimeRecordsOnWeekView.length);
+                // console.log(this.allTimeRecordsOnWeekView[0]);
                 const allSelectKeys: number[] = [];
-                for (let key in this.props.items) {
-                  this.props.items[key].map((item, i) => {
-                    if (isIdInSelectedKeys(item.id, this.state.selectedKeys)) {
-                      allSelectKeys.push(item.id);
-                    }
-                  })
+
+                const selectedTimeRecords: TimeRecordOnWeekView[] = [];
+                this.allTimeRecordsOnWeekView.map((timeRecordOnWeekView, i)=> {
+                  if (isIdInSelectedKeys(timeRecordOnWeekView.id, this.state.selectedKeys)) {
+                    selectedTimeRecords.push(timeRecordOnWeekView);
+                  }
+                });
+
+                for (let i = 0; i < selectedTimeRecords.length; i++) {
+                  console.log(i, selectedTimeRecords[i]);
                 }
+
+
+                // for (let key in this.props.items) {
+                //   console.log(key)
+                //   this.props.items[key].map((item, i) => {
+                //     if (isIdInSelectedKeys(item.id, this.state.selectedKeys)) {
+                //       allSelectKeys.push(item.id);
+                //     }
+                //   })
+                // }
 
                 let firstField = e.currentTarget[0];
                 assertIsFormFieldElement(firstField);
