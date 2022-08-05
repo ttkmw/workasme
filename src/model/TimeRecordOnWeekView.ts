@@ -36,19 +36,33 @@ export class TimeRecordOnWeekView {
     const hour: number = Number(endTime.split(":")[0]);
     if (0 <= hour && hour <= 3) {
       const tomorrow = day.add(1, 'day')
-      return new DateTime(tomorrow.year() + "-" + String(tomorrow.month() + 1) + "-" + tomorrow.date() + "T" + endTime);
+      return new DateTime(tomorrow.year() + "-" + this.convertMonth(tomorrow) + "-" + this.convertDate(tomorrow) + "T" + endTime);
     }
-    return new DateTime(day.year() + "-" + String(day.month() + 1) + "-" + day.date() + "T" + endTime);
+    return new DateTime(day.year() + "-" + this.convertMonth(day) + "-" + this.convertDate(day) + "T" + endTime);
+  }
+
+  private static convertMonth(day: Dayjs) {
+    if (day.month() + 1 < 10) {
+      return "0" + String(day.month() + 1);
+    }
+    return String(day.month() + 1);
   }
 
   private static convertToStartDateTime(day: Dayjs, startTime: string): DateTime {
     const hour: number = Number(startTime.split(":")[0]);
     if (0 <= hour && hour <= 2) {
       const tomorrow = day.add(1, 'day')
-      return new DateTime(tomorrow.year() + "-" + String(tomorrow.month() + 1) + "-" + tomorrow.date() + "T" + startTime)
+      return new DateTime(tomorrow.year() + "-" + this.convertMonth(tomorrow) + "-" + this.convertDate(tomorrow) + "T" + startTime)
     }
 
-    return new DateTime(day.year() + "-" + String(day.month() + 1) + "-" + day.date() + "T" + startTime)
+    return new DateTime(day.year() + "-" + this.convertMonth(day)+ "-" + this.convertDate(day) + "T" + startTime)
+  }
+
+  private static convertDate(day: Dayjs) {
+    if (day.date() < 10) {
+      return "0" + String(day.date());
+    }
+    return String(day.date());
   }
 
   getAlias() {

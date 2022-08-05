@@ -15,8 +15,8 @@ export class TimeRecordTemplate {
     const startHour = Number(this._startTime.split(":")[0]);
     const endHour = startHour + 1;
     if (endHour < 10) {
-      return "0" + String(endHour);
+      return "0" + String(endHour) + ":00";
     }
-    return String(endHour);
+    return String(endHour) + ":00";
   }
 }
