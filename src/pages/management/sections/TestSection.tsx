@@ -624,21 +624,25 @@ export class TestSection extends React.Component<any> {
 
                 const earliestRecord = getEarliestRecord(selectedTimeRecords);
                 const latestRecord = getLatestRecord(selectedTimeRecords);
-                console.log("earliest", earliestRecord);
-                console.log("latest", latestRecord);
+
+                let title = e.currentTarget[0];
+                let isGood = e.currentTarget[1];
+                let category = e.currentTarget[2];
+                let memo = e.currentTarget[3];
+                assertIsFormFieldElement(title);
+                assertIsFormFieldElement(isGood);
+                assertIsFormFieldElement(category);
+                assertIsFormFieldElement(memo);
+
+                console.log(title.value);
+                console.log(earliestRecord.startDateTime.getDateTime());
+                console.log(latestRecord.endDateTime.getDateTime());
+                console.log(isGood.value);
+                console.log(category.value);
+                console.log(memo.value);
 
 
-                // for (let key in this.props.items) {
-                //   console.log(key)
-                //   this.props.items[key].map((item, i) => {
-                //     if (isIdInSelectedKeys(item.id, this.state.selectedKeys)) {
-                //       allSelectKeys.push(item.id);
-                //     }
-                //   })
-                // }
 
-                let firstField = e.currentTarget[0];
-                assertIsFormFieldElement(firstField);
               }}
               onClick={() => console.log("kkkkk")}
               modalRef={(n: any) => (this.modal = n)}
