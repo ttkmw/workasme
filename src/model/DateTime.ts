@@ -17,4 +17,8 @@ export class DateTime {
   public getDateTime(): string {
     return this.dateTime;
   }
+
+  public getHour(): string {
+    return this.getTime().split(":")[0]
+  }
 }

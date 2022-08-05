@@ -15,34 +15,35 @@ import {DateTime} from "src/model/DateTime";
 import dayjs, {Dayjs} from "dayjs";
 import {TimeRecordOnWeekView} from "src/model/TimeRecordOnWeekView";
 import {parseDayOfWeek} from "src/util/DayofweekParser"
+import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
 
 const SelectableComponent = createSelectable(SomeComponent);
 
-const timeRecordsTemplate: string[] = [
-  "03:00",
-  "04:00",
-  "05:00",
-  "06:00",
-  "07:00",
-  "08:00",
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-  "16:00",
-  "17:00",
-  "18:00",
-  "19:00",
-  "20:00",
-  "21:00",
-  "22:00",
-  "23:00",
-  "00:00",
-  "01:00",
-  "02:00",
+const timeRecordTemplates: TimeRecordTemplate[] = [
+  new TimeRecordTemplate("03:00"),
+  new TimeRecordTemplate("04:00"),
+  new TimeRecordTemplate("05:00"),
+  new TimeRecordTemplate("06:00"),
+  new TimeRecordTemplate("07:00"),
+  new TimeRecordTemplate("08:00"),
+  new TimeRecordTemplate("09:00"),
+  new TimeRecordTemplate("10:00"),
+  new TimeRecordTemplate("11:00"),
+  new TimeRecordTemplate("12:00"),
+  new TimeRecordTemplate("13:00"),
+  new TimeRecordTemplate("14:00"),
+  new TimeRecordTemplate("15:00"),
+  new TimeRecordTemplate("16:00"),
+  new TimeRecordTemplate("17:00"),
+  new TimeRecordTemplate("18:00"),
+  new TimeRecordTemplate("19:00"),
+  new TimeRecordTemplate("20:00"),
+  new TimeRecordTemplate("21:00"),
+  new TimeRecordTemplate("22:00"),
+  new TimeRecordTemplate("23:00"),
+  new TimeRecordTemplate("00:00"),
+  new TimeRecordTemplate("01:00"),
+  new TimeRecordTemplate("02:00"),
 ]
 
 
@@ -72,13 +73,13 @@ function getLastOfYesterdayData(yesterdayData: TimeDto[]): TimeDto {
   return yesterdayData[yesterdayData.length - 1];
 }
 
-function match(serverData: WeekTimes, recordStartTime: string, todayDayOfWeek: string) {
+function match(serverData: WeekTimes, recordStartTime: DateTime, todayDayOfWeek: string) {
 
   const yesterdayData = serverData.getYesterdayTimesOf(todayDayOfWeek);
 
   const lastOfYesterdayData = getLastOfYesterdayData(yesterdayData);
 
-  if (recordStartTime === '03:00' && exceedsYesterday(lastOfYesterdayData)) {
+  if (recordStartTime.getTime() === '03:00' && exceedsYesterday(lastOfYesterdayData)) {
     return true;
   }
 
@@ -88,7 +89,7 @@ function match(serverData: WeekTimes, recordStartTime: string, todayDayOfWeek: s
     const data = todayData[i];
     // const startTimePieces = data.endDateTime.toISOString().split("T")[1].split(".")[0].split(":");
     const startTime = data.startDateTime.getTime();
-    if (recordStartTime === startTime) {
+    if (recordStartTime.getTime() === startTime) {
       return true
     }
   }
@@ -108,7 +109,7 @@ function calculateHeightTimes(serverData: WeekTimes, recordTemplate: TimeRecordO
   const itemEndDateTime = new Date();
   itemEndDateTime.setHours(parseInt(recordTemplate.getAlias()) + 1);
 
-  if (lastOfYesterdayData !== undefined && recordTemplate.startTime === '03:00' && exceedsYesterday(lastOfYesterdayData)) {
+  if (lastOfYesterdayData !== undefined && recordTemplate.startDateTime.getTime() === '03:00' && exceedsYesterday(lastOfYesterdayData)) {
     const endDate = lastOfYesterdayData.endDateTime.getDate();
     const comparable = new Date(endDate + "T" + "03:00");
     const endDateTime = new Date(lastOfYesterdayData.endDateTime.getDateTime());
@@ -122,7 +123,7 @@ function calculateHeightTimes(serverData: WeekTimes, recordTemplate: TimeRecordO
     const startDateTime = new Date(data.startDateTime.getDateTime());
     // const startTimePieces = data.endDateTime.toISOString().split("T")[1].split(".")[0].split(":");
     const startTime = data.startDateTime.getTime();
-    if (recordTemplate.startTime === startTime) {
+    if (recordTemplate.startDateTime.getTime() === startTime) {
 
       const endDate = data.endDateTime.getDate();
       const comparable = new Date(endDate + "T" + "03:00");
@@ -373,18 +374,23 @@ export class TestSection extends React.Component<any> {
           })}>
             {
               this.weekDays.map((day, i) => {
-                console.log("day", day.month() + 1, day.date())
 
                 const timeRecordsOnWeekView: TimeRecordOnWeekView[] = [];
-                timeRecordsTemplate.map((record, j) => {
-                  timeRecordsOnWeekView.push(new TimeRecordOnWeekView(Number(i.toString() + getIdOfTemplate(j)), record))
+
+                function getDateTime(recordTemplate: TimeRecordTemplate): DateTime {
+                  return new DateTime(day.year() + "-" + String(day.month() + 1) + "-" + day.date() + "T" + recordTemplate)
+                }
+
+                timeRecordTemplates.map((recordTemplate, j) => {
+                  getDateTime(recordTemplate);
+                  timeRecordsOnWeekView.push(new TimeRecordOnWeekView(Number(i.toString() + getIdOfTemplate(j)),day, recordTemplate))
                 })
 
                 return <div>
                   {
                     timeRecordsOnWeekView.map((record) => {
                       let selected = this.state.selectedKeys.indexOf(record.id) > -1 || isIdInSelectedKeys(record.id, this.state.selectedKeys);
-                      const isMatching = match(this.serverData, record.startTime, parseDayOfWeek(day.day()));
+                      const isMatching = match(this.serverData, record.startDateTime, parseDayOfWeek(day.day()));
                       const heightTimes = calculateHeightTimes(this.serverData, record, parseDayOfWeek(day.day()));
                       return (
                         <div>
@@ -575,6 +581,7 @@ export class TestSection extends React.Component<any> {
           {this.state.isShown ? (
             <Modal
               onSubmit={e => {
+                console.log("kkkkk!!!")
                 const allSelectKeys: number[] = [];
                 for (let key in this.props.items) {
                   this.props.items[key].map((item, i) => {
