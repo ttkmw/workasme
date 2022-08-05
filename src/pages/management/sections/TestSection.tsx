@@ -200,6 +200,30 @@ function createAllTimeRecordsOnWeekView():TimeRecordOnWeekView[] {
   return allTimeRecordsOnWeekView;
 }
 
+function getEarliestRecord(selectedTimeRecords: TimeRecordOnWeekView[]): TimeRecordOnWeekView {
+  let earliest: TimeRecordOnWeekView | undefined = undefined;
+
+  selectedTimeRecords.map((selectedTimeRecord) => {
+    if (earliest === undefined || new Date(selectedTimeRecord.endDateTime.getDateTime()).getTime() <  new Date(earliest.startDateTime.getDateTime()).getTime() ) {
+      earliest = selectedTimeRecord;
+    }
+  })
+
+  return earliest!;
+}
+
+function getLatestRecord(selectedTimeRecords: TimeRecordOnWeekView[]): TimeRecordOnWeekView {
+  let latest: TimeRecordOnWeekView | undefined = undefined;
+
+  selectedTimeRecords.map((selectedTimeRecord) => {
+    if (latest === undefined || new Date(latest.startDateTime.getDateTime()).getTime() < new Date(selectedTimeRecord.startDateTime.getDateTime()).getTime()) {
+      latest = selectedTimeRecord;
+    }
+  })
+
+  return latest!;
+}
+
 export class TestSection extends React.Component<any> {
   selectableRef;
   state;
@@ -590,10 +614,6 @@ export class TestSection extends React.Component<any> {
           {this.state.isShown ? (
             <Modal
               onSubmit={e => {
-                console.log("onSubmit!");
-                // console.log(this.allTimeRecordsOnWeekView.length);
-                // console.log(this.allTimeRecordsOnWeekView[0]);
-                const allSelectKeys: number[] = [];
 
                 const selectedTimeRecords: TimeRecordOnWeekView[] = [];
                 this.allTimeRecordsOnWeekView.map((timeRecordOnWeekView, i)=> {
@@ -602,9 +622,10 @@ export class TestSection extends React.Component<any> {
                   }
                 });
 
-                for (let i = 0; i < selectedTimeRecords.length; i++) {
-                  console.log(i, selectedTimeRecords[i]);
-                }
+                const earliestRecord = getEarliestRecord(selectedTimeRecords);
+                const latestRecord = getLatestRecord(selectedTimeRecords);
+                console.log("earliest", earliestRecord);
+                console.log("latest", latestRecord);
 
 
                 // for (let key in this.props.items) {
