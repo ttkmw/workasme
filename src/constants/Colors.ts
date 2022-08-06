@@ -19,7 +19,7 @@ export default {
       default: '#FFFFFF'
     },
     navigator: {
-      default: "#6c757d"
+      default: "#d94d3b"
     },
     text: {
       default: "black",

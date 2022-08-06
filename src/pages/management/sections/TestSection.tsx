@@ -28,6 +28,10 @@ import {number} from "prop-types";
 import fontConfig from "src/graphic/text/font";
 import NumberBox from "src/pages/management/sections/parts/components/box/NumberBox";
 
+import {AiOutlineLeft} from "react-icons/all";
+import ChevronRight from "src/pages/components/ChevronRight";
+import ChevronsLeft from "src/pages/components/ChevronLeft";
+
 
 const SelectableComponent = createSelectable(SomeComponent);
 
@@ -397,50 +401,55 @@ export class TestSection extends React.Component<any> {
       <div>
         <div css={css({
           display: "flex",
-          flexDirection: "row",
           justifyContent: "flex-end"
         })}>
-          <MdNavigateBefore size={new Pixel(50).toString()} color={colors.theme.navigator.default} onClick={() => {
-            this.setState({
-              standardDate: this.state.standardDate.subtract(7, 'day')
-            });
-          }}/>
-          {/*<ButtonComponent name={"today"} textSize={new Pixel(20)} backgroundColor={"white"} defaultTextColor={"balck"} hoverTextColor={"black"} width={new Pixel(80)} onClick={() => {}}>*/}
-          {/*  today*/}
-          {/*</ButtonComponent>*/}
           <div css={css({
             display: "flex",
-            alignItems: "center",
-            '.button': {
-              backgroundColor: Colors.theme.main.work,
-              border: "none",
-              color: Colors.theme.button.default,
-            },
-            '.button:hover': {
-              color: Colors.theme.main.orgasme
-            }
+            flexDirection: "row",
+            position: "relative",
+            left: 17
           })}>
-            <button
-              css={css({
-                width: new Pixel(100).toString(),
-                borderRadius: 10,
-                height: new Pixel(30).toString()
-              })}
-              className={"button"}
-              onClick={() => {
-                this.setState({
-                  standardDate: dayjs()
-                });
-              }}
-            >today</button>
+            <MdNavigateBefore size={new Pixel(50).toString()} color={colors.theme.navigator.default} onClick={() => {
+              this.setState({
+                standardDate: this.state.standardDate.subtract(7, 'day')
+              });
+            }}/>
+            <div css={css({
+              display: "flex",
+              alignItems: "center",
+              '.button': {
+                backgroundColor: Colors.theme.main.work,
+                border: "none",
+                color: Colors.theme.button.default,
+              },
+              '.button:hover': {
+                color: Colors.theme.main.orgasme
+              }
+            })}>
+              <button
+                css={css({
+                  width: new Pixel(100).toString(),
+                  borderRadius: 10,
+                  height: new Pixel(30).toString()
+                })}
+                className={"button"}
+                onClick={() => {
+                  this.setState({
+                    standardDate: dayjs()
+                  });
+                }}
+              >today</button>
+            </div>
+
+
+            <MdNavigateNext css={css({
+
+            })} size={new Pixel(50).toString()} color={colors.theme.navigator.default} onClick={() => {
+              this.setState({
+                standardDate: this.state.standardDate.add(7, 'day')
+              });
+            }} />
           </div>
-
-
-          <MdNavigateNext size={new Pixel(50).toString()} color={colors.theme.navigator.default} onClick={() => {
-            this.setState({
-              standardDate: this.state.standardDate.add(7, 'day')
-            });
-          }} />
         </div>
         <ReactSelectableGroup onSelection={this.handleSelection}
                               onEndSelection={() => this.showModal(this.state.selectedKeys)}
