@@ -188,13 +188,13 @@ const WeekView: React.FC<{ weekDays: Dayjs[] }> = (props: { weekDays: Dayjs[] })
   return <div></div>;
 }
 
-function createAllTimeRecordsOnWeekView():TimeRecordOnWeekView[] {
+function createAllTimeRecordsOnWeekView(day: Dayjs): TimeRecordOnWeekView[] {
   const allTimeRecordsOnWeekView: TimeRecordOnWeekView[] = [];
-  const weekdays = calculateWeekdaysForView(dayjs());
+  const weekdays = calculateWeekdaysForView(day);
 
   weekdays.map((day, i) => {
     timeRecordTemplates.map((timeRecordTemplate, j) => {
-      allTimeRecordsOnWeekView.push(new TimeRecordOnWeekView(Number(i.toString() + getIdOfTemplate(j)),day, timeRecordTemplate))
+      allTimeRecordsOnWeekView.push(new TimeRecordOnWeekView(Number(i.toString() + getIdOfTemplate(j)), day, timeRecordTemplate))
     })
   })
   return allTimeRecordsOnWeekView;
@@ -204,7 +204,7 @@ function getEarliestRecord(selectedTimeRecords: TimeRecordOnWeekView[]): TimeRec
   let earliest: TimeRecordOnWeekView | undefined = undefined;
 
   selectedTimeRecords.map((selectedTimeRecord) => {
-    if (earliest === undefined || new Date(selectedTimeRecord.endDateTime.getDateTime()).getTime() <  new Date(earliest.startDateTime.getDateTime()).getTime() ) {
+    if (earliest === undefined || new Date(selectedTimeRecord.endDateTime.getDateTime()).getTime() < new Date(earliest.startDateTime.getDateTime()).getTime()) {
       earliest = selectedTimeRecord;
     }
   })
@@ -234,7 +234,7 @@ export class TestSection extends React.Component<any> {
       selectedKeys: [],
       tolerance: 0,
       selectOnMouseMove: false,
-      haha: ""
+      standardDate: dayjs()
     };
     this.selectableRef = React.createRef();
 
@@ -244,8 +244,6 @@ export class TestSection extends React.Component<any> {
     this.toggleSelectOnMouseMove = this.toggleSelectOnMouseMove.bind(this);
   }
 
-  private weekDays: Dayjs[] = calculateWeekdaysForView(dayjs());
-  private allTimeRecordsOnWeekView: TimeRecordOnWeekView[] = createAllTimeRecordsOnWeekView();
 
   // clearSelectionUsingRef = () => {
   //   if (this.selectionRef) {
@@ -371,6 +369,8 @@ export class TestSection extends React.Component<any> {
   );
 
   render() {
+    const weekdays = calculateWeekdaysForView(this.state.standardDate);
+    const allTimeRecordsOnWeekView: TimeRecordOnWeekView[] = createAllTimeRecordsOnWeekView(this.state.standardDate);
     return (
       <div css={css({
         '.middle': {
@@ -410,13 +410,13 @@ export class TestSection extends React.Component<any> {
             display: "flex"
           })}>
             {
-              this.weekDays.map((day, i) => {
+              weekdays.map((day, i) => {
 
                 const timeRecordsOnWeekView: TimeRecordOnWeekView[] = [];
 
 
                 timeRecordTemplates.map((recordTemplate, j) => {
-                  timeRecordsOnWeekView.push(new TimeRecordOnWeekView(Number(i.toString() + getIdOfTemplate(j)),day, recordTemplate))
+                  timeRecordsOnWeekView.push(new TimeRecordOnWeekView(Number(i.toString() + getIdOfTemplate(j)), day, recordTemplate))
                 })
 
                 return <div>
@@ -443,172 +443,7 @@ export class TestSection extends React.Component<any> {
                 </div>
               })
             }
-            {/*<WeekView weekDays={this.weekDays}/>*/}
           </div>
-          {/*<div>*/}
-          {/*  {*/}
-          {/*    this.props.items['SUNDAY'].map((item, i) => {*/}
-          {/*      let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);*/}
-
-          {/*      const isMatching = match(this.serverData, item.startTime, 'SUNDAY');*/}
-
-          {/*      const heightTimes = calculateHeightTimes(this.serverData, new TimeRecordOnWeekView(item.id, item.startTime), 'SUNDAY');*/}
-          {/*      if (isMatching) {*/}
-          {/*        console.log(heightTimes)*/}
-          {/*      }*/}
-
-          {/*      return (*/}
-          {/*        <div>*/}
-          {/*          <SelectableComponent*/}
-          {/*            selectableKey={item.id}*/}
-          {/*            key={item.id}*/}
-          {/*            isSelected={selected}*/}
-          {/*            isMatching={isMatching}*/}
-          {/*            heightTimes={heightTimes}*/}
-          {/*          >*/}
-          {/*            {item.alias}*/}
-          {/*          </SelectableComponent>*/}
-          {/*        </div>*/}
-          {/*      );*/}
-          {/*    })}*/}
-          {/*</div>*/}
-          {/*<div>*/}
-          {/*  {this.props.items['MONDAY'].map((item, i) => {*/}
-
-          {/*    let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);*/}
-
-          {/*    const isMatching = match(this.serverData, item.startTime, 'MONDAY');*/}
-
-          {/*    const heightTimes = calculateHeightTimes(this.serverData, new TimeRecordOnWeekView(item.id, item.startTime), 'MONDAY');*/}
-
-          {/*    return (*/}
-          {/*      <div>*/}
-          {/*        <SelectableComponent*/}
-          {/*          selectableKey={item.id}*/}
-          {/*          key={item.id}*/}
-          {/*          isSelected={selected}*/}
-          {/*          isMatching={isMatching}*/}
-          {/*          heightTimes={heightTimes}*/}
-          {/*        >*/}
-          {/*          {item.alias}*/}
-          {/*        </SelectableComponent>*/}
-          {/*      </div>*/}
-          {/*    );*/}
-          {/*  })}*/}
-          {/*</div>*/}
-          {/*<div>*/}
-          {/*  {this.props.items['TUESDAY'].map((item, i) => {*/}
-          {/*    let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);*/}
-
-          {/*    const isMatching = match(this.serverData, item.startTime, 'TUESDAY');*/}
-          {/*    const heightTimes = calculateHeightTimes(this.serverData, new TimeRecordOnWeekView(item.id, item.startTime), 'TUESDAY');*/}
-
-          {/*    return (*/}
-          {/*      <div>*/}
-          {/*        <SelectableComponent*/}
-          {/*          selectableKey={item.id}*/}
-          {/*          key={item.id}*/}
-          {/*          isSelected={selected}*/}
-          {/*          isMatching={isMatching}*/}
-          {/*          heightTimes={heightTimes}*/}
-          {/*        >*/}
-          {/*          {item.alias}*/}
-          {/*        </SelectableComponent>*/}
-          {/*      </div>*/}
-          {/*    );*/}
-          {/*  })}*/}
-          {/*</div>*/}
-          {/*<div>*/}
-          {/*  {this.props.items['WEDNESDAY'].map((item, i) => {*/}
-          {/*    let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);*/}
-
-          {/*    const isMatching = match(this.serverData, item.startTime, 'WEDNESDAY');*/}
-          {/*    const heightTimes = calculateHeightTimes(this.serverData, new TimeRecordOnWeekView(item.id, item.startTime), 'WEDNESDAY');*/}
-
-
-          {/*    return (*/}
-          {/*      <div>*/}
-          {/*        <SelectableComponent*/}
-          {/*          selectableKey={item.id}*/}
-          {/*          key={item.id}*/}
-          {/*          isSelected={selected}*/}
-          {/*          isMatching={isMatching}*/}
-          {/*          heightTimes={heightTimes}*/}
-          {/*        >*/}
-          {/*          {item.alias}*/}
-          {/*        </SelectableComponent>*/}
-          {/*      </div>*/}
-          {/*    );*/}
-          {/*  })}*/}
-          {/*</div>*/}
-          {/*<div>*/}
-          {/*  {this.props.items['THURSDAY'].map((item, i) => {*/}
-          {/*    let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);*/}
-
-          {/*    const isMatching = match(this.serverData, item.startTime, 'THURSDAY');*/}
-          {/*    const heightTimes = calculateHeightTimes(this.serverData, new TimeRecordOnWeekView(item.id, item.startTime), 'THURSDAY');*/}
-
-
-          {/*    return (*/}
-          {/*      <div>*/}
-          {/*        <SelectableComponent*/}
-          {/*          selectableKey={item.id}*/}
-          {/*          key={item.id}*/}
-          {/*          isSelected={selected}*/}
-          {/*          isMatching={isMatching}*/}
-          {/*          heightTimes={heightTimes}*/}
-          {/*        >*/}
-          {/*          {item.alias}*/}
-          {/*        </SelectableComponent>*/}
-          {/*      </div>*/}
-          {/*    );*/}
-          {/*  })}*/}
-          {/*</div>*/}
-          {/*<div>*/}
-          {/*  {this.props.items['FRIDAY'].map((item, i) => {*/}
-          {/*    let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);*/}
-
-          {/*    const isMatching = match(this.serverData, item.startTime, 'FRIDAY');*/}
-          {/*    const heightTimes = calculateHeightTimes(this.serverData, new TimeRecordOnWeekView(item.id, item.startTime), 'FRIDAY');*/}
-
-
-          {/*    return (*/}
-          {/*      <div>*/}
-          {/*        <SelectableComponent*/}
-          {/*          selectableKey={item.id}*/}
-          {/*          key={item.id}*/}
-          {/*          isSelected={selected}*/}
-          {/*          isMatching={isMatching}*/}
-          {/*          heightTimes={heightTimes}*/}
-          {/*        >*/}
-          {/*          {item.alias}*/}
-          {/*        </SelectableComponent>*/}
-          {/*      </div>*/}
-          {/*    );*/}
-          {/*  })}*/}
-          {/*</div>*/}
-          {/*<div>*/}
-          {/*  {this.props.items['SATURDAY'].map((item, i) => {*/}
-          {/*    let selected = this.state.selectedKeys.indexOf(item.id) > -1 || isIdInSelectedKeys(item.id, this.state.selectedKeys);*/}
-
-          {/*    const isMatching = match(this.serverData, item.startTime, 'SATURDAY');*/}
-          {/*    const heightTimes = calculateHeightTimes(this.serverData, new TimeRecordOnWeekView(item.id, item.startTime), 'SATURDAY');*/}
-
-          {/*    return (*/}
-          {/*      <div>*/}
-          {/*        <SelectableComponent*/}
-          {/*          selectableKey={item.id}*/}
-          {/*          key={item.id}*/}
-          {/*          isSelected={selected}*/}
-          {/*          isMatching={isMatching}*/}
-          {/*          heightTimes={heightTimes}*/}
-          {/*        >*/}
-          {/*          {item.alias}*/}
-          {/*        </SelectableComponent>*/}
-          {/*      </div>*/}
-          {/*    );*/}
-          {/*  })}*/}
-          {/*</div>*/}
         </ReactSelectableGroup>
         <React.Fragment>
           {this.state.isShown ? (
@@ -616,7 +451,7 @@ export class TestSection extends React.Component<any> {
               onSubmit={e => {
 
                 const selectedTimeRecords: TimeRecordOnWeekView[] = [];
-                this.allTimeRecordsOnWeekView.map((timeRecordOnWeekView, i)=> {
+                allTimeRecordsOnWeekView.map((timeRecordOnWeekView, i) => {
                   if (isIdInSelectedKeys(timeRecordOnWeekView.id, this.state.selectedKeys)) {
                     selectedTimeRecords.push(timeRecordOnWeekView);
                   }
@@ -640,7 +475,6 @@ export class TestSection extends React.Component<any> {
                 console.log(isGood.value);
                 console.log(category.value);
                 console.log(memo.value);
-
 
 
               }}
