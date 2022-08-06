@@ -25,6 +25,8 @@ import colors from "src/constants/Colors";
 import Colors from "src/constants/Colors";
 import CheckBox from "src/pages/management/sections/parts/components/box/CheckBox";
 import {number} from "prop-types";
+import fontConfig from "src/graphic/text/font";
+import NumberBox from "src/pages/management/sections/parts/components/box/NumberBox";
 
 
 const SelectableComponent = createSelectable(SomeComponent);
@@ -382,6 +384,9 @@ export class TestSection extends React.Component<any> {
   private modal: any;
 
   private checkBoxSize = new Pixel(15);
+  private recordSize = new Pixel(30);
+  private outlineBorder = new Pixel(1);
+  private noBorder = new Pixel(0);
 
 
   render() {
@@ -463,7 +468,14 @@ export class TestSection extends React.Component<any> {
                 return <div>
                   <DateGuide day={day}/>
                   <TodoList checkBoxSize={this.checkBoxSize}/>
-                  <div>
+                  <div css={css({
+                    borderRight: this.outlineBorder.toString(),
+                    borderLeft: this.noBorder.toString(),
+                    borderTop: this.outlineBorder.toString(),
+                    borderBottom: this.outlineBorder.toString(),
+                    borderStyle: "solid",
+                    borderColor: Colors.theme.table.outLine
+                  })}>
 
                     {
                       timeRecordsOnWeekView.map((record) => {
@@ -471,15 +483,23 @@ export class TestSection extends React.Component<any> {
                         const isMatching = match(serverData, record.startDateTime, parseDayOfWeek(day.day()));
                         const heightTimes = calculateHeightTimes(serverData, record, parseDayOfWeek(day.day()));
                         return (
-                          <div>
+                          <div css={css({
+                            borderBottom: 1,
+                            borderBottomStyle: "solid",
+                            borderBottomColor: Colors.theme.table.innerLine,
+                          })}>
+
                             <SelectableComponent
                               selectableKey={record.id}
                               key={record.id}
                               isSelected={selected}
                               isMatching={isMatching}
                               heightTimes={heightTimes}
+                              height={this.recordSize}
                             >
-                              {record.getAlias()}
+                              <NumberBox number={record.getAlias()} numberSize={this.checkBoxSize} numberFont={fontConfig.web.medium.fontFamily}
+                                         numberColor={Colors.theme.text.box.default} boxWidth={new Pixel(14)} boxHeight={new Pixel(35)}
+                                         boxRadius={0}/>
                             </SelectableComponent>
                           </div>
                         )

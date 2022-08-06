@@ -12,35 +12,34 @@ interface SelectableProps extends ReactSelectableComponentProps {
   isSelected: boolean,
   isSelecting: boolean,
   isMatching: boolean
-  heightTimes: Percentage
+  heightTimes ?: Percentage
+  height: Pixel
+}
+
+function getBackgroundColor(isSelected: boolean) {
+  if (isSelected) {
+    return 'orange'
+  }  else
+    return 'white'
 }
 
 class SomeComponent extends Component<SelectableProps> {
-  private width: Pixel = new Pixel(150);
-  private height: Pixel = new Pixel(150);
   render() {
-    const {selectableRef, isSelected, isSelecting, isMatching, heightTimes} = this.props
+    const {selectableRef, isSelected, isMatching, heightTimes, height} = this.props
 
-    function getBackgroundColor(isSelected: boolean, isSelecting: boolean) {
-      if (isSelected) {
-        return 'orange'
-      } else if (isSelecting) {
-        return 'blue'
-      } else
-        return 'white'
-    }
 
-    const backgroundColor = getBackgroundColor(isSelected, isSelecting);
+
+    const backgroundColor = getBackgroundColor(isSelected);
 
     return <div css={css({
       position: "relative",
-      width: this.width.toString(),
-      height: this.height.toString(),
+      // width: this.width.toString(),
+      height: height.toString(),
       // margin: "30px",
       backgroundColor: backgroundColor
     })} ref={selectableRef}>
       {this.props.children}
-      {SomeComponent.getDiv(isMatching, this.height.multiply(heightTimes == null ? new Percentage(100) : heightTimes))}
+      {SomeComponent.getDiv(isMatching, height.multiply(heightTimes == null ? new Percentage(100) : heightTimes))}
     </div>;
   }
 
@@ -49,7 +48,7 @@ class SomeComponent extends Component<SelectableProps> {
     if (isMatching) {
 
       return <div css={css({
-        width: "150px",
+        width: "100%",
         height: height.toString(),
         position: "absolute",
         top: 0,
@@ -80,3 +79,5 @@ class SomeComponent extends Component<SelectableProps> {
 // </div>
 
 export default SomeComponent;
+
+
