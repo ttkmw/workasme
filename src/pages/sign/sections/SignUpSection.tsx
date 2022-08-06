@@ -89,6 +89,7 @@ const SignUpButton: React.FC<{email: string, password: string, firstName:string,
   const dispatch = useDispatch();
 
   return <ButtonComponent name={"createAccount"} backgroundColor={Colors.theme.main.work}
+                          textSize={new Pixel(20)}
                           defaultTextColor={Colors.theme.text.button.default}
                           hoverTextColor={Colors.theme.main.orgasme}
                           width={new Percentage(100)}
@@ -145,6 +146,7 @@ const SignUpButtonModal:React.FC<{show: boolean, handleClose: () => void}> = (pr
         <Modal.Footer>
           <LinkContainer to="/management">
             <ButtonComponent name={"moveToManagement"} backgroundColor={Colors.theme.main.work}
+                             textSize={new Pixel(20)}
                              defaultTextColor={Colors.theme.text.button.default}
                              hoverTextColor={Colors.theme.main.orgasme}
                              width={new Percentage(100)}
@@ -204,6 +206,7 @@ const SplitWithOrLine: React.FC = () => {
 const ContinueWithGoogleButton: React.FC = () => {
 
   return <ButtonComponent name={"outline-primary"} backgroundColor={Colors.theme.button.default}
+                          textSize={new Pixel(20)}
                           defaultTextColor={Colors.theme.main.orgasme}
                           hoverTextColor={Colors.theme.main.orgasme}
                           borderColor={Colors.theme.main.orgasme}

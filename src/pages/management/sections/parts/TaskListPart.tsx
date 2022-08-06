@@ -86,6 +86,7 @@ const TaskListPart: React.FC<{ marginVertical: Pixel }> = (props: { marginVertic
       })}>
 
         <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+                         textSize={new Pixel(20)}
                          defaultTextColor={Colors.theme.text.button.default}
                          hoverTextColor={Colors.theme.main.orgasme}
                          width={new Pixel(100)} onClick={onUpdate}>
@@ -130,6 +131,7 @@ const TaskButtonsWhenNotUpdating: React.FC<{ isUpdating: boolean, setIsUpdating:
   })}>
 
     <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
+                     textSize={new Pixel(20)}
                      defaultTextColor={Colors.theme.text.button.default}
                      hoverTextColor={Colors.theme.main.orgasme}
                      width={new Pixel(100)} onClick={onUpdateButtonClicked}>
@@ -173,6 +175,7 @@ const TaskButtonsWhenUpdating: React.FC<{
 
       <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
                        defaultTextColor={Colors.theme.text.button.default}
+                       textSize={new Pixel(20)}
                        hoverTextColor={Colors.theme.main.orgasme}
                        width={new Pixel(100)} onClick={onAddRowButtonClicked}>
         Add Row
@@ -180,6 +183,7 @@ const TaskButtonsWhenUpdating: React.FC<{
 
       <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
                        defaultTextColor={Colors.theme.text.button.default}
+                       textSize={new Pixel(20)}
                        hoverTextColor={Colors.theme.main.orgasme}
                        width={new Pixel(100)} onClick={onCompleteButtonClicked}>
         Complete

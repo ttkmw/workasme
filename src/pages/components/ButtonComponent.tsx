@@ -3,11 +3,13 @@ import {Button as BootstrapButton} from "react-bootstrap";
 import {Size} from "src/graphic/size/Size";
 import Colors from "src/constants/Colors";
 import {ButtonType} from "react-bootstrap/esm/Button";
+import Pixel from "src/graphic/size/pixel";
 
 interface ButtonComponentProps {
   children: ReactNode;
   name: string;
   backgroundColor: string;
+  textSize: Pixel
   defaultTextColor: string;
   hoverTextColor: string;
   borderColor?: string;
@@ -21,6 +23,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
                                                            children,
                                                            name,
                                                            backgroundColor,
+                                                           textSize,
                                                            defaultTextColor,
                                                            hoverTextColor,
                                                            borderColor,
@@ -37,13 +40,14 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
               border-color: ${getBorderColor(borderColor)};
               color: ${defaultTextColor};
               width: ${width.toString()};¸
+              font-size: ${textSize.toString()};
             }
             
             .btn-${name}:hover {
               background-color: ${backgroundColor};
               border-color: ${getBorderColor(borderColor)};
               color: ${hoverTextColor};
-              width: ${width.toString()};   
+              width: ${width.toString()}; 
              }
           `}
     </style>

@@ -76,6 +76,7 @@ const SignInButton: React.FC<{email: string, password: string}> = (props: {email
   };
 
   return <ButtonComponent name={"signIn"} backgroundColor={Colors.theme.main.work}
+                          textSize={new Pixel(20)}
                           defaultTextColor={Colors.theme.text.button.default}
                           hoverTextColor={Colors.theme.main.orgasme}
                           width={new Percentage(100)}

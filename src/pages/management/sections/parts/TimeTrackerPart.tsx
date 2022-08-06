@@ -115,6 +115,7 @@ const TimeTrackerForm: React.FC = () => {
         })}>
           <ButtonComponent
             name={"join"}
+            textSize={new Pixel(20)}
             backgroundColor={Colors.theme.main.work}
             defaultTextColor={Colors.theme.text.button.default}
             hoverTextColor={Colors.theme.main.orgasme}
@@ -200,6 +201,7 @@ const TimeTrackerButtonsWhenNotUpdating: React.FC<{isUpdating: boolean, setIsUpd
 
     <ButtonComponent name={"Update"} backgroundColor={Colors.theme.main.work}
                      defaultTextColor={Colors.theme.text.button.default}
+                     textSize={new Pixel(20)}
                      hoverTextColor={Colors.theme.main.orgasme}
                      width={new Pixel(100)} onClick={onUpdateButtonClicked}>
       Update
@@ -241,12 +243,14 @@ const TimeTrackerButtonsWhenUpdating: React.FC<{ isUpdating: boolean, setIsUpdat
 
       <ButtonComponent name={"AddBlankRow"} backgroundColor={Colors.theme.main.work}
                        defaultTextColor={Colors.theme.text.button.default}
+                       textSize={new Pixel(20)}
                        hoverTextColor={Colors.theme.main.orgasme}
                        width={new Pixel(100)} onClick={onAddRowButtonClicked}>
         Add Blank Row
       </ButtonComponent>
 
       <ButtonComponent name={"Comnplete"} backgroundColor={Colors.theme.main.work}
+                       textSize={new Pixel(20)}
                        defaultTextColor={Colors.theme.text.button.default}
                        hoverTextColor={Colors.theme.main.orgasme}
                        width={new Pixel(100)} onClick={onCompleteButtonClicked}>

@@ -4,10 +4,8 @@ import Container from 'react-bootstrap/Container';
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
-import {Button} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
 import Colors from "src/constants/Colors";
-import Percentage from "src/graphic/size/percentage";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 
 const GetStartedSection: React.FC = () => {
@@ -93,6 +91,7 @@ const GetStartedButton: React.FC = () => {
         <ButtonComponent name={"getStarted"} backgroundColor={Colors.theme.main.work}
                          defaultTextColor={Colors.theme.text.button.default}
                          hoverTextColor={Colors.theme.main.orgasme}
+                         textSize={new Pixel(30)}
                          width={new Pixel(200)} onClick={() => {}} size={"lg"}>
           Get Started
         </ButtonComponent>

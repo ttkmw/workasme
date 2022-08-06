@@ -18,6 +18,9 @@ export default {
     button: {
       default: '#FFFFFF'
     },
+    navigator: {
+      default: "#6c757d"
+    },
     text: {
       default: "black",
       soft: Grey.get('800'),

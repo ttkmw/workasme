@@ -41,14 +41,14 @@ const DayOfWeekWriteListPart: React.FC<{ day: Dayjs, borderRight: Pixel, borderL
       fontSize: "12px"
     })}>
       <div css={css({
-        width: "50%",
+        // width: "50%",
         color: Colors.theme.text.box.default,
         fontSize: fontSize.toString()
       })}>{parseDayOfWeekAlias(day.day())}</div>
       <div css={css({
         color: Colors.theme.text.box.default,
         fontSize: fontSize.toString()
-      })}>{day.date()}</div>
+      })}>{String(day.month() + 1) + "." + String(day.date())}</div>
     </div>
   }
 

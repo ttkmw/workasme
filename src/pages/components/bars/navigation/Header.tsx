@@ -1,4 +1,4 @@
-import React, {ReactElement, ReactNode} from "react";
+import React, {ReactElement} from "react";
 import {css} from "@emotion/react";
 import Sizes from "src/constants/Sizes";
 import {Nav, Navbar, NavbarBrand} from "react-bootstrap";
@@ -8,12 +8,8 @@ import Container from 'react-bootstrap/Container';
 import Colors from "src/constants/Colors";
 import {SerializedStyles} from "@emotion/serialize";
 import {LinkContainer} from 'react-router-bootstrap'
-import ButtonComponent from "src/pages/components/ButtonComponent";
-import Percentage from "src/graphic/size/percentage";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {selectSign} from "src/context/signSlice";
-import {selectUsername} from "src/context/usernameSlice";
-import {selectPassword} from "src/context/passwordSlice";
 
 
 const Menus: React.FC<{isSigned: boolean}> = (props: {isSigned: boolean}) => {

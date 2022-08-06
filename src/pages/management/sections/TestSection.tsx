@@ -16,6 +16,14 @@ import dayjs, {Dayjs} from "dayjs";
 import {TimeRecordOnWeekView} from "src/model/TimeRecordOnWeekView";
 import {parseDayOfWeek} from "src/util/DayofweekParser"
 import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
+import {MdNavigateBefore} from  'react-icons/md'
+import {MdNavigateNext} from 'react-icons/md'
+import ButtonComponent from "src/pages/components/ButtonComponent";
+import Pixel from "src/graphic/size/pixel";
+import {inspect} from "util";
+import colors from "src/constants/Colors";
+import Colors from "src/constants/Colors";
+
 
 const SelectableComponent = createSelectable(SomeComponent);
 
@@ -397,6 +405,53 @@ export class TestSection extends React.Component<any> {
         }
       })}
       >
+        <div css={css({
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end"
+        })}>
+          <MdNavigateBefore size={new Pixel(50).toString()} color={colors.theme.navigator.default} onClick={() => {
+            this.setState({
+              standardDate: this.state.standardDate.subtract(7, 'day')
+            });
+          }}/>
+          {/*<ButtonComponent name={"today"} textSize={new Pixel(20)} backgroundColor={"white"} defaultTextColor={"balck"} hoverTextColor={"black"} width={new Pixel(80)} onClick={() => {}}>*/}
+          {/*  today*/}
+          {/*</ButtonComponent>*/}
+          <div css={css({
+            display: "flex",
+            alignItems: "center",
+            '.button': {
+              backgroundColor: Colors.theme.main.work,
+              border: "none",
+              color: Colors.theme.button.default,
+            },
+            '.button:hover': {
+              color: Colors.theme.main.orgasme
+            }
+          })}>
+            <button
+              css={css({
+                width: new Pixel(100).toString(),
+                borderRadius: 10,
+                height: new Pixel(30).toString()
+              })}
+              className={"button"}
+              onClick={() => {
+                this.setState({
+                  standardDate: dayjs()
+                });
+              }}
+            >today</button>
+          </div>
+
+
+          <MdNavigateNext size={new Pixel(50).toString()} color={colors.theme.navigator.default} onClick={() => {
+            this.setState({
+              standardDate: this.state.standardDate.add(7, 'day')
+            });
+          }} />
+        </div>
         <ReactSelectableGroup onSelection={this.handleSelection}
                               onEndSelection={this.showModal}
                               className={"selectable"}
@@ -411,6 +466,7 @@ export class TestSection extends React.Component<any> {
           })}>
             {
               weekdays.map((day, i) => {
+                console.log(day.day(), day.month() + 1, day.date())
 
                 const timeRecordsOnWeekView: TimeRecordOnWeekView[] = [];
 
