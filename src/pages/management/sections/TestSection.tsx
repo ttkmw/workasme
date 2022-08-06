@@ -14,7 +14,7 @@ import {TimeDto} from "src/dtos/TimeDto";
 import {DateTime} from "src/model/DateTime";
 import dayjs, {Dayjs} from "dayjs";
 import {TimeRecordOnWeekView} from "src/model/TimeRecordOnWeekView";
-import {parseDayOfWeek} from "src/util/DayofweekParser"
+import {parseDayOfWeek, parseDayOfWeekAlias} from "src/util/DayofweekParser"
 import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
 import {MdNavigateBefore} from  'react-icons/md'
 import {MdNavigateNext} from 'react-icons/md'
@@ -23,6 +23,7 @@ import Pixel from "src/graphic/size/pixel";
 import {inspect} from "util";
 import colors from "src/constants/Colors";
 import Colors from "src/constants/Colors";
+import CheckBox from "src/pages/management/sections/parts/components/box/CheckBox";
 
 
 const SelectableComponent = createSelectable(SomeComponent);
@@ -232,6 +233,58 @@ function getLatestRecord(selectedTimeRecords: TimeRecordOnWeekView[]): TimeRecor
   return latest!;
 }
 
+const serverData: WeekTimes = new WeekTimes(
+  {
+    week: {
+      "LAST_SATURDAY": [],
+      "SUNDAY": [
+        {
+          startDateTime: new DateTime("2022-07-11T01:00"),
+          endDateTime: new DateTime("2022-07-11T04:00"),
+          type: "FREE"
+        },
+      ],
+
+      "MONDAY": [
+        {
+          startDateTime: new DateTime("2022-07-12T01:00"),
+          endDateTime: new DateTime("2022-07-12T04:00"),
+          type: "FREE"
+        },
+      ],
+      "TUESDAY": [
+        {
+          startDateTime: new DateTime("2022-07-13T01:00"),
+          endDateTime: new DateTime("2022-07-13T04:00"),
+          type: "FREE"
+        },
+      ],
+      "WEDNESDAY": [
+        {
+          startDateTime: new DateTime("2022-07-14T01:00"),
+          endDateTime: new DateTime("2022-07-14T04:00"),
+          type: "FREE"
+        },
+      ],
+      "THURSDAY": [
+        {
+          startDateTime: new DateTime("2022-07-15T01:00"),
+          endDateTime: new DateTime("2022-07-15T04:00"),
+          type: "FREE"
+        },
+      ],
+      "FRIDAY": [
+        {
+          startDateTime: new DateTime("2022-07-16T01:00"),
+          endDateTime: new DateTime("2022-07-16T04:00"),
+          type: "FREE"
+        },
+      ],
+      "SATURDAY": []
+    }
+  }
+);
+
 export class TestSection extends React.Component<any> {
   selectableRef;
   state;
@@ -324,87 +377,15 @@ export class TestSection extends React.Component<any> {
   private TriggerButton: any;
   private modal: any;
 
-  private serverData: WeekTimes = new WeekTimes(
-    {
-      week: {
-        "LAST_SATURDAY": [],
-        "SUNDAY": [
-          {
-            startDateTime: new DateTime("2022-07-11T01:00"),
-            endDateTime: new DateTime("2022-07-11T04:00"),
-            type: "FREE"
-          },
-        ],
+  private checkBoxSize = new Pixel(15);
 
-        "MONDAY": [
-          {
-            startDateTime: new DateTime("2022-07-12T01:00"),
-            endDateTime: new DateTime("2022-07-12T04:00"),
-            type: "FREE"
-          },
-        ],
-        "TUESDAY": [
-          {
-            startDateTime: new DateTime("2022-07-13T01:00"),
-            endDateTime: new DateTime("2022-07-13T04:00"),
-            type: "FREE"
-          },
-        ],
-        "WEDNESDAY": [
-          {
-            startDateTime: new DateTime("2022-07-14T01:00"),
-            endDateTime: new DateTime("2022-07-14T04:00"),
-            type: "FREE"
-          },
-        ],
-        "THURSDAY": [
-          {
-            startDateTime: new DateTime("2022-07-15T01:00"),
-            endDateTime: new DateTime("2022-07-15T04:00"),
-            type: "FREE"
-          },
-        ],
-        "FRIDAY": [
-          {
-            startDateTime: new DateTime("2022-07-16T01:00"),
-            endDateTime: new DateTime("2022-07-16T04:00"),
-            type: "FREE"
-          },
-        ],
-        "SATURDAY": []
-      }
-    }
-  );
 
   render() {
     const weekdays = calculateWeekdaysForView(this.state.standardDate);
+
     const allTimeRecordsOnWeekView: TimeRecordOnWeekView[] = createAllTimeRecordsOnWeekView(this.state.standardDate);
     return (
-      <div css={css({
-        '.middle': {
-          borderWidth: 5,
-          borderColor: "red",
-          borderStyle: "solid"
-        },
-        '.first': {
-          borderWidth: 5,
-          borderColor: "black",
-          borderStyle: "solid"
-        },
-        '.last': {
-          borderWidth: 5,
-          borderColor: "blue",
-          borderStyle: "solid"
-        },
-        '.selectable': {
-          backgroundColor: 'blue',
-          width: "150px"
-        },
-        '.selectingSelectable': {
-          backgroundColor: 'yellow'
-        }
-      })}
-      >
+      <div>
         <div css={css({
           display: "flex",
           flexDirection: "row",
@@ -476,26 +457,31 @@ export class TestSection extends React.Component<any> {
                 })
 
                 return <div>
-                  {
-                    timeRecordsOnWeekView.map((record) => {
-                      let selected = this.state.selectedKeys.indexOf(record.id) > -1 || isIdInSelectedKeys(record.id, this.state.selectedKeys);
-                      const isMatching = match(this.serverData, record.startDateTime, parseDayOfWeek(day.day()));
-                      const heightTimes = calculateHeightTimes(this.serverData, record, parseDayOfWeek(day.day()));
-                      return (
-                        <div>
-                          <SelectableComponent
-                            selectableKey={record.id}
-                            key={record.id}
-                            isSelected={selected}
-                            isMatching={isMatching}
-                            heightTimes={heightTimes}
-                          >
-                            {record.getAlias()}
-                          </SelectableComponent>
-                        </div>
-                      )
-                    })
-                  }
+                  <DateGuide day={day}/>
+                  <TodoList checkBoxSize={this.checkBoxSize}/>
+                  <div>
+
+                    {
+                      timeRecordsOnWeekView.map((record) => {
+                        let selected = this.state.selectedKeys.indexOf(record.id) > -1 || isIdInSelectedKeys(record.id, this.state.selectedKeys);
+                        const isMatching = match(serverData, record.startDateTime, parseDayOfWeek(day.day()));
+                        const heightTimes = calculateHeightTimes(serverData, record, parseDayOfWeek(day.day()));
+                        return (
+                          <div>
+                            <SelectableComponent
+                              selectableKey={record.id}
+                              key={record.id}
+                              isSelected={selected}
+                              isMatching={isMatching}
+                              heightTimes={heightTimes}
+                            >
+                              {record.getAlias()}
+                            </SelectableComponent>
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
                 </div>
               })
             }
@@ -547,6 +533,75 @@ export class TestSection extends React.Component<any> {
       </div>
     )
   }
+}
+const TodoList: React.FC<{checkBoxSize: Pixel}> = (props: {checkBoxSize: Pixel}) => {
+  const {checkBoxSize} = props;
+  let percent = new Percentage(100);
+  return <div>
+    <div css={css({
+      display: "flex",
+      alignItems: "center",
+      marginLeft: "5px",
+      marginRight: "10px",
+      flexDirection: "column",
+      paddingTop: checkBoxSize.multiply(new Percentage(50)).toString(),
+      paddingBottom: checkBoxSize.multiply(new Percentage(50)).toString()
+    })}>
+      <Todo checkBoxSize={checkBoxSize}/>
+      <Todo checkBoxSize={checkBoxSize}/>
+      <Todo checkBoxSize={checkBoxSize}/>
+    </div>
+  </div>
+}
+
+const Todo: React.FC<{checkBoxSize: Pixel}> = (props: {checkBoxSize: Pixel}) => {
+  const {checkBoxSize} = props;
+  return <div css={css({
+    display: "flex",
+    alignItems: "center",
+
+    marginTop: checkBoxSize.multiply(new Percentage(25)).toString(),
+    marginBottom: checkBoxSize.multiply(new Percentage(25)).toString()
+  })}>
+    <CheckBox size={checkBoxSize} borderWidth={new Pixel(1.5)}
+              borderColor={Colors.theme.table.innerLine} beforeColor={Colors.theme.screen.background}
+              afterColor={Colors.theme.table.innerLine}
+    />
+    <input css={css({
+      border: 0,
+      borderBottom: 1,
+      borderBottomStyle: "solid",
+      borderBottomColor: Colors.theme.table.innerLine,
+      marginLeft: "5%",
+      width: "90%"
+    })} type={"text"}/>
+  </div>
+}
+
+
+const DateGuide: React.FC<{day: Dayjs}> = (props: {day: Dayjs}) => {
+  const {day} = props;
+
+
+  const fontSize = new Pixel(20);
+  return <div css={css({
+    marginTop: 0,
+    marginBottom: 0,
+    paddingLeft: "5px",
+    display: 'flex',
+    justifyContent: "space-between",
+    fontSize: "12px"
+  })}>
+    <div css={css({
+      // width: "50%",
+      color: Colors.theme.text.box.default,
+      fontSize: fontSize.toString()
+    })}>{parseDayOfWeekAlias(day.day())}</div>
+    <div css={css({
+      color: Colors.theme.text.box.default,
+      fontSize: fontSize.toString()
+    })}>{String(day.month() + 1) + "." + String(day.date())}</div>
+  </div>
 }
 
 function assertIsFormFieldElement(element: Element): asserts element is HTMLInputElement | HTMLSelectElement | HTMLButtonElement {
