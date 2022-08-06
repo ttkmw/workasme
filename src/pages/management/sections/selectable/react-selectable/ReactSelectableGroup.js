@@ -257,13 +257,13 @@ class ReactSelectableGroup extends Component {
     }
 
     const boxStyle = {
-      left: boxLeft,
-      top: boxTop,
-      width: boxWidth,
-      height: boxHeight,
-      zIndex: 9000,
+      // left: boxLeft,
+      // top: boxTop,
+      // width: boxWidth,
+      // height: boxHeight,
+      // zIndex: 9000,
       position: fixedPosition ? 'fixed' : 'absolute',
-      cursor: 'default'
+      // cursor: 'default'
     };
 
     const spanStyle = {
