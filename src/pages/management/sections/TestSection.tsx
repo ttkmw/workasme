@@ -24,6 +24,7 @@ import {inspect} from "util";
 import colors from "src/constants/Colors";
 import Colors from "src/constants/Colors";
 import CheckBox from "src/pages/management/sections/parts/components/box/CheckBox";
+import {number} from "prop-types";
 
 
 const SelectableComponent = createSelectable(SomeComponent);
@@ -348,7 +349,10 @@ export class TestSection extends React.Component<any> {
     });
   }
 
-  showModal = () => {
+  showModal = (selectedKeys: number[]) => {
+    if (selectedKeys.length == 0) {
+      return
+    }
     this.setState({isShown: true}, () => {
       this.closeButton.focus();
     });
@@ -434,7 +438,7 @@ export class TestSection extends React.Component<any> {
           }} />
         </div>
         <ReactSelectableGroup onSelection={this.handleSelection}
-                              onEndSelection={this.showModal}
+                              onEndSelection={() => this.showModal(this.state.selectedKeys)}
                               className={"selectable"}
                               ref={this.selectableRef}
                               selectOnMouseMove={this.state.selectOnMouseMove}
