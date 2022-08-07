@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {DateTime} from "src/model/DateTime";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import TimePicker from "src/pages/components/TimePicker";
+import TimePickerWrapper from "src/pages/components/TimePickerWrapper";
 import {start} from "repl";
+import DatePicker from "src/pages/components/DatePicker";
+import moment from "moment";
+import TimePicker from 'react-time-picker';
 
 interface FormProps {
   onSubmit: (e)=> void,
@@ -12,11 +15,19 @@ interface FormProps {
   endDateTime: DateTime
 }
 
+
+const hrs = ["01", "02", "03", "04", "05","06","07","08","09","10","11", "12", "13", "14", "15","16","17","18","19","20","21", "22", "23"];
+const mins = ["01", "02", "03", "04", "05","06","07","08","09","10","11", "12", "13", "14", "15","16","17","18","19","20","21", "22", "23", "24", "25","26","27","28","29","30","31", "32", "33", "34", "35","36","37","38","39","40","41", "42", "43", "44", "45","46","47","48","49","50","51", "52", "53", "54", "55","56","57","58","59"];
 //https://stackoverflow.com/questions/45283030/html5-input-type-time-without-am-pm-and-with-min-max
 export const Form = ({onSubmit, startDateTime, endDateTime}: FormProps) => {
-  console.log("form")
-  console.log(startDateTime);
-  console.log(endDateTime);
+  const [dispatchTime, setDispatchTime] = React.useState(moment());
+  const showSecond = true;
+  const str = showSecond ? 'HH:mm:ss' : 'HH:mm';
+  const [value, onChange] = useState('10:00');
+  const [duration, setDuration] = React.useState(startDateTime.getHour());
+  const handleChangeDuration = event => {
+    setDuration(event.target.value);
+  };
   return (
     <form
       css={css({
@@ -40,10 +51,19 @@ export const Form = ({onSubmit, startDateTime, endDateTime}: FormProps) => {
       <div className="form-group">
         <label htmlFor="startDateTime">start at</label>
         <input className="form-control" id="startDateTime"/>
-        <input type="date" name="startDate" id={"startDate"} lang="en-US"/>
-        <TimePicker dateTime={startDateTime}/>
-        <input className="form-control inputs time" placeholder="hrs:mins" pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" type="time" id="startDateTime" value={startDateTime.getTime()} name="time" required/>
-        {/*<input type="time" name="time" placeholder="hrs:mins" pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$" class="inputs time" required/>*/}
+        <DatePicker />
+        <TimePickerWrapper dateTime={startDateTime}/>
+
+        <select
+          value={duration}
+          onChange={handleChangeDuration}
+        >
+          <option value={0}>00</option>
+          {hrs.map(info => (
+            <option value={info}>{info}</option>
+          ))}
+
+        </select>
       </div>
       <div className="form-group">
         <label htmlFor="endDateTime" >end at</label>

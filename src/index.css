@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+li .rc-time-picker-panel-select-option-selected {
+    color: red;
+}
+
 @font-face {
     font-family: "ObjectSans-Regular";
     src: url("assets/fonts/ObjectSans/ObjectSans-Regular.otf");

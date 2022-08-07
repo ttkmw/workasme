@@ -5,6 +5,7 @@ import {jsx} from '@emotion/react'
 import HomePage from "src/pages/home/Home";
 
 import 'devextreme/dist/css/dx.light.css';
+import "./index.css"
 
 const App: React.FC = () => {
 
