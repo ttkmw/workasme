@@ -535,20 +535,29 @@ export class TestSection extends React.Component<any> {
               onSubmit={e => {
 
                 let title = e.currentTarget[0];
-                let isGood = e.currentTarget[1];
-                let category = e.currentTarget[2];
-                let memo = e.currentTarget[3];
-                assertIsFormFieldElement(title);
-                assertIsFormFieldElement(isGood);
-                assertIsFormFieldElement(category);
-                assertIsFormFieldElement(memo);
+                let startDate = e.currentTarget[1];
+                let startTime = e.currentTarget[2];
+                let endDate = e.currentTarget[3];
+                let endTime = e.currentTarget[4];
+                let isGood = e.currentTarget[5];
 
-                console.log(title.value);
-                console.log(earliestRecord.startDateTime.getDateTime());
-                console.log(latestRecord.endDateTime.getDateTime());
-                console.log(isGood.value);
-                console.log(category.value);
-                console.log(memo.value);
+                assertIsFormFieldElement(title);
+                assertIsFormFieldElement(startDate);
+                assertIsFormFieldElement(startTime);
+                assertIsFormFieldElement(endDate);
+
+                console.log("title", title, title.value);
+                console.log("startDate", startDate, startDate.value);
+                console.log("startTime", startTime, startTime.value);
+                console.log("endDate", endDate, endTime.value);
+                console.log("isGood", isGood, isGood.checked);
+
+                // console.log(title.value);
+                // console.log(earliestRecord.startDateTime.getDateTime());
+                // console.log(latestRecord.endDateTime.getDateTime());
+                // console.log(isGood.value);
+                // console.log(category.value);
+                // console.log(memo.value);
 
 
               }}
