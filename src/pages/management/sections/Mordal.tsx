@@ -5,6 +5,18 @@ import Form from "src/pages/management/sections/Form";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
+import {DateTime} from "src/model/DateTime";
+
+interface ModalProps {
+  onClickOutside: (e) => void,
+  onKeyDown: (e) => void,
+  modalRef: (n) => void,
+  buttonRef: (n) => void,
+  closeModal: (e) => void,
+  onSubmit: (e) => void,
+  startDateTime: DateTime,
+  endDateTime: DateTime
+}
 
 export const Modal = ({
                         onClickOutside,
@@ -12,8 +24,10 @@ export const Modal = ({
                         modalRef,
                         buttonRef,
                         closeModal,
-                        onSubmit
-                      }: any) => {
+                        onSubmit,
+                        startDateTime,
+                        endDateTime
+                      }: ModalProps) => {
   return ReactDOM.createPortal(
     <FocusTrap>
       <aside
@@ -84,13 +98,13 @@ export const Modal = ({
               Close
             </span>
             <svg className="_modal-close-icon" viewBox="0 0 40 40">
-              <path d="M 10,10 L 30,30 M 30,10 L 10,30" />
+              <path d="M 10,10 L 30,30 M 30,10 L 10,30"/>
             </svg>
           </button>
           <div css={css({
             paddingTop: '0.25em'
           })}>
-            <Form onSubmit={onSubmit} />
+            <Form onSubmit={onSubmit} startDateTime={startDateTime} endDateTime={endDateTime}/>
           </div>
         </div>
       </aside>

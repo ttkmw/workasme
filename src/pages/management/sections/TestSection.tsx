@@ -28,9 +28,6 @@ import {number} from "prop-types";
 import fontConfig from "src/graphic/text/font";
 import NumberBox from "src/pages/management/sections/parts/components/box/NumberBox";
 
-import {AiOutlineLeft} from "react-icons/all";
-import ChevronRight from "src/pages/components/ChevronRight";
-import ChevronsLeft from "src/pages/components/ChevronLeft";
 
 
 const SelectableComponent = createSelectable(SomeComponent);
@@ -397,6 +394,16 @@ export class TestSection extends React.Component<any> {
     const weekdays = calculateWeekdaysForView(this.state.standardDate);
 
     const allTimeRecordsOnWeekView: TimeRecordOnWeekView[] = createAllTimeRecordsOnWeekView(this.state.standardDate);
+    const selectedTimeRecords: TimeRecordOnWeekView[] = [];
+    allTimeRecordsOnWeekView.map((timeRecordOnWeekView, i) => {
+      if (isIdInSelectedKeys(timeRecordOnWeekView.id, this.state.selectedKeys)) {
+        selectedTimeRecords.push(timeRecordOnWeekView);
+      }
+    });
+
+    const earliestRecord = getEarliestRecord(selectedTimeRecords);
+    const latestRecord = getLatestRecord(selectedTimeRecords);
+
     return (
       <div>
         <div css={css({
@@ -465,7 +472,6 @@ export class TestSection extends React.Component<any> {
           })}>
             {
               weekdays.map((day, i) => {
-                console.log(day.day(), day.month() + 1, day.date())
 
                 const timeRecordsOnWeekView: TimeRecordOnWeekView[] = [];
 
@@ -487,6 +493,7 @@ export class TestSection extends React.Component<any> {
                   })}>
 
                     {
+
                       timeRecordsOnWeekView.map((record) => {
                         let selected = this.state.selectedKeys.indexOf(record.id) > -1 || isIdInSelectedKeys(record.id, this.state.selectedKeys);
                         const isMatching = match(serverData, record.startDateTime, parseDayOfWeek(day.day()));
@@ -521,19 +528,11 @@ export class TestSection extends React.Component<any> {
           </div>
         </ReactSelectableGroup>
         <React.Fragment>
-          {this.state.isShown ? (
+          {
+
+            this.state.isShown ? (
             <Modal
               onSubmit={e => {
-
-                const selectedTimeRecords: TimeRecordOnWeekView[] = [];
-                allTimeRecordsOnWeekView.map((timeRecordOnWeekView, i) => {
-                  if (isIdInSelectedKeys(timeRecordOnWeekView.id, this.state.selectedKeys)) {
-                    selectedTimeRecords.push(timeRecordOnWeekView);
-                  }
-                });
-
-                const earliestRecord = getEarliestRecord(selectedTimeRecords);
-                const latestRecord = getLatestRecord(selectedTimeRecords);
 
                 let title = e.currentTarget[0];
                 let isGood = e.currentTarget[1];
@@ -553,12 +552,14 @@ export class TestSection extends React.Component<any> {
 
 
               }}
-              onClick={() => console.log("kkkkk")}
+
               modalRef={(n: any) => (this.modal = n)}
               buttonRef={(n: any) => (this.closeButton = n)}
               closeModal={this.onClose}
               onKeyDown={this.onKeyDown}
               onClickOutside={this.onClickOutside}
+              startDateTime={earliestRecord.startDateTime}
+              endDateTime={latestRecord.endDateTime}
             />
           ) : null}
         </React.Fragment>
