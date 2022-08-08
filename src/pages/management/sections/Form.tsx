@@ -6,6 +6,7 @@ import {css, jsx} from "@emotion/react";
 import DatePicker from "src/pages/components/DatePicker";
 import TimePicker from "src/pages/components/TimePicker";
 import Pixel from "src/graphic/size/pixel";
+import Colors from "src/constants/Colors";
 
 interface FormProps {
   onSubmit: (e) => void,
@@ -35,28 +36,29 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           "-ms-appearance": "none",
           "appearance": "none",
           "margin": "-10px",
+        },
+        '.input-key': {
+          width: "100px"
         }
       })}
       onClick={onSubmit}>
       <div className="form-group" css={css({
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-between"
       })}>
-        <label css={css({
+        <label className="input-key" css={css({
           lineHeight: new Pixel(27).toString(),
           margin: 0,
           padding: 0,
           boxSizing: "border-box",
         })} htmlFor="title">title: </label>
         <input css={css({
-          width: "100%",
-          marginLeft: new Pixel(10).toString(),
+          width: "300px",
           borderLeftWidth: new Pixel(0).toString(),
           borderTopWidth: new Pixel(0).toString(),
           borderRightWidth: new Pixel(0).toString(),
           borderBottomWidth: new Pixel(1).toString(),
-          borderBottomColor: "#ced4da",
+          borderBottomColor: Colors.theme.form.border.default,
           ":focus-visible": {
             outline: "0px"
           }
@@ -66,11 +68,9 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
         display: "flex",
         flexDirection: "row",
       })}>
-        <label htmlFor="startDateTime">start at: </label>
+        <label className="input-key" htmlFor="startDateTime">start at:</label>
         {/*<input className="form-control" id="startDateTime"/>*/}
-        <div css={css({
-          marginLeft: new Pixel(10).toString()
-        })}>
+        <div >
           <div css={css({
             display: "flex",
             flexDirection: "row",
@@ -89,10 +89,8 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
         display: "flex",
         flexDirection: "row",
       })}>
-        <label htmlFor="endDateTime">end at: </label>
-        <div css={css({
-          marginLeft: new Pixel(10).toString()
-        })}>
+        <label className="input-key" htmlFor="endDateTime">end at:</label>
+        <div>
           <div css={css({
             display: "flex",
             flexDirection: "row",
@@ -121,7 +119,7 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
         },
 
       })}>
-        <label htmlFor="isGood">good?</label>
+        <label className="input-key" htmlFor="isGood">good?</label>
         <label className="switch" css={css({
           ".slider": {
             position: "absolute",
@@ -130,7 +128,7 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
             left: 0,
             right: 0,
             bottom: 0,
-            "background-color": "#ccc",
+            "background-color": `${Colors.theme.main.work}`,
             "-webkit-transition": ".4s",
             transition: ".4s",
           },
@@ -152,7 +150,7 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
             "border-radius": "50%",
           },
           "input:checked + .slider": {
-            "background-color": "#2196F3",
+            "background-color": `${Colors.theme.main.orgasme}`,
           },
           "input:focus + .slider": {
             boxShadow: "0 0 1px #2196F3",
@@ -168,18 +166,68 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           <span className="slider round"/>
         </label>
       </div>
-      <div className="form-group">
-        <label htmlFor="category">category</label>
-        <input
-          className="form-control"
-          id="category"
-        />
+      {/**/}
+      <div className="form-group" css={css({
+        ".select_box": {
+        width: "110px",
+        overflow: "hidden",
+        border: `1px solid ${Colors.theme.form.border.default}`,
+        position: "relative",
+        padding: "5px 0",
+      },
+        ".select_box:after": {
+        width: 0,
+        height: 0,
+        "border-left": "6px solid transparent",
+        "border-right": "6px solid transparent",
+        "border-top": `6px solid ${Colors.theme.main.work}`,
+        position: "absolute",
+        top: "40%",
+        right: "5px",
+        content: '""',
+        "z-index": 98,
+      },
+        ".select_box select": {
+        width: "120px",
+        border: 0,
+        position: "relative",
+        "z-index": 99,
+        background: "none",
+      },
+        display: "flex",
+        flexDirection: "row"
+      })}
+      >
+        <label className="input-key" htmlFor="category">category:</label>
+
+        <div className="select_box">
+          <select css={css({
+            ":focus-visible": {
+              outline: "0px"
+            }
+          })}
+
+            name="category" id="category-select">
+            <option value="none">None</option>
+            <option value="spiritual">Spiritual</option>
+            <option value="intellectual">Intellectual</option>
+            <option value="social">Social</option>
+            <option value="physical">Physical</option>
+          </select>
+        </div>
       </div>
-      <div className="form-group">
-        <label htmlFor="memo">memo</label>
+      <div className="form-group" css={css({
+        display: "flex",
+        flexDirection: "row"
+      })}>
+        <label className="input-key" htmlFor="memo">memo:</label>
         <input
           className="form-control"
           id="memo"
+          css={css({
+            width: "300px",
+            height: "200px"
+          })}
         />
       </div>
 

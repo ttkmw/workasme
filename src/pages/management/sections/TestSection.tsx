@@ -540,6 +540,7 @@ export class TestSection extends React.Component<any> {
                 let endDate = e.currentTarget[3];
                 let endTime = e.currentTarget[4];
                 let isGood = e.currentTarget[5];
+                let category = e.currentTarget[6];
 
                 assertIsFormFieldElement(title);
                 assertIsFormFieldElement(startDate);
@@ -551,6 +552,7 @@ export class TestSection extends React.Component<any> {
                 console.log("startTime", startTime, startTime.value);
                 console.log("endDate", endDate, endTime.value);
                 console.log("isGood", isGood, isGood.checked);
+                console.log("category", category, category.value)
 
                 // console.log(title.value);
                 // console.log(earliestRecord.startDateTime.getDateTime());

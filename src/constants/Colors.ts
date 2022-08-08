@@ -8,6 +8,12 @@ export default {
       work: "#d94d3b",
       orgasme: "#802578"
     },
+    form: {
+      border: {
+        default: "#ced4da"
+      }
+    },
+
     bar: {
       top: '#ffffff'
     },
