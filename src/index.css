@@ -7,12 +7,17 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
-li .rc-time-picker-panel-select-option-selected {
+li.rc-time-picker-panel-select-option-selected {
+    color: red;
+}
+
+.rc-time-picker-panel-select-option-selected {
     color: red;
 }
 
@@ -29,6 +34,11 @@ li .rc-time-picker-panel-select-option-selected {
 @font-face {
     font-family: "ObjectSans-HeavySlanted";
     src: url("assets/fonts/ObjectSans/ObjectSans-HeavySlanted.otf");
+}
+
+@font-face {
+    font-family: "ObjectSans-Slanted";
+    src: url("assets/fonts/ObjectSans/ObjectSans-Slanted.otf");
 }
 
 @font-face {

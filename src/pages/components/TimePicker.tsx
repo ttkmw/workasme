@@ -15,13 +15,17 @@ const TimePicker: React.FC<{ initialValue: string }> = (props: { initialValue: s
   return <div css={css({
     display: "flex",
     flexDirection: "row",
-    borderLeftWidth: new Pixel(0).toString(),
-    borderTopWidth: new Pixel(0).toString(),
-    borderRightWidth: new Pixel(0).toString(),
-    borderBottomWidth: new Pixel(1).toString(),
-    borderBottomColor: "#ced4da",
-    borderStyle: "solid",
-    width: new Pixel(50).toString(),
+    "-moz-box-shadow": "0 4px 6px -6px #222",
+    "-webkit-box-shadow": "0 4px 6px -6px #222",
+    "box-shadow": "0 4px 6px -6px #222",
+    // borderLeftWidth: new Pixel(0).toString(),
+    // borderTopWidth: new Pixel(0).toString(),
+    // borderRightWidth: new Pixel(0).toString(),
+    // borderBottomWidth: new Pixel(1).toString(),
+    // borderBottomColor: "#ced4da",
+    // borderStyle: "solid",
+    width: new Pixel(70).toString(),
+    justifyContent: "center"
   })}>
     <select
       value={value}

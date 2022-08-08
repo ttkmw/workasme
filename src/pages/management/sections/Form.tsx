@@ -7,6 +7,11 @@ import DatePicker from "src/pages/components/DatePicker";
 import TimePicker from "src/pages/components/TimePicker";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
+import '../../../index.css';
+import Select, { components } from 'react-select'
+import {IoMdClose} from "react-icons/all";
+import TimePickerWrapper from "src/pages/components/TimePickerWrapper";
+import dayjs from "dayjs";
 
 interface FormProps {
   onSubmit: (e) => void,
@@ -14,13 +19,28 @@ interface FormProps {
   endDateTime: DateTime
 }
 
+const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' }
+]
+
+const DropdownIndicator = (
+  props: any
+) => {
+  return (
+    <components.DropdownIndicator {...props}>
+      <IoMdClose />
+    </components.DropdownIndicator>
+  );
+};
+
 
 const mins = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"];
 //https://stackoverflow.com/questions/45283030/html5-input-type-time-without-am-pm-and-with-min-max
 export const Form: React.FC<FormProps> = (props: FormProps) => {
   const showSecond = true;
   const {onSubmit, startDateTime, endDateTime} = props;
-
 
 
   return (
@@ -39,26 +59,32 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
         },
         '.input-key': {
           width: "100px"
-        }
+        },
+        "label": {
+          marginBottom: "0px"
+        },
+        fontFamily: "ObjectSans-Slanted"
       })}
-      onClick={onSubmit}>
+      onSubmit={onSubmit}>
       <div className="form-group" css={css({
         display: "flex",
         flexDirection: "row",
       })}>
         <label className="input-key" css={css({
-          lineHeight: new Pixel(27).toString(),
           margin: 0,
           padding: 0,
           boxSizing: "border-box",
-        })} htmlFor="title">title: </label>
+          display: "flex",
+          justifyContent: "flex-end",
+          paddingRight: "30px",
+        })} htmlFor="title">title </label>
         <input css={css({
-          width: "300px",
-          borderLeftWidth: new Pixel(0).toString(),
-          borderTopWidth: new Pixel(0).toString(),
-          borderRightWidth: new Pixel(0).toString(),
-          borderBottomWidth: new Pixel(1).toString(),
-          borderBottomColor: Colors.theme.form.border.default,
+          width: "280px",
+          borderWidth: "0px",
+
+          "-moz-box-shadow": "0 4px 6px -6px #222",
+          "-webkit-box-shadow": "0 4px 6px -6px #222",
+          "box-shadow": "0 4px 6px -6px #222",
           ":focus-visible": {
             outline: "0px"
           }
@@ -68,14 +94,18 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
         display: "flex",
         flexDirection: "row",
       })}>
-        <label className="input-key" htmlFor="startDateTime">start at:</label>
+        <label css={css({
+          display: "flex",
+          justifyContent: "flex-end",
+          paddingRight: "30px"
+        })} className="input-key" htmlFor="startDateTime">start</label>
         {/*<input className="form-control" id="startDateTime"/>*/}
-        <div >
+        <div>
           <div css={css({
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: new Pixel(155).toString()
+            // width: new Pixel(155).toString()
           })}
                id={"startDateTime"}
           >
@@ -89,13 +119,16 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
         display: "flex",
         flexDirection: "row",
       })}>
-        <label className="input-key" htmlFor="endDateTime">end at:</label>
+        <label css={css({
+          display: "flex",
+          justifyContent: "flex-end",
+          paddingRight: "30px"
+        })} className="input-key" htmlFor="endDateTime">end</label>
         <div>
           <div css={css({
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: new Pixel(155).toString()
           })}
                id={"endDateTime"}>
             <DatePicker/>
@@ -117,9 +150,16 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           width: 0,
           height: 0,
         },
-
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center"
       })}>
-        <label className="input-key" htmlFor="isGood">good?</label>
+        <label css={css({
+          display: "flex",
+          justifyContent: "flex-end",
+          paddingRight: "30px"
+
+        })} className="input-key" htmlFor="isGood">good?</label>
         <label className="switch" css={css({
           ".slider": {
             position: "absolute",
@@ -131,6 +171,10 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
             "background-color": `${Colors.theme.main.work}`,
             "-webkit-transition": ".4s",
             transition: ".4s",
+            "-moz-box-shadow": "0 4px 6px -6px #222",
+            "-webkit-box-shadow": "0 4px 6px -6px #222",
+            "box-shadow": "0 4px 6px -4px #222",
+
           },
           ".slider:before": {
             position: "absolute",
@@ -166,39 +210,56 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           <span className="slider round"/>
         </label>
       </div>
+      {/*<Select components={{DropdownIndicator}} options={options} />*/}
       {/**/}
+      {/*https://github.com/JedWatson/react-select/issues/3493*/}
       <div className="form-group" css={css({
         ".select_box": {
-        width: "110px",
-        overflow: "hidden",
-        border: `1px solid ${Colors.theme.form.border.default}`,
-        position: "relative",
-        padding: "5px 0",
-      },
-        ".select_box:after": {
-        width: 0,
-        height: 0,
-        "border-left": "6px solid transparent",
-        "border-right": "6px solid transparent",
-        "border-top": `6px solid ${Colors.theme.main.work}`,
-        position: "absolute",
-        top: "40%",
-        right: "5px",
-        content: '""',
-        "z-index": 98,
-      },
+          width: "120px",
+          overflow: "hidden",
+          // border: `1px solid ${Colors.theme.form.border.default}`,
+          "-moz-box-shadow": "0 4px 6px -6px #222",
+          "-webkit-box-shadow": "0 4px 6px -6px #222",
+          "box-shadow": "0px 4px 6px -6px #222",
+          position: "relative",
+          padding: "5px 0",
+        },
+
+
+        // ".select_box:after": {
+        //   width: 0,
+        //   height: 0,
+        //   "border-left": "5px solid transparent",
+        //   "border-right": "5px solid transparent",
+        //   "border-top": `5px solid ${Colors.theme.main.work}`,
+        //   position: "absolute",
+        //   top: "40%",
+        //   right: "10px",
+        //   content: '""',
+        //   "z-index": 98,
+        //   // "-moz-box-shadow": "0 4px 6px -6px #222",
+        //   // "-webkit-box-shadow": "0 4px 6px -6px #222",
+        //   // "box-shadow": "0 4px 6px 100px #222",
+        // },
         ".select_box select": {
-        width: "120px",
-        border: 0,
-        position: "relative",
-        "z-index": 99,
-        background: "none",
-      },
+          width: "120px",
+          border: 0,
+          position: "relative",
+          "z-index": 99,
+          background: "none",
+        },
         display: "flex",
-        flexDirection: "row"
+        flexDirection: "row",
+        alignItems: "center"
       })}
       >
-        <label className="input-key" htmlFor="category">category:</label>
+        <label css={css({
+          display: "flex",
+          justifyContent: "flex-end",
+          paddingRight: "30px",
+          // lineHeight: "24px",
+          // height: "24px"
+        })} className="input-key" htmlFor="category">category</label>
 
         <div className="select_box">
           <select css={css({
@@ -207,7 +268,7 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
             }
           })}
 
-            name="category" id="category-select">
+                  name="category" id="category-select">
             <option value="none">None</option>
             <option value="spiritual">Spiritual</option>
             <option value="intellectual">Intellectual</option>
@@ -220,21 +281,54 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
         display: "flex",
         flexDirection: "row"
       })}>
-        <label className="input-key" htmlFor="memo">memo:</label>
+        <label css={css({
+          display: "flex",
+          justifyContent: "flex-end",
+          paddingRight: "30px"
+        })} className="input-key" htmlFor="memo">memo</label>
         <input
-          className="form-control"
+          // className="form-control"
           id="memo"
           css={css({
-            width: "300px",
-            height: "200px"
+            width: "280px",
+            borderRadius: "0.25rem",
+            border: "0px solid",
+            borderColor: "#222",
+            height: "200px",
+            // "-moz-box-shadow": "-10px 10px 20px -20px #222",
+            // "-webkit-box-shadow": "-10px 10px 20px -20px #222",
+            "box-shadow": "0px 0px 6px -2px #222",
+            //{/*"box-shadow": "0 4px 6px -6px #222",*/}
           })}
+
+
         />
       </div>
 
       <div className="form-group">
-        <button className="form-control btn btn-primary" type="button">
-          Submit
-        </button>
+        <div css={css({
+          paddingTop: "15px",
+          display: "flex",
+          alignItems: "center",
+          '.button': {
+            backgroundColor: Colors.theme.main.work,
+            border: "none",
+            color: Colors.theme.button.default,
+          },
+          '.button:hover': {
+            color: Colors.theme.main.orgasme
+          }
+        })}>
+          <button
+            css={css({
+              width: "100%",
+              borderRadius: 7,
+              height: new Pixel(40).toString()
+            })}
+            className={"button"}
+            type={"submit"}
+          >record</button>
+        </div>
       </div>
     </form>
   );

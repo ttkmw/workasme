@@ -24,7 +24,8 @@ const TimePickerWrapper: React.FC<{dateTime: DateTime}> = (props:{dateTime: Date
         backgroundColor: 'yellow',
         borderColor: "red",
         color: "orange"
-      }
+      },
+// 셀렉트 컴포넌트 찾아서 주기
     })}>
       <label>DispatchTime</label>
       <TimePicker

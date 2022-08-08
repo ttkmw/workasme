@@ -6,6 +6,10 @@ import Form from "src/pages/management/sections/Form";
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import {DateTime} from "src/model/DateTime";
+import Pixel from "src/graphic/size/pixel";
+import colors from "src/constants/Colors";
+import {MdNavigateBefore} from "react-icons/md";
+import {IoMdClose} from "react-icons/all";
 
 interface ModalProps {
   onClickOutside: (e) => void,
@@ -80,29 +84,46 @@ export const Modal = ({
           left: 0,
           width: '100%',
           height: '100%',
-          padding: '2.5em 1.5em 1.5em 1.5em',
+          padding: '1.0em 1.0em 1.2em 2em',
           backgroundColor: '#ffffff',
           boxShadow: '0 0 10px 3px rgba(0, 0, 0, 0.1)',
           overflowY: "auto",
           webkitOverflowScrolling: 'touch',
 
         })} className="modal-area" ref={modalRef}>
-          <button
-            ref={buttonRef}
-            aria-label="Close Modal"
-            aria-labelledby="close-modal"
-            className="_modal-close"
-            onClick={closeModal}
-          >
-            <span id="close-modal" className="_hide-visual">
-              Close
-            </span>
-            <svg className="_modal-close-icon" viewBox="0 0 40 40">
-              <path d="M 10,10 L 30,30 M 30,10 L 10,30"/>
-            </svg>
-          </button>
           <div css={css({
-            paddingTop: '0.25em'
+            display: "flex",
+            justifyContent: "flex-end"
+          })}>
+            <button
+              ref={buttonRef}
+              aria-label="Close Modal"
+              aria-labelledby="close-modal"
+              onClick={closeModal}
+              css={css({
+                backgroundColor: "rgba( 255, 255, 255, 1 )",
+                ":focus-visible": {
+                  outline: "0px"
+                },
+                borderWidth: "0px"
+              })}
+
+            >
+              {/*<span id="close-modal" className="_hide-visual">*/}
+              {/*  Close*/}
+              {/*</span>*/}
+              <IoMdClose css={css({
+
+              })} size={new Pixel(25).toString()} color={colors.theme.table.outLine} onClick={() => {
+              }}/>
+              {/*<svg className="_modal-close-icon" viewBox="0 0 40 40">*/}
+              {/*  <path d="M 10,10 L 30,30 M 30,10 L 10,30"/>*/}
+              {/*</svg>*/}
+            </button>
+          </div>
+
+          <div css={css({
+            marginTop: "16px"
           })}>
             <Form onSubmit={onSubmit} startDateTime={startDateTime} endDateTime={endDateTime}/>
           </div>

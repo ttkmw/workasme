@@ -25,12 +25,16 @@ const DatePicker: React.FC = () => {
       ".picker-input": {
         // backgroundColor: "orange",
         textAlign: "center",
-        width: new Pixel(90).toString(),
-        borderLeftWidth: new Pixel(0).toString(),
-        borderTopWidth: new Pixel(0).toString(),
-        borderRightWidth: new Pixel(0).toString(),
-        borderBottomColor: "#ced4da",
-        borderBottomWidth: new Pixel(1).toString(),
+        width: new Pixel(120).toString(),
+        "-moz-box-shadow": "0 4px 6px -6px #222",
+        "-webkit-box-shadow": "0 4px 6px -6px #222",
+        "box-shadow": "0 4px 6px -6px #222",
+        borderWidth: "0px",
+        // borderLeftWidth: new Pixel(0).toString(),
+        // borderTopWidth: new Pixel(0).toString(),
+        // borderRightWidth: new Pixel(0).toString(),
+        // borderBottomColor: "#ced4da",
+        // borderBottomWidth: new Pixel(1).toString(),
         ":focus-visible": {
           outline: "0px"
         }
