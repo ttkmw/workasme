@@ -243,45 +243,63 @@ const serverData: WeekTimes = new WeekTimes(
       "LAST_SATURDAY": [],
       "SUNDAY": [
         {
-          startDateTime: new DateTime("2022-07-11T01:00"),
-          endDateTime: new DateTime("2022-07-11T04:00"),
-          type: "FREE"
+          title: "축구",
+          startDateTime: new DateTime("2022-08-07T01:00"),
+          endDateTime: new DateTime("2022-08-07T04:00"),
+          isGood: true,
+          category: "NONE",
+          memo: "funny"
         },
       ],
 
       "MONDAY": [
         {
-          startDateTime: new DateTime("2022-07-12T01:00"),
-          endDateTime: new DateTime("2022-07-12T04:00"),
-          type: "FREE"
+          title: "영홥 보고 친구랑 잠깐 수다떨음",
+          startDateTime: new DateTime("2022-08-08T01:00"),
+          endDateTime: new DateTime("2022-08-08T04:00"),
+          isGood: false,
+          category: "SOCIAL",
+          memo: undefined
         },
       ],
       "TUESDAY": [
         {
-          startDateTime: new DateTime("2022-07-13T01:00"),
-          endDateTime: new DateTime("2022-07-13T04:00"),
-          type: "FREE"
+          title: "샤워하고 밥먹고 전화하다가 엄마한테 등짝맞고 공부하다가 플스함",
+          startDateTime: new DateTime("2022-08-09T01:00"),
+          endDateTime: new DateTime("2022-08-09T04:00"),
+          isGood: false,
+          category: "NONE",
+          memo: "why should id live like this"
         },
       ],
       "WEDNESDAY": [
         {
-          startDateTime: new DateTime("2022-07-14T01:00"),
-          endDateTime: new DateTime("2022-07-14T04:00"),
-          type: "FREE"
+          title: "코딩함",
+          startDateTime: new DateTime("2022-08-10T01:00"),
+          endDateTime: new DateTime("2022-08-10T04:00"),
+          isGood: true,
+          category: "INTELLECTUAL",
+          memo: undefined
         },
       ],
       "THURSDAY": [
         {
-          startDateTime: new DateTime("2022-07-15T01:00"),
-          endDateTime: new DateTime("2022-07-15T04:00"),
-          type: "FREE"
+          title: "베라 피티를 함",
+          startDateTime: new DateTime("2022-08-11T01:00"),
+          endDateTime: new DateTime("2022-08-11T04:00"),
+          isGood: true,
+          category: "PHYSICAL",
+          memo: "개힘들다"
         },
       ],
       "FRIDAY": [
         {
-          startDateTime: new DateTime("2022-07-16T01:00"),
-          endDateTime: new DateTime("2022-07-16T04:00"),
-          type: "FREE"
+          title: "산책을 함",
+          startDateTime: new DateTime("2022-08-16T01:00"),
+          endDateTime: new DateTime("2022-08-16T04:00"),
+          isGood: false,
+          category: "SPIRITUAL",
+          memo: "개운하다"
         },
       ],
       "SATURDAY": []
