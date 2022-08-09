@@ -7,6 +7,7 @@ import Pixel from "src/graphic/size/pixel";
 import Percentage from "src/graphic/size/percentage";
 import {ReactSelectableComponentProps} from "react-selectable";
 import Colors from "src/constants/Colors";
+import assert from "assert";
 
 interface SelectableProps extends ReactSelectableComponentProps {
   selectableRef: any,
@@ -28,7 +29,6 @@ class Selectable extends Component<SelectableProps> {
   render() {
     const {selectableRef, isSelected, isMatching, heightTimes, height} = this.props
 
-    const backgroundColor = getBackgroundColor(isSelected);
 
     return <div css={css({
       ".unselected": {
@@ -39,7 +39,7 @@ class Selectable extends Component<SelectableProps> {
       },
       ".selected": {
         backgroundColor: Colors.theme.main.work,
-        opacity:0.8,
+
         borderBottom: 0
       }
     })}>
@@ -57,23 +57,46 @@ class Selectable extends Component<SelectableProps> {
 
   private static getDiv(isMatching: boolean, height: Pixel) {
 
+    console.log(getTextWidth("kkkkfdajdfkladjfk ...", "ObjectSans-Slanted"));
     if (isMatching) {
 
       return <div css={css({
-        width: "100%",
-        height: height.toString(),
+        width: "95%",
+        height: height.minus(new Pixel(6)).toString(),
         position: "absolute",
-        top: 0,
-        left: 0,
-        // opacity: 0.7,
+        top: new Pixel(3).toString(),
+        left: "2.5%",
         background: Colors.theme.main.orgasme,
         zIndex: 9,
-        margin: "2px"
+        color: "white",
+        paddingLeft: "5px",
+        paddingRight: "5px",
+        fontSize: "12px",
+        fontFamily: "ObjectSans-Slanted",
+        "text-overflow": "ellipsis",
+        overflow: "hidden",
+        "-webkit-line-clamp": 1,
+        "word-break": "break-all",
+        "white-space": "nowrap",
+        borderRadius: "5px"
+        // "-webkit-box-orient": "vertical"
       })}>
-        kkkk
+        kkkkf
       </div>;
     }
   }
+}
+
+function getTextWidth(text, font) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+
+
+  // @ts-ignore
+  context.font = font || getComputedStyle(document.body).font;
+
+  // @ts-ignore
+  return context.measureText(text).width;
 }
 
 // <div css={css({
