@@ -6,6 +6,7 @@ import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Percentage from "src/graphic/size/percentage";
 import {ReactSelectableComponentProps} from "react-selectable";
+import Colors from "src/constants/Colors";
 
 interface SelectableProps extends ReactSelectableComponentProps {
   selectableRef: any,
@@ -23,23 +24,34 @@ function getBackgroundColor(isSelected: boolean) {
     return 'white'
 }
 
-class SomeComponent extends Component<SelectableProps> {
+class Selectable extends Component<SelectableProps> {
   render() {
     const {selectableRef, isSelected, isMatching, heightTimes, height} = this.props
-
-
 
     const backgroundColor = getBackgroundColor(isSelected);
 
     return <div css={css({
-      position: "relative",
-      // width: this.width.toString(),
-      height: height.toString(),
-      // margin: "30px",
-      backgroundColor: backgroundColor
-    })} ref={selectableRef}>
-      {this.props.children}
-      {SomeComponent.getDiv(isMatching, height.multiply(heightTimes == null ? new Percentage(100) : heightTimes))}
+      ".unselected": {
+          backgroundColor: "white",
+        borderBottom: 1,
+        borderBottomStyle: "solid",
+        borderBottomColor: Colors.theme.table.innerLine,
+      },
+      ".selected": {
+        backgroundColor: Colors.theme.main.work,
+        opacity:0.8,
+        borderBottom: 0
+      }
+    })}>
+      <div className={!isSelected ? 'unselected' : 'selected'} css={css({
+        position: "relative",
+        // width: this.width.toString(),
+        height: height.toString(),
+        // margin: "30px",
+      })} ref={selectableRef}>
+        {this.props.children}
+        {Selectable.getDiv(isMatching, height.multiply(heightTimes == null ? new Percentage(100) : heightTimes))}
+      </div>
     </div>;
   }
 
@@ -54,7 +66,7 @@ class SomeComponent extends Component<SelectableProps> {
         top: 0,
         left: 0,
         // opacity: 0.7,
-        background: "purple",
+        background: Colors.theme.main.orgasme,
         zIndex: 9,
         margin: "2px"
       })}>
@@ -78,6 +90,6 @@ class SomeComponent extends Component<SelectableProps> {
 //   hoho
 // </div>
 
-export default SomeComponent;
+export default Selectable;
 
 

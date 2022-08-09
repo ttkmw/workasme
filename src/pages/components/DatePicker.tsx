@@ -7,10 +7,12 @@ import {css, jsx} from "@emotion/react";
 import "react-datepicker/dist/react-datepicker.css";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
+import {DateTime} from "src/model/DateTime";
 
 //https://reactdatepicker.com/
-const DatePicker: React.FC = () => {
-  const [startDate, setStartDate] = useState(new Date());
+const DatePicker: React.FC<{dateTime: DateTime}> = (props: {dateTime: DateTime}) => {
+  const {dateTime} = props;
+  const [startDate, setStartDate] = useState(new Date(dateTime.getDateTime()));
   const [isOpen, setIsOpen] = useState(false);
   const handleChange = (e) => {
     setIsOpen(!isOpen);

@@ -44,7 +44,6 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
   const [isGood, setIsGood] = useState(false)
   const toggleIsGood = () => setIsGood(!isGood)
 
-
   return (
     <form
       css={css({
@@ -111,7 +110,7 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           })}
                id={"startDateTime"}
           >
-            <DatePicker/>
+            <DatePicker dateTime={startDateTime}/>
             <div>-</div>
             <TimePicker initialValue={startDateTime.getHour()}/>
           </div>
@@ -133,7 +132,7 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
             justifyContent: "space-between",
           })}
                id={"endDateTime"}>
-            <DatePicker/>
+            <DatePicker dateTime={endDateTime}/>
             <div>-</div>
             <TimePicker initialValue={endDateTime.getHour()}/>
           </div>

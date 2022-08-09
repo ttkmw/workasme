@@ -6,7 +6,7 @@ import {css, jsx} from "@emotion/react";
 import {createSelectable} from 'react-selectable';
 
 import Modal from "src/pages/management/sections/Mordal";
-import SomeComponent from "./SomeComponent";
+import Selectable from "src/pages/management/sections/Selectable";
 import ReactSelectableGroup from "src/pages/management/sections/selectable/react-selectable/ReactSelectableGroup";
 import Percentage from "src/graphic/size/percentage";
 import {WeekTimes} from "src/model/WeekTimes";
@@ -30,7 +30,7 @@ import NumberBox from "src/pages/management/sections/parts/components/box/Number
 
 
 
-const SelectableComponent = createSelectable(SomeComponent);
+const SelectableComponent = createSelectable(Selectable);
 
 const timeRecordTemplates: TimeRecordTemplate[] = [
   new TimeRecordTemplate("03:00"),
@@ -499,11 +499,7 @@ export class TestSection extends React.Component<any> {
                         const isMatching = match(serverData, record.startDateTime, parseDayOfWeek(day.day()));
                         const heightTimes = calculateHeightTimes(serverData, record, parseDayOfWeek(day.day()));
                         return (
-                          <div css={css({
-                            borderBottom: 1,
-                            borderBottomStyle: "solid",
-                            borderBottomColor: Colors.theme.table.innerLine,
-                          })}>
+                          <div >
 
                             <SelectableComponent
                               selectableKey={record.id}
@@ -514,7 +510,7 @@ export class TestSection extends React.Component<any> {
                               height={this.recordSize}
                             >
                               <NumberBox number={record.getAlias()} numberSize={this.checkBoxSize} numberFont={fontConfig.web.medium.fontFamily}
-                                         numberColor={Colors.theme.text.box.default} boxWidth={new Pixel(14)} boxHeight={new Pixel(35)}
+                                         numberColor={!selected ? Colors.theme.text.box.default : "white"} boxWidth={new Pixel(14)} boxHeight={new Pixel(35)}
                                          boxRadius={0}/>
                             </SelectableComponent>
                           </div>
@@ -533,7 +529,6 @@ export class TestSection extends React.Component<any> {
             this.state.isShown ? (
             <Modal
               onSubmit={e => {
-
                 let title = e.currentTarget[0];
                 let startDate = e.currentTarget[1];
                 let startTime = e.currentTarget[2];
@@ -554,12 +549,6 @@ export class TestSection extends React.Component<any> {
                 console.log("isGood", isGood, isGood.checked);
                 console.log("category", category, category.value)
 
-                // console.log(title.value);
-                // console.log(earliestRecord.startDateTime.getDateTime());
-                // console.log(latestRecord.endDateTime.getDateTime());
-                // console.log(isGood.value);
-                // console.log(category.value);
-                // console.log(memo.value);
 
 
               }}
