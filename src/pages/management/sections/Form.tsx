@@ -41,6 +41,8 @@ const mins = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", 
 export const Form: React.FC<FormProps> = (props: FormProps) => {
   const showSecond = true;
   const {onSubmit, startDateTime, endDateTime} = props;
+  const [isGood, setIsGood] = useState(false)
+  const toggleIsGood = () => setIsGood(!isGood)
 
 
   return (
@@ -174,6 +176,9 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
             "-moz-box-shadow": "0 4px 6px -6px #222",
             "-webkit-box-shadow": "0 4px 6px -6px #222",
             "box-shadow": "0 4px 6px -4px #222",
+            ":focus-visible": {
+              outline: "0px"
+            }
 
           },
           ".slider:before": {
@@ -187,6 +192,7 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
             "-webkit-transition": ".4s",
             transition: ".4s",
           },
+
           ".slider.round": {
             "border-radius": "34px",
           },
@@ -196,9 +202,7 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           "input:checked + .slider": {
             "background-color": `${Colors.theme.main.orgasme}`,
           },
-          "input:focus + .slider": {
-            boxShadow: "0 0 1px #2196F3",
-          },
+
           "input:checked + .slider:before": {
             "-webkit-transform": "translateX(26px)",
             "-ms-transform": "translateX(26px)",
@@ -206,6 +210,8 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           }
         })}>
           <input
+            onClick={toggleIsGood}
+            checked={isGood}
             type="checkbox"/>
           <span className="slider round"/>
         </label>
@@ -245,7 +251,7 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           width: "120px",
           border: 0,
           position: "relative",
-          "z-index": 99,
+          // "z-index": 99,
           background: "none",
         },
         display: "flex",
@@ -286,7 +292,8 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           justifyContent: "flex-end",
           paddingRight: "30px"
         })} className="input-key" htmlFor="memo">memo</label>
-        <input
+
+        <textarea
           // className="form-control"
           id="memo"
           css={css({
@@ -298,6 +305,9 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
             // "-moz-box-shadow": "-10px 10px 20px -20px #222",
             // "-webkit-box-shadow": "-10px 10px 20px -20px #222",
             "box-shadow": "0px 0px 6px -2px #222",
+            ":focus-visible": {
+              outline: "0px"
+            }
             //{/*"box-shadow": "0 4px 6px -6px #222",*/}
           })}
 
@@ -310,14 +320,17 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           paddingTop: "15px",
           display: "flex",
           alignItems: "center",
-          '.button': {
+          '.button-work': {
             backgroundColor: Colors.theme.main.work,
             border: "none",
             color: Colors.theme.button.default,
           },
-          '.button:hover': {
-            color: Colors.theme.main.orgasme
-          }
+          '.button-orgasm': {
+            backgroundColor: Colors.theme.main.orgasme,
+            border: "none",
+            color: Colors.theme.button.default,
+          },
+
         })}>
           <button
             css={css({
@@ -325,7 +338,7 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
               borderRadius: 7,
               height: new Pixel(40).toString()
             })}
-            className={"button"}
+            className={!isGood ? 'button-work': 'button-orgasm'}
             type={"submit"}
           >record</button>
         </div>
