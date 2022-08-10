@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -13,50 +13,46 @@ import {WeekTimes} from "src/model/WeekTimes";
 import {TimeDto} from "src/dtos/TimeDto";
 import {DateTime} from "src/model/DateTime";
 import dayjs, {Dayjs} from "dayjs";
-import {TimeRecordOnWeekView} from "src/model/TimeRecordOnWeekView";
+import {TimeRecord} from "src/model/TimeRecord";
 import {parseDayOfWeek, parseDayOfWeekAlias} from "src/util/DayofweekParser"
 import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
-import {MdNavigateBefore} from  'react-icons/md'
-import {MdNavigateNext} from 'react-icons/md'
-import ButtonComponent from "src/pages/components/ButtonComponent";
+import {MdNavigateBefore, MdNavigateNext} from 'react-icons/md'
 import Pixel from "src/graphic/size/pixel";
-import {inspect} from "util";
 import colors from "src/constants/Colors";
 import Colors from "src/constants/Colors";
 import CheckBox from "src/pages/management/sections/parts/components/box/CheckBox";
-import {number} from "prop-types";
 import fontConfig from "src/graphic/text/font";
 import NumberBox from "src/pages/management/sections/parts/components/box/NumberBox";
-
+import {RelativeDay} from "src/model/RelativeDay";
 
 
 const SelectableComponent = createSelectable(Selectable);
 
-const timeRecordTemplates: TimeRecordTemplate[] = [
-  new TimeRecordTemplate("03:00"),
-  new TimeRecordTemplate("04:00"),
-  new TimeRecordTemplate("05:00"),
-  new TimeRecordTemplate("06:00"),
-  new TimeRecordTemplate("07:00"),
-  new TimeRecordTemplate("08:00"),
-  new TimeRecordTemplate("09:00"),
-  new TimeRecordTemplate("10:00"),
-  new TimeRecordTemplate("11:00"),
-  new TimeRecordTemplate("12:00"),
-  new TimeRecordTemplate("13:00"),
-  new TimeRecordTemplate("14:00"),
-  new TimeRecordTemplate("15:00"),
-  new TimeRecordTemplate("16:00"),
-  new TimeRecordTemplate("17:00"),
-  new TimeRecordTemplate("18:00"),
-  new TimeRecordTemplate("19:00"),
-  new TimeRecordTemplate("20:00"),
-  new TimeRecordTemplate("21:00"),
-  new TimeRecordTemplate("22:00"),
-  new TimeRecordTemplate("23:00"),
-  new TimeRecordTemplate("00:00"),
-  new TimeRecordTemplate("01:00"),
-  new TimeRecordTemplate("02:00"),
+const timeTemplates: TimeRecordTemplate[] = [
+  new TimeRecordTemplate("03:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("04:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("05:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("06:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("07:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("08:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("09:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("10:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("11:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("12:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("13:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("14:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("15:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("16:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("17:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("18:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("19:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("20:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("21:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("22:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("23:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("00:00", RelativeDay.TOMORROW),
+  new TimeRecordTemplate("01:00", RelativeDay.TOMORROW),
+  new TimeRecordTemplate("02:00", RelativeDay.TOMORROW),
 ]
 
 
@@ -71,7 +67,7 @@ const isNodeInRoot = (node, root) => {
   return false;
 };
 
-function exceedsYesterday(lastOfYesterdayData: TimeDto | undefined) {
+function exceedsYesterday(lastOfYesterdayData: TimeDto | undefined, comparableRecord: TimeRecord) {
   if (lastOfYesterdayData === undefined) {
     return false;
   }
@@ -79,50 +75,47 @@ function exceedsYesterday(lastOfYesterdayData: TimeDto | undefined) {
   const yesterdayDate = lastOfYesterdayData.endDateTime.getDate();
   const comparable = new Date(yesterdayDate + "T" + "02:00");
   const endDateTime = new Date(lastOfYesterdayData.endDateTime.getDateTime());
-  return comparable.getTime() < endDateTime.getTime();
+
+  return lastOfYesterdayData.endDateTime.getDate() === comparableRecord.getEndDate() && comparable.getTime() < endDateTime.getTime();
 }
 
-function getLastOfYesterdayData(yesterdayData: TimeDto[]): TimeDto {
-  return yesterdayData[yesterdayData.length - 1];
+function getFirstTimeOfTheDayAfterTargetDay(yesterdayData: TimeDto[]): TimeDto {
+  return yesterdayData[0];
 }
 
-function match(serverData: WeekTimes, recordStartTime: DateTime, todayDayOfWeek: string) {
+function match(serverData: WeekTimes, record: TimeRecord, targetDayOfWeek: string) {
 
-  const yesterdayData = serverData.getYesterdayTimesOf(todayDayOfWeek);
-
-  const lastOfYesterdayData = getLastOfYesterdayData(yesterdayData);
-
-  if (recordStartTime.getTime() === '03:00' && exceedsYesterday(lastOfYesterdayData)) {
-    return true;
-  }
-
-
-  const todayData = serverData.getTimesOf(todayDayOfWeek);
-  for (let i = 0; i < todayData.length; i++) {
-    const data = todayData[i];
+  const targetTimes = serverData.getTimesOf(targetDayOfWeek);
+  for (let i = 0; i < targetTimes.length; i++) {
+    const targetTime = targetTimes[i];
     // const startTimePieces = data.endDateTime.toISOString().split("T")[1].split(".")[0].split(":");
-    const startTime = data.startDateTime.getTime();
-    if (recordStartTime.getTime() === startTime) {
+    if (record.getStartDateTime() === targetTime.startDateTime.getDateTime()) {
       return true
     }
   }
 
-  return false;
+  const theDayAfterTargetDayTimes = serverData.getTimesOfheDayAfterTargetDay(targetDayOfWeek);
 
+  const firstOftheDayAfterTargetDay = getFirstTimeOfTheDayAfterTargetDay(theDayAfterTargetDayTimes);
+  if (firstOftheDayAfterTargetDay === undefined) {
+    return false;
+  }
+  return (record.getStartTime() === '00:00' || record.getStartTime() === '01:00') || record.getStartTime() === '02:00' &&
+    record.getStartDateTime() === firstOftheDayAfterTargetDay.startDateTime.getDateTime();
 }
 
-function calculateHeightTimes(serverData: WeekTimes, recordTemplate: TimeRecordOnWeekView, todayDayOfWeek) {
+function calculateHeightTimes(serverData: WeekTimes, record: TimeRecord, todayDayOfWeek) {
 
-  const yesterdayData = serverData.getYesterdayTimesOf(todayDayOfWeek);
-  const lastOfYesterdayData = getLastOfYesterdayData(yesterdayData);
+  const yesterdayData = serverData.getTimesOfheDayAfterTargetDay(todayDayOfWeek);
+  const lastOfYesterdayData = getFirstTimeOfTheDayAfterTargetDay(yesterdayData);
 
   let itemStartDateTime = new Date();
-  itemStartDateTime.setHours(parseInt(recordTemplate.getAlias()));
+  itemStartDateTime.setHours(parseInt(record.getAlias()));
 
   const itemEndDateTime = new Date();
-  itemEndDateTime.setHours(parseInt(recordTemplate.getAlias()) + 1);
+  itemEndDateTime.setHours(parseInt(record.getAlias()) + 1);
 
-  if (lastOfYesterdayData !== undefined && recordTemplate.startDateTime.getTime() === '03:00' && exceedsYesterday(lastOfYesterdayData)) {
+  if (lastOfYesterdayData !== undefined && record.getStartTime() === '03:00' && exceedsYesterday(lastOfYesterdayData, record)) {
     const endDate = lastOfYesterdayData.endDateTime.getDate();
     const comparable = new Date(endDate + "T" + "03:00");
     const endDateTime = new Date(lastOfYesterdayData.endDateTime.getDateTime());
@@ -136,7 +129,7 @@ function calculateHeightTimes(serverData: WeekTimes, recordTemplate: TimeRecordO
     const startDateTime = new Date(data.startDateTime.getDateTime());
     // const startTimePieces = data.endDateTime.toISOString().split("T")[1].split(".")[0].split(":");
     const startTime = data.startDateTime.getTime();
-    if (recordTemplate.startDateTime.getTime() === startTime) {
+    if (record.getStartTime() === startTime) {
 
       const endDate = data.endDateTime.getDate();
       const comparable = new Date(endDate + "T" + "03:00");
@@ -201,23 +194,23 @@ const WeekView: React.FC<{ weekDays: Dayjs[] }> = (props: { weekDays: Dayjs[] })
   return <div></div>;
 }
 
-function createAllTimeRecordsOnWeekView(day: Dayjs): TimeRecordOnWeekView[] {
-  const allTimeRecordsOnWeekView: TimeRecordOnWeekView[] = [];
+function createAllTimeRecords(day: Dayjs): TimeRecord[] {
+  const allTimeRecords: TimeRecord[] = [];
   const weekdays = calculateWeekdaysForView(day);
 
   weekdays.map((day, i) => {
-    timeRecordTemplates.map((timeRecordTemplate, j) => {
-      allTimeRecordsOnWeekView.push(new TimeRecordOnWeekView(Number(i.toString() + getIdOfTemplate(j)), day, timeRecordTemplate))
+    timeTemplates.map((timeTemplate, j) => {
+      allTimeRecords.push(new TimeRecord(Number(i.toString() + getIdOfTemplate(j)), day, timeTemplate))
     })
   })
-  return allTimeRecordsOnWeekView;
+  return allTimeRecords;
 }
 
-function getEarliestRecord(selectedTimeRecords: TimeRecordOnWeekView[]): TimeRecordOnWeekView {
-  let earliest: TimeRecordOnWeekView | undefined = undefined;
+function getEarliestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
+  let earliest: TimeRecord | undefined = undefined;
 
   selectedTimeRecords.map((selectedTimeRecord) => {
-    if (earliest === undefined || new Date(selectedTimeRecord.endDateTime.getDateTime()).getTime() < new Date(earliest.startDateTime.getDateTime()).getTime()) {
+    if (earliest === undefined || new Date(selectedTimeRecord.getEndDateTime()).getTime() < new Date(earliest.getStartDateTime()).getTime()) {
       earliest = selectedTimeRecord;
     }
   })
@@ -225,11 +218,11 @@ function getEarliestRecord(selectedTimeRecords: TimeRecordOnWeekView[]): TimeRec
   return earliest!;
 }
 
-function getLatestRecord(selectedTimeRecords: TimeRecordOnWeekView[]): TimeRecordOnWeekView {
-  let latest: TimeRecordOnWeekView | undefined = undefined;
+function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
+  let latest: TimeRecord | undefined = undefined;
 
   selectedTimeRecords.map((selectedTimeRecord) => {
-    if (latest === undefined || new Date(latest.startDateTime.getDateTime()).getTime() < new Date(selectedTimeRecord.startDateTime.getDateTime()).getTime()) {
+    if (latest === undefined || new Date(latest.getStartDateTime()).getTime() < new Date(selectedTimeRecord.getStartDateTime()).getTime()) {
       latest = selectedTimeRecord;
     }
   })
@@ -240,18 +233,7 @@ function getLatestRecord(selectedTimeRecords: TimeRecordOnWeekView[]): TimeRecor
 const serverData: WeekTimes = new WeekTimes(
   {
     week: {
-      "LAST_SATURDAY": [],
-      "SUNDAY": [
-        {
-          title: "축구",
-          startDateTime: new DateTime("2022-08-07T01:00"),
-          endDateTime: new DateTime("2022-08-07T04:00"),
-          isGood: true,
-          category: "NONE",
-          memo: "funny"
-        },
-      ],
-
+      "SUNDAY": [],
       "MONDAY": [
         {
           title: "영홥 보고 친구랑 잠깐 수다떨음",
@@ -302,7 +284,8 @@ const serverData: WeekTimes = new WeekTimes(
           memo: "개운하다"
         },
       ],
-      "SATURDAY": []
+      "SATURDAY": [],
+      "NEXT_SUNDAY": []
     }
   }
 );
@@ -411,11 +394,11 @@ export class TestSection extends React.Component<any> {
   render() {
     const weekdays = calculateWeekdaysForView(this.state.standardDate);
 
-    const allTimeRecordsOnWeekView: TimeRecordOnWeekView[] = createAllTimeRecordsOnWeekView(this.state.standardDate);
-    const selectedTimeRecords: TimeRecordOnWeekView[] = [];
-    allTimeRecordsOnWeekView.map((timeRecordOnWeekView, i) => {
-      if (isIdInSelectedKeys(timeRecordOnWeekView.id, this.state.selectedKeys)) {
-        selectedTimeRecords.push(timeRecordOnWeekView);
+    const allTimeRecords: TimeRecord[] = createAllTimeRecords(this.state.standardDate);
+    const selectedTimeRecords: TimeRecord[] = [];
+    allTimeRecords.map((timeRecord, i) => {
+      if (isIdInSelectedKeys(timeRecord.id, this.state.selectedKeys)) {
+        selectedTimeRecords.push(timeRecord);
       }
     });
 
@@ -463,17 +446,17 @@ export class TestSection extends React.Component<any> {
                     standardDate: dayjs()
                   });
                 }}
-              >today</button>
+              >today
+              </button>
             </div>
 
 
-            <MdNavigateNext css={css({
-
-            })} size={new Pixel(50).toString()} color={colors.theme.navigator.default} onClick={() => {
-              this.setState({
-                standardDate: this.state.standardDate.add(7, 'day')
-              });
-            }} />
+            <MdNavigateNext css={css({})} size={new Pixel(50).toString()} color={colors.theme.navigator.default}
+                            onClick={() => {
+                              this.setState({
+                                standardDate: this.state.standardDate.add(7, 'day')
+                              });
+                            }}/>
           </div>
         </div>
         <ReactSelectableGroup onSelection={this.handleSelection}
@@ -491,11 +474,11 @@ export class TestSection extends React.Component<any> {
             {
               weekdays.map((day, i) => {
 
-                const timeRecordsOnWeekView: TimeRecordOnWeekView[] = [];
+                const timeRecords: TimeRecord[] = [];
 
 
-                timeRecordTemplates.map((recordTemplate, j) => {
-                  timeRecordsOnWeekView.push(new TimeRecordOnWeekView(Number(i.toString() + getIdOfTemplate(j)), day, recordTemplate))
+                timeTemplates.map((recordTemplate, j) => {
+                  timeRecords.push(new TimeRecord(Number(i.toString() + getIdOfTemplate(j)), day, recordTemplate))
                 })
 
                 return <div>
@@ -511,24 +494,27 @@ export class TestSection extends React.Component<any> {
                   })}>
 
                     {
+                      timeRecords.map((timeRecord) => {
+                        console.log("timeRecord", timeRecord.getStartDateTime(), timeRecord.getEndDateTime());
 
-                      timeRecordsOnWeekView.map((record) => {
-                        let selected = this.state.selectedKeys.indexOf(record.id) > -1 || isIdInSelectedKeys(record.id, this.state.selectedKeys);
-                        const isMatching = match(serverData, record.startDateTime, parseDayOfWeek(day.day()));
-                        const heightTimes = calculateHeightTimes(serverData, record, parseDayOfWeek(day.day()));
+                        let selected = this.state.selectedKeys.indexOf(timeRecord.id) > -1 || isIdInSelectedKeys(timeRecord.id, this.state.selectedKeys);
+                        const isMatching = match(serverData, timeRecord, parseDayOfWeek(day.day()));
+                        const heightTimes = calculateHeightTimes(serverData, timeRecord, parseDayOfWeek(day.day()));
                         return (
-                          <div >
+                          <div>
 
                             <SelectableComponent
-                              selectableKey={record.id}
-                              key={record.id}
+                              selectableKey={timeRecord.id}
+                              key={timeRecord.id}
                               isSelected={selected}
                               isMatching={isMatching}
                               heightTimes={heightTimes}
                               height={this.recordSize}
                             >
-                              <NumberBox number={record.getAlias()} numberSize={this.checkBoxSize} numberFont={fontConfig.web.medium.fontFamily}
-                                         numberColor={!selected ? Colors.theme.text.box.default : "white"} boxWidth={new Pixel(14)} boxHeight={new Pixel(35)}
+                              <NumberBox number={timeRecord.getAlias()} numberSize={this.checkBoxSize}
+                                         numberFont={fontConfig.web.medium.fontFamily}
+                                         numberColor={!selected ? Colors.theme.text.box.default : "white"}
+                                         boxWidth={new Pixel(14)} boxHeight={new Pixel(35)}
                                          boxRadius={0}/>
                             </SelectableComponent>
                           </div>
@@ -545,48 +531,48 @@ export class TestSection extends React.Component<any> {
           {
 
             this.state.isShown ? (
-            <Modal
-              onSubmit={e => {
-                let title = e.currentTarget[0];
-                let startDate = e.currentTarget[1];
-                let startTime = e.currentTarget[2];
-                let endDate = e.currentTarget[3];
-                let endTime = e.currentTarget[4];
-                let isGood = e.currentTarget[5];
-                let category = e.currentTarget[6];
+              <Modal
+                onSubmit={e => {
+                  let title = e.currentTarget[0];
+                  let startDate = e.currentTarget[1];
+                  let startTime = e.currentTarget[2];
+                  let endDate = e.currentTarget[3];
+                  let endTime = e.currentTarget[4];
+                  let isGood = e.currentTarget[5];
+                  let category = e.currentTarget[6];
 
-                assertIsFormFieldElement(title);
-                assertIsFormFieldElement(startDate);
-                assertIsFormFieldElement(startTime);
-                assertIsFormFieldElement(endDate);
+                  assertIsFormFieldElement(title);
+                  assertIsFormFieldElement(startDate);
+                  assertIsFormFieldElement(startTime);
+                  assertIsFormFieldElement(endDate);
 
-                console.log("title", title, title.value);
-                console.log("startDate", startDate, startDate.value);
-                console.log("startTime", startTime, startTime.value);
-                console.log("endDate", endDate, endTime.value);
-                console.log("isGood", isGood, isGood.checked);
-                console.log("category", category, category.value)
+                  console.log("title", title, title.value);
+                  console.log("startDate", startDate, startDate.value);
+                  console.log("startTime", startTime, startTime.value);
+                  console.log("endDate", endDate, endTime.value);
+                  console.log("isGood", isGood, isGood.checked);
+                  console.log("category", category, category.value)
 
 
+                }}
 
-              }}
-
-              modalRef={(n: any) => (this.modal = n)}
-              buttonRef={(n: any) => (this.closeButton = n)}
-              closeModal={this.onClose}
-              onKeyDown={this.onKeyDown}
-              onClickOutside={this.onClickOutside}
-              startDateTime={earliestRecord.startDateTime}
-              endDateTime={latestRecord.endDateTime}
-            />
-          ) : null}
+                modalRef={(n: any) => (this.modal = n)}
+                buttonRef={(n: any) => (this.closeButton = n)}
+                closeModal={this.onClose}
+                onKeyDown={this.onKeyDown}
+                onClickOutside={this.onClickOutside}
+                earliestRecord={earliestRecord}
+                latestRecord={latestRecord}
+              />
+            ) : null}
         </React.Fragment>
 
       </div>
     )
   }
 }
-const TodoList: React.FC<{checkBoxSize: Pixel}> = (props: {checkBoxSize: Pixel}) => {
+
+const TodoList: React.FC<{ checkBoxSize: Pixel }> = (props: { checkBoxSize: Pixel }) => {
   const {checkBoxSize} = props;
   let percent = new Percentage(100);
   return <div>
@@ -606,7 +592,7 @@ const TodoList: React.FC<{checkBoxSize: Pixel}> = (props: {checkBoxSize: Pixel})
   </div>
 }
 
-const Todo: React.FC<{checkBoxSize: Pixel}> = (props: {checkBoxSize: Pixel}) => {
+const Todo: React.FC<{ checkBoxSize: Pixel }> = (props: { checkBoxSize: Pixel }) => {
   const {checkBoxSize} = props;
   return <div css={css({
     display: "flex",
@@ -631,7 +617,7 @@ const Todo: React.FC<{checkBoxSize: Pixel}> = (props: {checkBoxSize: Pixel}) => 
 }
 
 
-const DateGuide: React.FC<{day: Dayjs}> = (props: {day: Dayjs}) => {
+const DateGuide: React.FC<{ day: Dayjs }> = (props: { day: Dayjs }) => {
   const {day} = props;
 
 

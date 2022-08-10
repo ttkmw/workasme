@@ -10,6 +10,7 @@ import Pixel from "src/graphic/size/pixel";
 import colors from "src/constants/Colors";
 import {MdNavigateBefore} from "react-icons/md";
 import {IoMdClose} from "react-icons/all";
+import {TimeRecord} from "src/model/TimeRecord";
 
 interface ModalProps {
   onClickOutside: (e) => void,
@@ -18,8 +19,8 @@ interface ModalProps {
   buttonRef: (n) => void,
   closeModal: (e) => void,
   onSubmit: (e) => void,
-  startDateTime: DateTime,
-  endDateTime: DateTime
+  earliestRecord: TimeRecord,
+  latestRecord: TimeRecord
 }
 
 export const Modal = ({
@@ -29,8 +30,8 @@ export const Modal = ({
                         buttonRef,
                         closeModal,
                         onSubmit,
-                        startDateTime,
-                        endDateTime
+                        earliestRecord,
+                        latestRecord
                       }: ModalProps) => {
   return ReactDOM.createPortal(
     <FocusTrap>
@@ -125,7 +126,7 @@ export const Modal = ({
           <div css={css({
             marginTop: "16px"
           })}>
-            <Form onSubmit={onSubmit} startDateTime={startDateTime} endDateTime={endDateTime}/>
+            <Form onSubmit={onSubmit} earliestRecord={earliestRecord} latestRecord={latestRecord}/>
           </div>
         </div>
       </aside>

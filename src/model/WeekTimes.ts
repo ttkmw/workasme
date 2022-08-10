@@ -4,7 +4,6 @@ import {WeekTimesDto} from "src/dtos/WeekTimesDto";
 export class WeekTimes {
   constructor(weekTimesDto: WeekTimesDto) {
     this.week = {
-      "LAST_SATURDAY": weekTimesDto.week.LAST_SATURDAY,
       "SUNDAY": weekTimesDto.week.SUNDAY,
       "MONDAY": weekTimesDto.week.MONDAY,
       "TUESDAY": weekTimesDto.week.TUESDAY,
@@ -12,12 +11,12 @@ export class WeekTimes {
       "THURSDAY": weekTimesDto.week.THURSDAY,
       "FRIDAY": weekTimesDto.week.FRIDAY,
       "SATURDAY": weekTimesDto.week.SATURDAY,
+      "NEXT_SUNDAY": weekTimesDto.week.NEXT_SUNDAY,
 
     };
   }
 
   week: {
-    "LAST_SATURDAY": TimeDto[],
     "SUNDAY": TimeDto[],
     "MONDAY": TimeDto[],
     "TUESDAY": TimeDto[],
@@ -25,40 +24,37 @@ export class WeekTimes {
     "THURSDAY": TimeDto[],
     "FRIDAY": TimeDto[],
     "SATURDAY": TimeDto[]
+    "NEXT_SUNDAY": TimeDto[],
   };
 
-  //todo: check
-  getYesterdayTimesOf(todayDayOfWeek: string): TimeDto[] {
+  //todo: check!!!! tomorrow로 해야할 삘
+  getTimesOfheDayAfterTargetDay(todayDayOfWeek: string): TimeDto[] {
     if (todayDayOfWeek === 'SUNDAY') {
-      return this.week.LAST_SATURDAY;
-    }
-
-    if (todayDayOfWeek === 'MONDAY') {
-      return this.week.SUNDAY;
-    }
-
-    if (todayDayOfWeek === 'TUESDAY') {
       return this.week.MONDAY;
     }
 
-    if (todayDayOfWeek === 'WEDNESDAY') {
+    if (todayDayOfWeek === 'MONDAY') {
       return this.week.TUESDAY;
     }
 
-    if (todayDayOfWeek === 'THURSDAY') {
+    if (todayDayOfWeek === 'TUESDAY') {
       return this.week.WEDNESDAY;
     }
 
-    if (todayDayOfWeek === 'FRIDAY') {
+    if (todayDayOfWeek === 'WEDNESDAY') {
       return this.week.THURSDAY;
     }
 
-    if (todayDayOfWeek === 'SATURDAY') {
+    if (todayDayOfWeek === 'THURSDAY') {
       return this.week.FRIDAY;
     }
 
-    if (todayDayOfWeek === 'SUNDAY') {
+    if (todayDayOfWeek === 'FRIDAY') {
       return this.week.SATURDAY;
+    }
+
+    if (todayDayOfWeek === 'SATURDAY') {
+      return this.week.NEXT_SUNDAY;
     }
 
     throw new Error("이상한 요일입니다.");

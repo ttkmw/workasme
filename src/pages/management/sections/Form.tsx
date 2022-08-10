@@ -12,11 +12,12 @@ import Select, { components } from 'react-select'
 import {IoMdClose} from "react-icons/all";
 import TimePickerWrapper from "src/pages/components/TimePickerWrapper";
 import dayjs from "dayjs";
+import {TimeRecord} from "src/model/TimeRecord";
 
 interface FormProps {
   onSubmit: (e) => void,
-  startDateTime: DateTime,
-  endDateTime: DateTime
+  earliestRecord: TimeRecord,
+  latestRecord: TimeRecord
 }
 
 const options = [
@@ -40,7 +41,7 @@ const mins = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", 
 //https://stackoverflow.com/questions/45283030/html5-input-type-time-without-am-pm-and-with-min-max
 export const Form: React.FC<FormProps> = (props: FormProps) => {
   const showSecond = true;
-  const {onSubmit, startDateTime, endDateTime} = props;
+  const {onSubmit, earliestRecord, latestRecord} = props;
   const [isGood, setIsGood] = useState(false)
   const toggleIsGood = () => setIsGood(!isGood)
 
@@ -110,9 +111,9 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           })}
                id={"startDateTime"}
           >
-            <DatePicker dateTime={startDateTime}/>
+            <DatePicker dateTime={earliestRecord.getStartDateTime()}/>
             <div>-</div>
-            <TimePicker initialValue={startDateTime.getHour()}/>
+            <TimePicker initialValue={earliestRecord.getStartDateTime().slice(0,2)}/>
           </div>
         </div>
       </div>
@@ -132,9 +133,9 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
             justifyContent: "space-between",
           })}
                id={"endDateTime"}>
-            <DatePicker dateTime={endDateTime}/>
+            <DatePicker dateTime={latestRecord.getEndDateTime()}/>
             <div>-</div>
-            <TimePicker initialValue={endDateTime.getHour()}/>
+            <TimePicker initialValue={latestRecord.getEndDateTime().slice(0,2)}/>
           </div>
         </div>
       </div>

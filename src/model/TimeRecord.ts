@@ -1,35 +1,55 @@
 import {DateTime} from "src/model/DateTime";
 import {Dayjs} from "dayjs";
 import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
+import moment from "moment";
 
 function parseHour(startTime: string) {
   const hour = Number();
   return 0;
 }
 
-export class TimeRecordOnWeekView {
+export class TimeRecord {
   private readonly _id: number;
-  private readonly _startDateTime: DateTime;
-  private readonly _endDateTime: DateTime;
+  private readonly _startDateTime: moment.Moment;
+  private readonly _endDateTime: moment.Moment;
 
   get id(): number {
     return this._id;
   }
 
-  get startDateTime(): DateTime {
-    return this._startDateTime;
-  }
-
-  get endDateTime(): DateTime {
-    return this._endDateTime;
-  }
   constructor(id: number, day:Dayjs, timeRecordTemplate: TimeRecordTemplate) {
     this._id = id;
 
     //todo: validate startTime
-    this._startDateTime = TimeRecordOnWeekView.convertToStartDateTime(day, timeRecordTemplate.startTime);
 
-    this._endDateTime = TimeRecordOnWeekView.convertToEndDateTime(day, timeRecordTemplate.getEndTime());
+    const formattedDay = TimeRecord.getFormattedDay(day, timeRecordTemplate);
+    // const startDateTime = moment(formattedDay + "T" + timeRecordTemplate.startTime);
+    // const endDateTime = moment(startDateTime).add(1, "hours");
+    // console.log("startDateTime", startDateTime.format("YYYY-MM-DDTHH:mm"));
+    // console.log("endDateTime", endDateTime.format("HH:mm"));
+    this._startDateTime = moment(formattedDay + "T" + timeRecordTemplate.startTime);
+    this._endDateTime = moment(this._startDateTime).add(1, "hours");
+  }
+
+  public getStartDateTime(): string {
+    return this._startDateTime.format("YYYY-MM-DDTHH:mm");
+  }
+
+  public getStartTime(): string {
+    return this._startDateTime.format("HH:mm");
+  }
+
+  public getEndDateTime(): string {
+    return this._endDateTime.format("YYYY-MM-DDTHH:mm");
+  }
+
+  private static getFormattedDay(day: Dayjs, timeRecordTemplate: TimeRecordTemplate) {
+    const currentDay = day.add(timeRecordTemplate.relativeDay.valueOf(), 'day');
+    const year = currentDay.year();
+    const month = currentDay.month() + 1;
+    const date = currentDay.date();
+
+    return `${year}-${month < 10 ? "0" + month : month}-${date < 10 ? "0" + date : date}`;
   }
 
   private static convertToEndDateTime(day: Dayjs, endTime: string): DateTime {
@@ -66,10 +86,14 @@ export class TimeRecordOnWeekView {
   }
 
   getAlias() {
-    const hour = this._startDateTime.getHour();
+    const hour = this._startDateTime.format("HH");
     if (hour[0] === '0') {
       return hour[1];
     }
     return hour;
+  }
+
+  public getEndDate(): string {
+    return this._endDateTime.format("YYYY-MM-DD");
   }
 }

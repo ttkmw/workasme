@@ -2,7 +2,6 @@ import {TimeDto} from "src/dtos/TimeDto";
 
 export interface WeekTimesDto {
   readonly week: {
-    "LAST_SATURDAY": TimeDto[],
     "SUNDAY": TimeDto[],
     "MONDAY": TimeDto[],
     "TUESDAY": TimeDto[],
@@ -10,5 +9,6 @@ export interface WeekTimesDto {
     "THURSDAY": TimeDto[],
     "FRIDAY": TimeDto[],
     "SATURDAY": TimeDto[],
+    "NEXT_SUNDAY": TimeDto[],
   }
 }

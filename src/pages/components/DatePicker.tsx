@@ -8,11 +8,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
 import {DateTime} from "src/model/DateTime";
+import {TimeRecord} from "src/model/TimeRecord";
 
 //https://reactdatepicker.com/
-const DatePicker: React.FC<{dateTime: DateTime}> = (props: {dateTime: DateTime}) => {
+const DatePicker: React.FC<{dateTime: string}> = (props: {dateTime: string}) => {
   const {dateTime} = props;
-  const [startDate, setStartDate] = useState(new Date(dateTime.getDateTime()));
+  const [startDate, setStartDate] = useState(new Date(dateTime));
   const [isOpen, setIsOpen] = useState(false);
   const handleChange = (e) => {
     setIsOpen(!isOpen);
