@@ -94,20 +94,21 @@ function match(serverData: WeekTimes, record: TimeRecord, targetDayOfWeek: strin
     }
   }
 
-  const theDayAfterTargetDayTimes = serverData.getTimesOfheDayAfterTargetDay(targetDayOfWeek);
+  // const theDayAfterTargetDayTimes = serverData.getTimesOfheDayAfterTargetDay(targetDayOfWeek);
 
-  const firstOftheDayAfterTargetDay = getFirstTimeOfTheDayAfterTargetDay(theDayAfterTargetDayTimes);
-  if (firstOftheDayAfterTargetDay === undefined) {
-    return false;
-  }
-  return (record.getStartTime() === '00:00' || record.getStartTime() === '01:00') || record.getStartTime() === '02:00' &&
-    record.getStartDateTime() === firstOftheDayAfterTargetDay.startDateTime.getDateTime();
+  // const firstOftheDayAfterTargetDay = getFirstTimeOfTheDayAfterTargetDay(theDayAfterTargetDayTimes);
+  // if (firstOftheDayAfterTargetDay === undefined) {
+  //   return false;
+  // }
+  // return (record.getStartTime() === '00:00' || record.getStartTime() === '01:00') || record.getStartTime() === '02:00' &&
+  //   record.getStartDateTime() === firstOftheDayAfterTargetDay.startDateTime.getDateTime();
+  return false;
 }
 
 function calculateHeightTimes(serverData: WeekTimes, record: TimeRecord, todayDayOfWeek) {
 
-  const yesterdayData = serverData.getTimesOfheDayAfterTargetDay(todayDayOfWeek);
-  const lastOfYesterdayData = getFirstTimeOfTheDayAfterTargetDay(yesterdayData);
+  // const yesterdayData = serverData.getTimesOfheDayAfterTargetDay(todayDayOfWeek);
+  const lastOfYesterdayData = getFirstTimeOfTheDayAfterTargetDay([]);
 
   let itemStartDateTime = new Date();
   itemStartDateTime.setHours(parseInt(record.getAlias()));
@@ -123,6 +124,10 @@ function calculateHeightTimes(serverData: WeekTimes, record: TimeRecord, todayDa
   }
 
   const todayData = serverData.getTimesOf(todayDayOfWeek);
+  // todo: check!!! 왜 undefined야
+  if (todayData === undefined) {
+    return null;
+  }
   for (let i = 0; i < todayData.length; i++) {
     const data = todayData[i];
 
@@ -231,63 +236,59 @@ function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
 }
 
 const serverData: WeekTimes = new WeekTimes(
-  {
-    week: {
-      "SUNDAY": [],
-      "MONDAY": [
-        {
-          title: "영홥 보고 친구랑 잠깐 수다떨음",
-          startDateTime: new DateTime("2022-08-08T01:00"),
-          endDateTime: new DateTime("2022-08-08T04:00"),
-          isGood: false,
-          category: "SOCIAL",
-          memo: undefined
-        },
-      ],
-      "TUESDAY": [
-        {
-          title: "샤워하고 밥먹고 전화하다가 엄마한테 등짝맞고 공부하다가 플스함",
-          startDateTime: new DateTime("2022-08-09T01:00"),
-          endDateTime: new DateTime("2022-08-09T04:00"),
-          isGood: false,
-          category: "NONE",
-          memo: "why should id live like this"
-        },
-      ],
-      "WEDNESDAY": [
-        {
-          title: "코딩함",
-          startDateTime: new DateTime("2022-08-10T01:00"),
-          endDateTime: new DateTime("2022-08-10T04:00"),
-          isGood: true,
-          category: "INTELLECTUAL",
-          memo: undefined
-        },
-      ],
-      "THURSDAY": [
-        {
-          title: "베라 피티를 함",
-          startDateTime: new DateTime("2022-08-11T01:00"),
-          endDateTime: new DateTime("2022-08-11T04:00"),
-          isGood: true,
-          category: "PHYSICAL",
-          memo: "개힘들다"
-        },
-      ],
-      "FRIDAY": [
-        {
-          title: "산책을 함",
-          startDateTime: new DateTime("2022-08-16T01:00"),
-          endDateTime: new DateTime("2022-08-16T04:00"),
-          isGood: false,
-          category: "SPIRITUAL",
-          memo: "개운하다"
-        },
-      ],
-      "SATURDAY": [],
-      "NEXT_SUNDAY": []
-    }
-  }
+  new Map<string, TimeDto[]>([
+    ["2022-08-07", []],
+    ["2022-08-08", [
+      {
+        title: "영홥 보고 친구랑 잠깐 수다떨음",
+        startDateTime: new DateTime("2022-08-08T01:00"),
+        endDateTime: new DateTime("2022-08-08T04:00"),
+        isGood: false,
+        category: "SOCIAL",
+        memo: undefined
+      },
+    ]],
+    ["2022-08-09", [
+      {
+        title: "샤워하고 밥먹고 전화하다가 엄마한테 등짝맞고 공부하다가 플스함",
+        startDateTime: new DateTime("2022-08-09T01:00"),
+        endDateTime: new DateTime("2022-08-09T04:00"),
+        isGood: false,
+        category: "NONE",
+        memo: "why should id live like this"
+      },
+    ]],
+    ["2022-08-10", [
+      {
+        title: "코딩함",
+        startDateTime: new DateTime("2022-08-10T01:00"),
+        endDateTime: new DateTime("2022-08-10T04:00"),
+        isGood: true,
+        category: "INTELLECTUAL",
+        memo: undefined
+      },
+    ]],
+    ["2022-08-11", [
+      {
+        title: "베라 피티를 함",
+        startDateTime: new DateTime("2022-08-11T01:00"),
+        endDateTime: new DateTime("2022-08-11T04:00"),
+        isGood: true,
+        category: "PHYSICAL",
+        memo: "개힘들다"
+      },
+    ]],
+    ["2022-08-12", [
+      {
+        title: "산책을 함",
+        startDateTime: new DateTime("2022-08-12T01:00"),
+        endDateTime: new DateTime("2022-08-12T04:00"),
+        isGood: false,
+        category: "SPIRITUAL",
+        memo: "개운하다"
+      },
+    ]]
+  ])
 );
 
 export class TestSection extends React.Component<any> {
@@ -495,10 +496,14 @@ export class TestSection extends React.Component<any> {
 
                     {
                       timeRecords.map((timeRecord) => {
-                        console.log("timeRecord", timeRecord.getStartDateTime(), timeRecord.getEndDateTime());
 
                         let selected = this.state.selectedKeys.indexOf(timeRecord.id) > -1 || isIdInSelectedKeys(timeRecord.id, this.state.selectedKeys);
-                        const isMatching = match(serverData, timeRecord, parseDayOfWeek(day.day()));
+                        const isMatching = timeRecord.match(serverData);
+                        if (isMatching) {
+                          console.log("isMatching", isMatching, timeRecord.getStartDateTime());
+                        }
+                        // const isMatching = match(serverData, timeRecord, parseDayOfWeek(day.day()));
+
                         const heightTimes = calculateHeightTimes(serverData, timeRecord, parseDayOfWeek(day.day()));
                         return (
                           <div>

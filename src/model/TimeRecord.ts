@@ -1,7 +1,10 @@
 import {DateTime} from "src/model/DateTime";
-import {Dayjs} from "dayjs";
+import dayjs, {Dayjs} from "dayjs";
 import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
 import moment from "moment";
+import {WeekTimes} from "src/model/WeekTimes";
+import {TimeDto} from "src/dtos/TimeDto";
+import {RelativeDay} from "src/model/RelativeDay";
 
 function parseHour(startTime: string) {
   const hour = Number();
@@ -22,7 +25,7 @@ export class TimeRecord {
 
     //todo: validate startTime
 
-    const formattedDay = TimeRecord.getFormattedDay(day, timeRecordTemplate);
+    const formattedDay = TimeRecord.getFormattedDay(day, timeRecordTemplate.relativeDay);
     // const startDateTime = moment(formattedDay + "T" + timeRecordTemplate.startTime);
     // const endDateTime = moment(startDateTime).add(1, "hours");
     // console.log("startDateTime", startDateTime.format("YYYY-MM-DDTHH:mm"));
@@ -43,8 +46,8 @@ export class TimeRecord {
     return this._endDateTime.format("YYYY-MM-DDTHH:mm");
   }
 
-  private static getFormattedDay(day: Dayjs, timeRecordTemplate: TimeRecordTemplate) {
-    const currentDay = day.add(timeRecordTemplate.relativeDay.valueOf(), 'day');
+  private static getFormattedDay(day: Dayjs, relativeDay: RelativeDay): string {
+    const currentDay = day.add(relativeDay.valueOf(), 'day');
     const year = currentDay.year();
     const month = currentDay.month() + 1;
     const date = currentDay.date();
@@ -95,5 +98,38 @@ export class TimeRecord {
 
   public getEndDate(): string {
     return this._endDateTime.format("YYYY-MM-DD");
+  }
+
+  public getStartDate(): string {
+    return this._startDateTime.format("YYYY-MM-DD");
+  }
+
+  public match(savedTimes: WeekTimes) {
+      if (this.getStartTime() === '03:00') {
+        const formattedYesterday: string = TimeRecord.getFormattedDay(dayjs(this.getStartDate()), RelativeDay.TODAY);
+        const atSameDate: TimeDto[] | undefined = savedTimes.times.get(formattedYesterday);
+        if (atSameDate !== undefined && atSameDate.length !== 0) {
+          const candidate: TimeDto = atSameDate[atSameDate.length - 1];
+          const candidateEndDateTime = moment(candidate.endDateTime.getDateTime());
+          if (candidateEndDateTime.isAfter(this._startDateTime)) {
+            return true;
+          }
+        }
+      }
+
+
+      const atSameDate: TimeDto[] | undefined = savedTimes.times.get(this.getStartDate());
+      if (atSameDate === undefined) {
+        return false;
+      }
+
+      for (let i = 0; i < atSameDate.length; i++) {
+        const candidate = atSameDate[i];
+        if (this.getStartDateTime() === candidate.startDateTime.getDateTime()) {
+          return true;
+        }
+      }
+
+      return false;
   }
 }
