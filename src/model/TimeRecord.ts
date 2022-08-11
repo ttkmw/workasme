@@ -5,6 +5,7 @@ import moment from "moment";
 import {WeekTimes} from "src/model/WeekTimes";
 import {TimeDto} from "src/dtos/TimeDto";
 import {RelativeDay} from "src/model/RelativeDay";
+import Percentage from "src/graphic/size/percentage";
 
 function parseHour(startTime: string) {
   const hour = Number();
@@ -12,6 +13,9 @@ function parseHour(startTime: string) {
 }
 
 export class TimeRecord {
+
+  private static readonly FIRST_TIME = '03:00';
+
   private readonly _id: number;
   private readonly _startDateTime: moment.Moment;
   private readonly _endDateTime: moment.Moment;
@@ -20,12 +24,12 @@ export class TimeRecord {
     return this._id;
   }
 
-  constructor(id: number, day:Dayjs, timeRecordTemplate: TimeRecordTemplate) {
+  constructor(id: number, day: Dayjs, timeRecordTemplate: TimeRecordTemplate) {
     this._id = id;
 
     //todo: validate startTime
 
-    const formattedDay = TimeRecord.getFormattedDay(day, timeRecordTemplate.relativeDay);
+    const formattedDay = TimeRecord.getFormattedDate(day, timeRecordTemplate.relativeDay);
     // const startDateTime = moment(formattedDay + "T" + timeRecordTemplate.startTime);
     // const endDateTime = moment(startDateTime).add(1, "hours");
     // console.log("startDateTime", startDateTime.format("YYYY-MM-DDTHH:mm"));
@@ -46,7 +50,7 @@ export class TimeRecord {
     return this._endDateTime.format("YYYY-MM-DDTHH:mm");
   }
 
-  private static getFormattedDay(day: Dayjs, relativeDay: RelativeDay): string {
+  private static getFormattedDate(day: Dayjs, relativeDay: RelativeDay): string {
     const currentDay = day.add(relativeDay.valueOf(), 'day');
     const year = currentDay.year();
     const month = currentDay.month() + 1;
@@ -78,7 +82,7 @@ export class TimeRecord {
       return new DateTime(tomorrow.year() + "-" + this.convertMonth(tomorrow) + "-" + this.convertDate(tomorrow) + "T" + startTime)
     }
 
-    return new DateTime(day.year() + "-" + this.convertMonth(day)+ "-" + this.convertDate(day) + "T" + startTime)
+    return new DateTime(day.year() + "-" + this.convertMonth(day) + "-" + this.convertDate(day) + "T" + startTime)
   }
 
   private static convertDate(day: Dayjs) {
@@ -105,31 +109,96 @@ export class TimeRecord {
   }
 
   public match(savedTimes: WeekTimes) {
-      if (this.getStartTime() === '03:00') {
-        const formattedYesterday: string = TimeRecord.getFormattedDay(dayjs(this.getStartDate()), RelativeDay.TODAY);
-        const atSameDate: TimeDto[] | undefined = savedTimes.times.get(formattedYesterday);
-        if (atSameDate !== undefined && atSameDate.length !== 0) {
-          const candidate: TimeDto = atSameDate[atSameDate.length - 1];
-          const candidateEndDateTime = moment(candidate.endDateTime.getDateTime());
-          if (candidateEndDateTime.isAfter(this._startDateTime)) {
-            return true;
-          }
-        }
-      }
-
-
-      const atSameDate: TimeDto[] | undefined = savedTimes.times.get(this.getStartDate());
-      if (atSameDate === undefined) {
-        return false;
-      }
-
-      for (let i = 0; i < atSameDate.length; i++) {
-        const candidate = atSameDate[i];
-        if (this.getStartDateTime() === candidate.startDateTime.getDateTime()) {
+    if (this.isFirstTime()) {
+      const lastTimeBeforeTodayFirstTime = this.getLastTimeBeforeTodayFirstTime(savedTimes);
+      if (lastTimeBeforeTodayFirstTime !== undefined) {
+        if (moment(lastTimeBeforeTodayFirstTime.endDateTime.getDateTime()).isAfter(this.getFirstDateTime())) {
           return true;
         }
       }
+    }
 
+    const atSameDate: TimeDto[] | undefined = savedTimes.timesWithinThisWeek.get(this.getStartDate());
+    if (atSameDate === undefined) {
       return false;
+    }
+
+    for (let i = 0; i < atSameDate.length; i++) {
+      const candidate = atSameDate[i];
+      if (this.getStartDateTime() === candidate.startDateTime.getDateTime()) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private getLastTimeBeforeTodayFirstTime(savedTimes: WeekTimes): TimeDto {
+    let currentDate = dayjs(this.getStartDate());
+    const firstDateOfThisWeek: Dayjs = this.getFirstDateOfThisWeek(savedTimes);
+    while (TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY) !== TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY)) {
+      const formattedCurrentDate: string = TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY);
+      const timesOfDate: TimeDto[] | undefined = savedTimes.timesWithinThisWeek.get(formattedCurrentDate);
+      currentDate = currentDate.subtract(1, 'days');
+      if (timesOfDate !== undefined && timesOfDate.length !== 0) {
+        return timesOfDate[timesOfDate.length - 1]
+      } else {
+        currentDate = currentDate.subtract(1, 'days');
+      }
+    }
+
+    return savedTimes.edgeTimeBeforeThisWeek;
+  }
+
+  private getFirstDateOfThisWeek(savedTimes: WeekTimes): Dayjs {
+    let firstDateOfThisWeek: Dayjs | undefined = undefined;
+    for (let date of Array.from(savedTimes.timesWithinThisWeek.keys())) {
+      const weekDate = dayjs(date);
+      if (firstDateOfThisWeek === undefined) {
+        firstDateOfThisWeek = weekDate;
+      }
+
+      if (weekDate.isBefore(firstDateOfThisWeek)) {
+        firstDateOfThisWeek = weekDate;
+      }
+    }
+    return firstDateOfThisWeek!;
+  }
+
+  private getCandidateToBeFirstTime(atSameDate: TimeDto[]): TimeDto {
+    const firstDateTime: moment.Moment = this.getFirstDateTime();
+    const exTime = moment(firstDateTime).subtract(1, "hours");
+    console.log("firstDateTime", firstDateTime.hours(), exTime.hours());
+    // for (let i = 0; i < 3; )
+
+    return atSameDate[atSameDate.length - 1];
+  }
+
+  private getFirstDateTime(): moment.Moment {
+    return moment(this.getStartDate() + "T" + TimeRecord.FIRST_TIME);
+  }
+
+  private isFirstTime() {
+    return this.getStartTime() === TimeRecord.FIRST_TIME;
+  }
+
+  public calculateHeightTimes(savedTimes: WeekTimes): Percentage {
+    const edgeTimeBeforeThisWeek = savedTimes.edgeTimeBeforeThisWeek;
+    if (this.isFirstTime() && edgeTimeBeforeThisWeek !== undefined) {
+
+      const edgeTimeEndDateTime: moment.Moment = this.convertEdgeTimeEndDateTime(edgeTimeBeforeThisWeek.endDateTime)
+      // const atSameDate: TimeDto[] | undefined = savedTimes.timesWithinThisWeek.get(this.getStartDate());
+      // if (atSameDate !== undefined && atSameDate.length !== 0) {
+      //   const candidate: TimeDto = atSameDate[atSameDate.length - 1];
+      // }
+    }
+
+    return new Percentage(100);
+  }
+
+  private convertEdgeTimeEndDateTime(endDateTime: DateTime) {
+    const edgeTimeEndDateTime = moment(endDateTime.getDateTime());
+    const maxOfEdgeTime = moment(this.getFirstDateTime()).add(1, 'days').subtract(1, 'hours')
+    return edgeTimeEndDateTime.isBefore(maxOfEdgeTime) ? edgeTimeEndDateTime : maxOfEdgeTime;
   }
 }

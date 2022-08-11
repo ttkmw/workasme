@@ -2,11 +2,13 @@ import {TimeDto} from "src/dtos/TimeDto";
 import {WeekTimesDto} from "src/dtos/WeekTimesDto";
 
 export class WeekTimes {
-  constructor(times: Map<string, TimeDto[]>) {
-    this.times = times;
+  constructor(times: Map<string, TimeDto[]>, edgeTimeBeforeThisWeek: TimeDto) {
+    this.timesWithinThisWeek = times;
+    this.edgeTimeBeforeThisWeek = edgeTimeBeforeThisWeek;
   }
 
-  times: Map<string, TimeDto[]>;
+  timesWithinThisWeek: Map<string, TimeDto[]>;
+  edgeTimeBeforeThisWeek: TimeDto
 
   //todo: check!!!! tomorrow로 해야할 삘
   // getTimesOfheDayAfterTargetDay(todayDayOfWeek: string): TimeDto[] {
@@ -42,6 +44,6 @@ export class WeekTimes {
   // }
 
   getTimesOf(todayDayOfWeek: string): TimeDto[] {
-    return this.times[todayDayOfWeek];
+    return this.timesWithinThisWeek[todayDayOfWeek];
   }
 }

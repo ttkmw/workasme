@@ -288,7 +288,15 @@ const serverData: WeekTimes = new WeekTimes(
         memo: "개운하다"
       },
     ]]
-  ])
+  ]),
+  {
+    title: "엣지타임",
+    startDateTime: new DateTime("2022-08-06T23:00"),
+    endDateTime: new DateTime("2022-08-07T04:00"),
+    isGood: true,
+    category: "NONE",
+    memo: "엣지타임"
+  }
 );
 
 export class TestSection extends React.Component<any> {
@@ -499,12 +507,13 @@ export class TestSection extends React.Component<any> {
 
                         let selected = this.state.selectedKeys.indexOf(timeRecord.id) > -1 || isIdInSelectedKeys(timeRecord.id, this.state.selectedKeys);
                         const isMatching = timeRecord.match(serverData);
-                        if (isMatching) {
-                          console.log("isMatching", isMatching, timeRecord.getStartDateTime());
-                        }
+                        // if (isMatching) {
+                        //   console.log("isMatching", isMatching, timeRecord.getStartDateTime());
+                        // }
                         // const isMatching = match(serverData, timeRecord, parseDayOfWeek(day.day()));
 
-                        const heightTimes = calculateHeightTimes(serverData, timeRecord, parseDayOfWeek(day.day()));
+                        const heightTimes = timeRecord.calculateHeightTimes(serverData)
+                        // const heightTimes = calculateHeightTimes(serverData, timeRecord, parseDayOfWeek(day.day()));
                         return (
                           <div>
 
