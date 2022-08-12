@@ -3,7 +3,7 @@ import dayjs, {Dayjs} from "dayjs";
 import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
 import moment from "moment";
 import {WeekTimes} from "src/model/WeekTimes";
-import {TimeDto} from "src/dtos/TimeDto";
+import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import {RelativeDay} from "src/model/RelativeDay";
 import Percentage from "src/graphic/size/percentage";
 
@@ -38,6 +38,7 @@ export class TimeRecord {
     this._endDateTime = moment(this._startDateTime).add(1, "hours");
   }
 
+
   public getStartDateTime(): string {
     return this._startDateTime.format("YYYY-MM-DDTHH:mm");
   }
@@ -50,6 +51,10 @@ export class TimeRecord {
     return this._endDateTime.format("YYYY-MM-DDTHH:mm");
   }
 
+  private formatToDateTime(moment: moment.Moment): string {
+    return moment.format("YYYY-MM-DDTHH:mm");
+  }
+
   private static getFormattedDate(day: Dayjs, relativeDay: RelativeDay): string {
     const currentDay = day.add(relativeDay.valueOf(), 'day');
     const year = currentDay.year();
@@ -57,39 +62,6 @@ export class TimeRecord {
     const date = currentDay.date();
 
     return `${year}-${month < 10 ? "0" + month : month}-${date < 10 ? "0" + date : date}`;
-  }
-
-  private static convertToEndDateTime(day: Dayjs, endTime: string): DateTime {
-    const hour: number = Number(endTime.split(":")[0]);
-    if (0 <= hour && hour <= 3) {
-      const tomorrow = day.add(1, 'day')
-      return new DateTime(tomorrow.year() + "-" + this.convertMonth(tomorrow) + "-" + this.convertDate(tomorrow) + "T" + endTime);
-    }
-    return new DateTime(day.year() + "-" + this.convertMonth(day) + "-" + this.convertDate(day) + "T" + endTime);
-  }
-
-  private static convertMonth(day: Dayjs) {
-    if (day.month() + 1 < 10) {
-      return "0" + String(day.month() + 1);
-    }
-    return String(day.month() + 1);
-  }
-
-  private static convertToStartDateTime(day: Dayjs, startTime: string): DateTime {
-    const hour: number = Number(startTime.split(":")[0]);
-    if (0 <= hour && hour <= 2) {
-      const tomorrow = day.add(1, 'day')
-      return new DateTime(tomorrow.year() + "-" + this.convertMonth(tomorrow) + "-" + this.convertDate(tomorrow) + "T" + startTime)
-    }
-
-    return new DateTime(day.year() + "-" + this.convertMonth(day) + "-" + this.convertDate(day) + "T" + startTime)
-  }
-
-  private static convertDate(day: Dayjs) {
-    if (day.date() < 10) {
-      return "0" + String(day.date());
-    }
-    return String(day.date());
   }
 
   getAlias() {
@@ -118,7 +90,7 @@ export class TimeRecord {
       }
     }
 
-    const atSameDate: TimeDto[] | undefined = savedTimes.timesWithinThisWeek.get(this.getStartDate());
+    const atSameDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(this.getStartDate());
     if (atSameDate === undefined) {
       return false;
     }
@@ -133,12 +105,12 @@ export class TimeRecord {
     return false;
   }
 
-  private getLastTimeBeforeTodayFirstTime(savedTimes: WeekTimes): TimeDto {
-    let currentDate = dayjs(this.getStartDate());
-    const firstDateOfThisWeek: Dayjs = this.getFirstDateOfThisWeek(savedTimes);
+  private getLastTimeBeforeTodayFirstTime(savedTimes: WeekTimes): TimeBlockDto {
+    let currentDate = this.getCurrentDate();
+    const firstDateOfThisWeek: Dayjs = TimeRecord.getFirstDateOfThisWeek(savedTimes);
     while (TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY) !== TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY)) {
       const formattedCurrentDate: string = TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY);
-      const timesOfDate: TimeDto[] | undefined = savedTimes.timesWithinThisWeek.get(formattedCurrentDate);
+      const timesOfDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(formattedCurrentDate);
       currentDate = currentDate.subtract(1, 'days');
       if (timesOfDate !== undefined && timesOfDate.length !== 0) {
         return timesOfDate[timesOfDate.length - 1]
@@ -150,7 +122,11 @@ export class TimeRecord {
     return savedTimes.edgeTimeBeforeThisWeek;
   }
 
-  private getFirstDateOfThisWeek(savedTimes: WeekTimes): Dayjs {
+  private getCurrentDate() {
+    return dayjs(this.getStartDate());
+  }
+
+  private static getFirstDateOfThisWeek(savedTimes: WeekTimes): Dayjs {
     let firstDateOfThisWeek: Dayjs | undefined = undefined;
     for (let date of Array.from(savedTimes.timesWithinThisWeek.keys())) {
       const weekDate = dayjs(date);
@@ -165,15 +141,6 @@ export class TimeRecord {
     return firstDateOfThisWeek!;
   }
 
-  private getCandidateToBeFirstTime(atSameDate: TimeDto[]): TimeDto {
-    const firstDateTime: moment.Moment = this.getFirstDateTime();
-    const exTime = moment(firstDateTime).subtract(1, "hours");
-    console.log("firstDateTime", firstDateTime.hours(), exTime.hours());
-    // for (let i = 0; i < 3; )
-
-    return atSameDate[atSameDate.length - 1];
-  }
-
   private getFirstDateTime(): moment.Moment {
     return moment(this.getStartDate() + "T" + TimeRecord.FIRST_TIME);
   }
@@ -182,23 +149,39 @@ export class TimeRecord {
     return this.getStartTime() === TimeRecord.FIRST_TIME;
   }
 
-  public calculateHeightTimes(savedTimes: WeekTimes): Percentage {
-    const edgeTimeBeforeThisWeek = savedTimes.edgeTimeBeforeThisWeek;
-    if (this.isFirstTime() && edgeTimeBeforeThisWeek !== undefined) {
-
-      const edgeTimeEndDateTime: moment.Moment = this.convertEdgeTimeEndDateTime(edgeTimeBeforeThisWeek.endDateTime)
-      // const atSameDate: TimeDto[] | undefined = savedTimes.timesWithinThisWeek.get(this.getStartDate());
-      // if (atSameDate !== undefined && atSameDate.length !== 0) {
-      //   const candidate: TimeDto = atSameDate[atSameDate.length - 1];
-      // }
+  public calculateHeightTimes(savedTimes: WeekTimes, isMatching: boolean): Percentage | undefined {
+    if (!isMatching) {
+      return undefined;
     }
 
-    return new Percentage(100);
+    if (this.isFirstTime()) {
+      const lastTimeBeforeTodayFirstTime = this.getLastTimeBeforeTodayFirstTime(savedTimes);
+      if (lastTimeBeforeTodayFirstTime !== undefined) {
+        const endDateTimeOfLasTimeBeforeTodayFirstTime: moment.Moment =  moment(lastTimeBeforeTodayFirstTime.endDateTime.getDateTime());
+        if (endDateTimeOfLasTimeBeforeTodayFirstTime.isAfter(this.getFirstDateTime())) {
+            return new Percentage(endDateTimeOfLasTimeBeforeTodayFirstTime.diff(this.getFirstDateTime(), 'hours') * 100);
+        }
+      }
+    }
+
+    const todayTimes: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(TimeRecord.getFormattedDate(this.getCurrentDate(), RelativeDay.TODAY));
+    if (todayTimes === undefined) {
+      return undefined;
+    }
+
+    for (let todayTime of todayTimes) {
+      if (this.getStartDateTime() === todayTime.startDateTime.getDateTime()) {
+          const endDateTimeOfTimeBlock: moment.Moment = this.getEndDateTimeOfTimeBlock(todayTime);
+          return new Percentage(endDateTimeOfTimeBlock.diff(this._startDateTime, 'hours') * 100);
+      }
+    }
+
+    return undefined;
   }
 
-  private convertEdgeTimeEndDateTime(endDateTime: DateTime) {
-    const edgeTimeEndDateTime = moment(endDateTime.getDateTime());
-    const maxOfEdgeTime = moment(this.getFirstDateTime()).add(1, 'days').subtract(1, 'hours')
-    return edgeTimeEndDateTime.isBefore(maxOfEdgeTime) ? edgeTimeEndDateTime : maxOfEdgeTime;
+  private getEndDateTimeOfTimeBlock(timeBlock: TimeBlockDto): moment.Moment {
+    const maxEndDateTime: moment.Moment = this.getFirstDateTime();
+    const timeBlockEndDateTime = moment(timeBlock.endDateTime.getDateTime());
+    return timeBlockEndDateTime.isBefore(maxEndDateTime) ? timeBlockEndDateTime : maxEndDateTime;
   }
 }

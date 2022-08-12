@@ -1,14 +1,14 @@
-import {TimeDto} from "src/dtos/TimeDto";
+import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import {WeekTimesDto} from "src/dtos/WeekTimesDto";
 
 export class WeekTimes {
-  constructor(times: Map<string, TimeDto[]>, edgeTimeBeforeThisWeek: TimeDto) {
+  constructor(times: Map<string, TimeBlockDto[]>, edgeTimeBeforeThisWeek: TimeBlockDto) {
     this.timesWithinThisWeek = times;
     this.edgeTimeBeforeThisWeek = edgeTimeBeforeThisWeek;
   }
 
-  timesWithinThisWeek: Map<string, TimeDto[]>;
-  edgeTimeBeforeThisWeek: TimeDto
+  timesWithinThisWeek: Map<string, TimeBlockDto[]>;
+  edgeTimeBeforeThisWeek: TimeBlockDto
 
   //todo: check!!!! tomorrow로 해야할 삘
   // getTimesOfheDayAfterTargetDay(todayDayOfWeek: string): TimeDto[] {
@@ -43,7 +43,7 @@ export class WeekTimes {
   //   throw new Error("이상한 요일입니다.");
   // }
 
-  getTimesOf(todayDayOfWeek: string): TimeDto[] {
+  getTimesOf(todayDayOfWeek: string): TimeBlockDto[] {
     return this.timesWithinThisWeek[todayDayOfWeek];
   }
 }

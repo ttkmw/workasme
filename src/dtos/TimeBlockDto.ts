@@ -1,6 +1,6 @@
 import {DateTime} from "src/model/DateTime";
 
-export interface TimeDto {
+export interface TimeBlockDto {
   readonly title: string;
   readonly startDateTime: DateTime;
   readonly endDateTime: DateTime;

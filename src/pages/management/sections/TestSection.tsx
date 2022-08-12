@@ -10,7 +10,7 @@ import Selectable from "src/pages/management/sections/Selectable";
 import ReactSelectableGroup from "src/pages/management/sections/selectable/react-selectable/ReactSelectableGroup";
 import Percentage from "src/graphic/size/percentage";
 import {WeekTimes} from "src/model/WeekTimes";
-import {TimeDto} from "src/dtos/TimeDto";
+import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import {DateTime} from "src/model/DateTime";
 import dayjs, {Dayjs} from "dayjs";
 import {TimeRecord} from "src/model/TimeRecord";
@@ -67,7 +67,7 @@ const isNodeInRoot = (node, root) => {
   return false;
 };
 
-function exceedsYesterday(lastOfYesterdayData: TimeDto | undefined, comparableRecord: TimeRecord) {
+function exceedsYesterday(lastOfYesterdayData: TimeBlockDto | undefined, comparableRecord: TimeRecord) {
   if (lastOfYesterdayData === undefined) {
     return false;
   }
@@ -79,7 +79,7 @@ function exceedsYesterday(lastOfYesterdayData: TimeDto | undefined, comparableRe
   return lastOfYesterdayData.endDateTime.getDate() === comparableRecord.getEndDate() && comparable.getTime() < endDateTime.getTime();
 }
 
-function getFirstTimeOfTheDayAfterTargetDay(yesterdayData: TimeDto[]): TimeDto {
+function getFirstTimeOfTheDayAfterTargetDay(yesterdayData: TimeBlockDto[]): TimeBlockDto {
   return yesterdayData[0];
 }
 
@@ -236,7 +236,7 @@ function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
 }
 
 const serverData: WeekTimes = new WeekTimes(
-  new Map<string, TimeDto[]>([
+  new Map<string, TimeBlockDto[]>([
     ["2022-08-07", []],
     ["2022-08-08", [
       {
@@ -262,7 +262,7 @@ const serverData: WeekTimes = new WeekTimes(
       {
         title: "코딩함",
         startDateTime: new DateTime("2022-08-10T01:00"),
-        endDateTime: new DateTime("2022-08-10T04:00"),
+        endDateTime: new DateTime("2022-08-10T05:00"),
         isGood: true,
         category: "INTELLECTUAL",
         memo: undefined
@@ -512,7 +512,7 @@ export class TestSection extends React.Component<any> {
                         // }
                         // const isMatching = match(serverData, timeRecord, parseDayOfWeek(day.day()));
 
-                        const heightTimes = timeRecord.calculateHeightTimes(serverData)
+                        const heightTimes = timeRecord.calculateHeightTimes(serverData, isMatching)
                         // const heightTimes = calculateHeightTimes(serverData, timeRecord, parseDayOfWeek(day.day()));
                         return (
                           <div>

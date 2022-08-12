@@ -1,14 +1,14 @@
-import {TimeDto} from "src/dtos/TimeDto";
+import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 
 export interface WeekTimesDto {
   readonly week: {
-    "SUNDAY": TimeDto[],
-    "MONDAY": TimeDto[],
-    "TUESDAY": TimeDto[],
-    "WEDNESDAY": TimeDto[],
-    "THURSDAY": TimeDto[],
-    "FRIDAY": TimeDto[],
-    "SATURDAY": TimeDto[],
-    "NEXT_SUNDAY": TimeDto[],
+    "SUNDAY": TimeBlockDto[],
+    "MONDAY": TimeBlockDto[],
+    "TUESDAY": TimeBlockDto[],
+    "WEDNESDAY": TimeBlockDto[],
+    "THURSDAY": TimeBlockDto[],
+    "FRIDAY": TimeBlockDto[],
+    "SATURDAY": TimeBlockDto[],
+    "NEXT_SUNDAY": TimeBlockDto[],
   }
 }
