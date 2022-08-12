@@ -112,11 +112,21 @@ export class TimeRecord {
       const formattedCurrentDate: string = TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY);
       const timesOfDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(formattedCurrentDate);
       currentDate = currentDate.subtract(1, 'days');
-      if (timesOfDate !== undefined && timesOfDate.length !== 0) {
-        return timesOfDate[timesOfDate.length - 1]
-      } else {
+
+      if (timesOfDate === undefined || timesOfDate.length === 0) {
         currentDate = currentDate.subtract(1, 'days');
+        continue;
       }
+
+      for (let timeOfDate of timesOfDate) {
+        if (moment(timeOfDate.startDateTime.getDateTime()).isBefore(this.getFirstDateTime())
+          && moment(timeOfDate.endDateTime.getDateTime()).isAfter(this.getFirstDateTime())
+        ) {
+          return timeOfDate;
+        }
+      }
+
+
     }
 
     return savedTimes.edgeTimeBeforeThisWeek;
@@ -172,6 +182,7 @@ export class TimeRecord {
     for (let todayTime of todayTimes) {
       if (this.getStartDateTime() === todayTime.startDateTime.getDateTime()) {
           const endDateTimeOfTimeBlock: moment.Moment = this.getEndDateTimeOfTimeBlock(todayTime);
+          console.log("getStartDateTime", todayTime.startDateTime.getDateTime(), endDateTimeOfTimeBlock);
           return new Percentage(endDateTimeOfTimeBlock.diff(this._startDateTime, 'hours') * 100);
       }
     }
@@ -180,8 +191,12 @@ export class TimeRecord {
   }
 
   private getEndDateTimeOfTimeBlock(timeBlock: TimeBlockDto): moment.Moment {
-    const maxEndDateTime: moment.Moment = this.getFirstDateTime();
+    const maxEndDateTime: moment.Moment = this.getMaxEndDateTime();
     const timeBlockEndDateTime = moment(timeBlock.endDateTime.getDateTime());
     return timeBlockEndDateTime.isBefore(maxEndDateTime) ? timeBlockEndDateTime : maxEndDateTime;
+  }
+
+  private getMaxEndDateTime() {
+    return this._startDateTime.isBefore(this.getFirstDateTime()) ? this.getFirstDateTime() : this.getFirstDateTime().add(1, "days");
   }
 }

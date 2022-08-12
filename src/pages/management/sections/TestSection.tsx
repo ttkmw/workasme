@@ -247,6 +247,14 @@ const serverData: WeekTimes = new WeekTimes(
         category: "SOCIAL",
         memo: undefined
       },
+      {
+        title: "일했지",
+        startDateTime: new DateTime("2022-08-08T15:00"),
+        endDateTime: new DateTime("2022-08-08T19:00"),
+        isGood: false,
+        category: "INTELLECTUAL",
+        memo: undefined
+      },
     ]],
     ["2022-08-09", [
       {
@@ -263,6 +271,14 @@ const serverData: WeekTimes = new WeekTimes(
         title: "코딩함",
         startDateTime: new DateTime("2022-08-10T01:00"),
         endDateTime: new DateTime("2022-08-10T05:00"),
+        isGood: true,
+        category: "INTELLECTUAL",
+        memo: undefined
+      },
+      {
+        title: "카페에 왔다",
+        startDateTime: new DateTime("2022-08-10T10:00"),
+        endDateTime: new DateTime("2022-08-10T13:00"),
         isGood: true,
         category: "INTELLECTUAL",
         memo: undefined
@@ -286,6 +302,28 @@ const serverData: WeekTimes = new WeekTimes(
         isGood: false,
         category: "SPIRITUAL",
         memo: "개운하다"
+      },
+    ]],
+
+    ["2022-08-13", [
+      {
+        title: "잠을 뒤척임",
+        startDateTime: new DateTime("2022-08-13T02:00"),
+        endDateTime: new DateTime("2022-08-13T05:00"),
+        isGood: false,
+        category: "NONE",
+        memo: "힘들다"
+      },
+    ]],
+
+    ["2022-08-14", [
+      {
+        title: "잠을 뒤척임",
+        startDateTime: new DateTime("2022-08-14T00:00"),
+        endDateTime: new DateTime("2022-08-14T05:00"),
+        isGood: false,
+        category: "NONE",
+        memo: "힘들다"
       },
     ]]
   ]),
