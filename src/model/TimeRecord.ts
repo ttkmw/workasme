@@ -82,11 +82,12 @@ export class TimeRecord {
 
   public match(savedTimes: WeekTimes) {
     if (this.isFirstTime()) {
-      const lastTimeBeforeTodayFirstTime = this.getLastTimeBeforeTodayFirstTime(savedTimes);
+      const lastTimeBeforeTodayFirstTime = this.getEdgeTimeOfDay(savedTimes);
       if (lastTimeBeforeTodayFirstTime !== undefined) {
-        if (moment(lastTimeBeforeTodayFirstTime.endDateTime.getDateTime()).isAfter(this.getFirstDateTime())) {
-          return true;
-        }
+        return true;
+        // if (moment(lastTimeBeforeTodayFirstTime.endDateTime.getDateTime()).isAfter(this.getFirstDateTime())) {
+        //
+        // }
       }
     }
 
@@ -105,7 +106,7 @@ export class TimeRecord {
     return false;
   }
 
-  private getLastTimeBeforeTodayFirstTime(savedTimes: WeekTimes): TimeBlockDto {
+  private getEdgeTimeOfDay(savedTimes: WeekTimes): TimeBlockDto {
     let currentDate = this.getCurrentDate();
     const firstDateOfThisWeek: Dayjs = TimeRecord.getFirstDateOfThisWeek(savedTimes);
     while (TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY) !== TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY)) {
@@ -125,8 +126,6 @@ export class TimeRecord {
           return timeOfDate;
         }
       }
-
-
     }
 
     return savedTimes.edgeTimeBeforeThisWeek;
@@ -165,11 +164,11 @@ export class TimeRecord {
     }
 
     if (this.isFirstTime()) {
-      const lastTimeBeforeTodayFirstTime = this.getLastTimeBeforeTodayFirstTime(savedTimes);
-      if (lastTimeBeforeTodayFirstTime !== undefined) {
-        const endDateTimeOfLasTimeBeforeTodayFirstTime: moment.Moment =  moment(lastTimeBeforeTodayFirstTime.endDateTime.getDateTime());
-        if (endDateTimeOfLasTimeBeforeTodayFirstTime.isAfter(this.getFirstDateTime())) {
-            return new Percentage(endDateTimeOfLasTimeBeforeTodayFirstTime.diff(this.getFirstDateTime(), 'hours') * 100);
+      const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes);
+      if (edgeTimeOfDay !== undefined) {
+        const endDateTimeOfEdgeTime: moment.Moment =  moment(edgeTimeOfDay.endDateTime.getDateTime());
+        if (endDateTimeOfEdgeTime.isAfter(this.getFirstDateTime())) {
+            return new Percentage(endDateTimeOfEdgeTime.diff(this.getFirstDateTime(), 'hours') * 100);
         }
       }
     }

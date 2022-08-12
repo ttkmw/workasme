@@ -237,7 +237,16 @@ function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
 
 const serverData: WeekTimes = new WeekTimes(
   new Map<string, TimeBlockDto[]>([
-    ["2022-08-07", []],
+    ["2022-08-07", [
+      {
+        title: "엣지타임",
+        startDateTime: new DateTime("2022-08-06T23:00"),
+        endDateTime: new DateTime("2022-08-07T04:00"),
+        isGood: true,
+        category: "NONE",
+        memo: "엣지타임"
+      }
+    ]],
     ["2022-08-08", [
       {
         title: "영홥 보고 친구랑 잠깐 수다떨음",
