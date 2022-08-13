@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import ReactDOM from 'react-dom';
 import FocusTrap from 'focus-trap-react';
-import Form from "src/pages/management/sections/Form";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -11,6 +10,7 @@ import colors from "src/constants/Colors";
 import {MdNavigateBefore} from "react-icons/md";
 import {IoMdClose} from "react-icons/all";
 import {TimeRecord} from "src/model/TimeRecord";
+import TimeBlockRegisterForm from "src/pages/components/timeblock/TimeBlockRegisterForm";
 
 interface ModalProps {
   onClickOutside: (e) => void,
@@ -18,9 +18,7 @@ interface ModalProps {
   modalRef: (n) => void,
   buttonRef: (n) => void,
   closeModal: (e) => void,
-  onSubmit: (e) => void,
-  earliestRecord: TimeRecord,
-  latestRecord: TimeRecord
+  children: ReactNode;
 }
 
 export const Modal = ({
@@ -29,9 +27,7 @@ export const Modal = ({
                         modalRef,
                         buttonRef,
                         closeModal,
-                        onSubmit,
-                        earliestRecord,
-                        latestRecord
+                        children
                       }: ModalProps) => {
   return ReactDOM.createPortal(
     <FocusTrap>
@@ -113,10 +109,9 @@ export const Modal = ({
               {/*<span id="close-modal" className="_hide-visual">*/}
               {/*  Close*/}
               {/*</span>*/}
-              <IoMdClose css={css({
-
-              })} size={new Pixel(25).toString()} color={colors.theme.table.outLine} onClick={() => {
-              }}/>
+              <IoMdClose css={css({})} size={new Pixel(25).toString()} color={colors.theme.table.outLine}
+                         onClick={() => {
+                         }}/>
               {/*<svg className="_modal-close-icon" viewBox="0 0 40 40">*/}
               {/*  <path d="M 10,10 L 30,30 M 30,10 L 10,30"/>*/}
               {/*</svg>*/}
@@ -126,7 +121,7 @@ export const Modal = ({
           <div css={css({
             marginTop: "16px"
           })}>
-            <Form onSubmit={onSubmit} earliestRecord={earliestRecord} latestRecord={latestRecord}/>
+            {children}
           </div>
         </div>
       </aside>

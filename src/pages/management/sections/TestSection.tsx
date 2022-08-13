@@ -5,7 +5,6 @@ import {css, jsx} from "@emotion/react";
 
 import {createSelectable} from 'react-selectable';
 
-import Modal from "src/pages/management/sections/Mordal";
 import Selectable from "src/pages/management/sections/Selectable";
 import ReactSelectableGroup from "src/pages/management/sections/selectable/react-selectable/ReactSelectableGroup";
 import Percentage from "src/graphic/size/percentage";
@@ -24,6 +23,8 @@ import CheckBox from "src/pages/management/sections/parts/components/box/CheckBo
 import fontConfig from "src/graphic/text/font";
 import NumberBox from "src/pages/management/sections/parts/components/box/NumberBox";
 import {RelativeDay} from "src/model/RelativeDay";
+import Modal from "src/pages/components/Mordal";
+import TimeBlockRegisterForm from "src/pages/components/timeblock/TimeBlockRegisterForm";
 
 
 const SelectableComponent = createSelectable(Selectable);
@@ -349,6 +350,32 @@ const serverData: WeekTimes = new WeekTimes(
   undefined
 );
 
+function onRegister() {
+  return e => {
+    let title = e.currentTarget[0];
+    let startDate = e.currentTarget[1];
+    let startTime = e.currentTarget[2];
+    let endDate = e.currentTarget[3];
+    let endTime = e.currentTarget[4];
+    let isGood = e.currentTarget[5];
+    let category = e.currentTarget[6];
+
+    assertIsFormFieldElement(title);
+    assertIsFormFieldElement(startDate);
+    assertIsFormFieldElement(startTime);
+    assertIsFormFieldElement(endDate);
+
+    console.log("title", title, title.value);
+    console.log("startDate", startDate, startDate.value);
+    console.log("startTime", startTime, startTime.value);
+    console.log("endDate", endDate, endTime.value);
+    console.log("isGood", isGood, isGood.checked);
+    console.log("category", category, category.value)
+
+
+  };
+}
+
 export class TestSection extends React.Component<any> {
   selectableRef;
   state;
@@ -563,7 +590,6 @@ export class TestSection extends React.Component<any> {
             </div>
 
 
-
           </div>
         </div>
         <ReactSelectableGroup onSelection={this.handleSelection}
@@ -639,38 +665,14 @@ export class TestSection extends React.Component<any> {
 
             this.state.isShown ? (
               <Modal
-                onSubmit={e => {
-                  let title = e.currentTarget[0];
-                  let startDate = e.currentTarget[1];
-                  let startTime = e.currentTarget[2];
-                  let endDate = e.currentTarget[3];
-                  let endTime = e.currentTarget[4];
-                  let isGood = e.currentTarget[5];
-                  let category = e.currentTarget[6];
-
-                  assertIsFormFieldElement(title);
-                  assertIsFormFieldElement(startDate);
-                  assertIsFormFieldElement(startTime);
-                  assertIsFormFieldElement(endDate);
-
-                  console.log("title", title, title.value);
-                  console.log("startDate", startDate, startDate.value);
-                  console.log("startTime", startTime, startTime.value);
-                  console.log("endDate", endDate, endTime.value);
-                  console.log("isGood", isGood, isGood.checked);
-                  console.log("category", category, category.value)
-
-
-                }}
-
                 modalRef={(n: any) => (this.modal = n)}
                 buttonRef={(n: any) => (this.closeButton = n)}
                 closeModal={this.onClose}
                 onKeyDown={this.onKeyDown}
                 onClickOutside={this.onClickOutside}
-                earliestRecord={earliestRecord}
-                latestRecord={latestRecord}
-              />
+              >
+                <TimeBlockRegisterForm onSubmit={onRegister} earliestRecord={earliestRecord} latestRecord={latestRecord}/>
+              </Modal>
             ) : null}
         </React.Fragment>
 

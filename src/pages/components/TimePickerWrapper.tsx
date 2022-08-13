@@ -14,7 +14,6 @@ const TimePickerWrapper: React.FC<{dateTime: DateTime}> = (props:{dateTime: Date
   const [dispatchTime, setDispatchTime] = useState(moment(dateTime.getDateTime()));
   const handleValueChange = (value) => {
     setDispatchTime(value);
-    console.log("value" + value);
   };
 
   return (

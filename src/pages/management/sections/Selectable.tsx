@@ -7,9 +7,8 @@ import Pixel from "src/graphic/size/pixel";
 import Percentage from "src/graphic/size/percentage";
 import {ReactSelectableComponentProps} from "react-selectable";
 import Colors from "src/constants/Colors";
-import assert from "assert";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
-import TimeBlock from "src/pages/components/TimeBlock";
+import TimeBlock from "src/pages/components/timeblock/TimeBlock";
 
 interface SelectableProps extends ReactSelectableComponentProps {
   selectableRef: any,
@@ -31,26 +30,27 @@ class Selectable extends Component<SelectableProps> {
   render() {
     const {selectableRef, isSelected, isMatching, timeBlockDto, timeBlockHeightRatio, timeCellHeight} = this.props
 
+    return <div
+      css={css({
+        ".unselected": {
+          backgroundColor: "white",
+          borderBottom: 1,
+          borderBottomStyle: "solid",
+          borderBottomColor: Colors.theme.table.innerLine,
+        },
+        ".selected": {
+          backgroundColor: Colors.theme.main.workTimeBlock,
 
-    return <div css={css({
-      ".unselected": {
-        backgroundColor: "white",
-        borderBottom: 1,
-        borderBottomStyle: "solid",
-        borderBottomColor: Colors.theme.table.innerLine,
-      },
-      ".selected": {
-        backgroundColor: Colors.theme.main.workTimeBlock,
+          borderBottom: 0
+        }
+      })}
 
-        borderBottom: 0
-      }
-    })}>
+    >
       <div className={!isSelected ? 'unselected' : 'selected'} css={css({
         position: "relative",
-        // width: this.width.toString(),
         height: timeCellHeight.toString(),
-        // margin: "30px",
-      })} ref={selectableRef}>
+      })} ref={selectableRef}
+      >
         {this.props.children}
         <TimeBlock isMatching={isMatching} timeBlockDto={timeBlockDto} timeCellHeight={timeCellHeight}
                    timeBlockHeightRatio={timeBlockHeightRatio}/>

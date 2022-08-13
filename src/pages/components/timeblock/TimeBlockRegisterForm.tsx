@@ -8,10 +8,6 @@ import TimePicker from "src/pages/components/TimePicker";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
 import '../../../index.css';
-import Select, { components } from 'react-select'
-import {IoMdClose} from "react-icons/all";
-import TimePickerWrapper from "src/pages/components/TimePickerWrapper";
-import dayjs from "dayjs";
 import {TimeRecord} from "src/model/TimeRecord";
 
 interface FormProps {
@@ -20,27 +16,10 @@ interface FormProps {
   latestRecord: TimeRecord
 }
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
-]
-
-const DropdownIndicator = (
-  props: any
-) => {
-  return (
-    <components.DropdownIndicator {...props}>
-      <IoMdClose />
-    </components.DropdownIndicator>
-  );
-};
-
 
 const mins = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"];
 //https://stackoverflow.com/questions/45283030/html5-input-type-time-without-am-pm-and-with-min-max
-export const Form: React.FC<FormProps> = (props: FormProps) => {
-  const showSecond = true;
+export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => {
   const {onSubmit, earliestRecord, latestRecord} = props;
   const [isGood, setIsGood] = useState(false)
   const toggleIsGood = () => setIsGood(!isGood)
@@ -216,14 +195,10 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           <span className="slider round"/>
         </label>
       </div>
-      {/*<Select components={{DropdownIndicator}} options={options} />*/}
-      {/**/}
-      {/*https://github.com/JedWatson/react-select/issues/3493*/}
       <div className="form-group" css={css({
         ".select_box": {
           width: "120px",
           overflow: "hidden",
-          // border: `1px solid ${Colors.theme.form.border.default}`,
           "-moz-box-shadow": "0 4px 6px -6px #222",
           "-webkit-box-shadow": "0 4px 6px -6px #222",
           "box-shadow": "0px 4px 6px -6px #222",
@@ -232,21 +207,6 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
         },
 
 
-        // ".select_box:after": {
-        //   width: 0,
-        //   height: 0,
-        //   "border-left": "5px solid transparent",
-        //   "border-right": "5px solid transparent",
-        //   "border-top": `5px solid ${Colors.theme.main.work}`,
-        //   position: "absolute",
-        //   top: "40%",
-        //   right: "10px",
-        //   content: '""',
-        //   "z-index": 98,
-        //   // "-moz-box-shadow": "0 4px 6px -6px #222",
-        //   // "-webkit-box-shadow": "0 4px 6px -6px #222",
-        //   // "box-shadow": "0 4px 6px 100px #222",
-        // },
         ".select_box select": {
           width: "120px",
           border: 0,
@@ -263,8 +223,6 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
           display: "flex",
           justifyContent: "flex-end",
           paddingRight: "30px",
-          // lineHeight: "24px",
-          // height: "24px"
         })} className="input-key" htmlFor="category">category</label>
 
         <div className="select_box">
@@ -346,4 +304,4 @@ export const Form: React.FC<FormProps> = (props: FormProps) => {
     </form>
   );
 };
-export default Form;
+export default TimeBlockRegisterForm;

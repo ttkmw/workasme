@@ -103,7 +103,6 @@ export class TimeRecord {
   }
 
   public match(savedTimes: WeekTimes, standardDate: Dayjs) {
-    console.log("standardDate", TimeRecord.getFormattedDate(standardDate, RelativeDay.TODAY))
     if (this.isFirstTime()) {
       const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes, standardDate);
       if (edgeTimeOfDay !== undefined) {
@@ -133,7 +132,6 @@ export class TimeRecord {
     let currentDate = this.getCurrentDate();
     const firstDateOfThisWeek: Dayjs = TimeRecord.getFirstDateOfThisWeek(standardDate);
     while (TimeRecord.getFormattedDate(currentDate, RelativeDay.YESTERDAY) !== TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY) && firstDateOfThisWeek.isBefore(currentDate.add(1, "days"))) {
-      console.log("currentDate, firstDateOfThisWeek", TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY), TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY));
       const formattedCurrentDate: string = TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY);
       const timeBlocksOfDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(formattedCurrentDate);
 
