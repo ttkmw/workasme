@@ -474,33 +474,39 @@ export class TestSection extends React.Component<any> {
             display: "flex",
             flexDirection: "row",
             position: "relative",
-            left: 17
+            left: 17,
+            marginTop: 25,
+            marginBottom: 25
           })}>
-            <MdNavigateBefore size={new Pixel(50).toString()} color={colors.theme.navigator.default} onClick={() => {
-              this.setState({
-                // todo: while이 문제인듯
-                standardDate: this.state.standardDate.subtract(7, 'day')
-              });
+            <div css={css({
+              display: "flex",
+              alignItems: "center",
+            })}>
+              <MdNavigateBefore size={new Pixel(40).toString()} color={colors.theme.navigator.default} onClick={() => {
+                this.setState({
+                  // todo: while이 문제인듯
+                  standardDate: this.state.standardDate.subtract(7, 'day')
+                });
+              }}/>
+            </div>
 
-              // console.log("kkkkjakldfjladjklda")
-            }}/>
             <div css={css({
               display: "flex",
               alignItems: "center",
               '.button': {
-                backgroundColor: Colors.theme.main.work,
+                backgroundColor: "transparent",
                 border: "none",
-                color: Colors.theme.button.default,
-              },
-              '.button:hover': {
-                color: Colors.theme.main.orgasme
+                color: Colors.theme.main.work
+
               }
             })}>
               <button
                 css={css({
-                  width: new Pixel(100).toString(),
+                  width: new Pixel(70).toString(),
                   borderRadius: 10,
-                  height: new Pixel(30).toString()
+                  height: new Pixel(30).toString(),
+                  fontFamily: "ObjectSans-Regular",
+
                 })}
                 className={"button"}
                 onClick={() => {
@@ -512,16 +518,19 @@ export class TestSection extends React.Component<any> {
               </button>
             </div>
 
+            <div css={css({
+              display: "flex",
+              alignItems: "center"
+            })}>
+              <MdNavigateNext css={css({})} size={new Pixel(40).toString()} color={colors.theme.navigator.default}
+                              onClick={() => {
+                                this.setState({
+                                  standardDate: this.state.standardDate.add(7, 'day')
+                                });
+                              }}/>
+            </div>
 
-            <MdNavigateNext css={css({})} size={new Pixel(50).toString()} color={colors.theme.navigator.default}
-                            onClick={() => {
-                              this.setState({
-                                standardDate: dayjs(this.state.standardDate.add(7, 'day'))
-                              });
 
-                              console.log("kqwwjerlqjekqler")
-                              console.log();
-                            }}/>
           </div>
         </div>
         <ReactSelectableGroup onSelection={this.handleSelection}
@@ -700,7 +709,8 @@ const DateGuide: React.FC<{ day: Dayjs }> = (props: { day: Dayjs }) => {
     paddingLeft: "5px",
     display: 'flex',
     justifyContent: "space-between",
-    fontSize: "12px"
+    fontSize: "12px",
+    fontFamily: fontConfig.web.medium.fontFamily
   })}>
     <div css={css({
       // width: "50%",
