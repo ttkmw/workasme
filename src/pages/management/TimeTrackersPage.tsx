@@ -213,14 +213,15 @@ const TimeTrackersPage: React.FC = () => {
             }
           `}
       </style>
-      <Tabs className="navlink-custom" defaultActiveKey="monthly" id="management">
-        <Tab className="navtab-custom"  eventKey="monthly" title="Monthly">
-          <TestSection items={items}/>
-        </Tab>
-        <Tab eventKey="weekly" title="Weekly">
-          <WeeklySection/>
-        </Tab>
-      </Tabs>
+      {/*<Tabs className="navlink-custom" defaultActiveKey="monthly" id="management">*/}
+      {/*  <Tab className="navtab-custom"  eventKey="monthly" title="Monthly">*/}
+      {/*    <TestSection items={items}/>*/}
+      {/*  </Tab>*/}
+      {/*  <Tab eventKey="weekly" title="Weekly">*/}
+      {/*    <WeeklySection/>*/}
+      {/*  </Tab>*/}
+      {/*</Tabs>*/}
+      <TestSection items={items}/>
     </>
 
   </Container>

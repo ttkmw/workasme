@@ -475,7 +475,6 @@ export class TestSection extends React.Component<any> {
             flexDirection: "row",
             position: "relative",
             // left: 17,
-            marginTop: 25,
             marginBottom: 25,
             ".arrow-prev, .arrow-next": {
               position: "relative",
@@ -491,8 +490,8 @@ export class TestSection extends React.Component<any> {
               content: '""',
               width: "15px", /* 사이즈 */
               height: "15px", /* 사이즈 */
-              "border-top": `4px solid ${Colors.theme.main.work}`, /* 선 두께 */
-              "border-right": `4px solid ${Colors.theme.main.work}`, /* 선 두께 */
+              "border-top": `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
+              "border-right": `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
               transform: "rotate(225deg)", /* 각도 */
             },
 
@@ -504,8 +503,8 @@ export class TestSection extends React.Component<any> {
               content: '""',
               width: "15px", /* 사이즈 */
               height: "15px", /* 사이즈 */
-              "border-top": `4px solid ${Colors.theme.main.work}`, /* 선 두께 */
-              "border-right": `4px solid ${Colors.theme.main.work}`, /* 선 두께 */
+              "border-top": `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
+              "border-right": `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
               transform: "rotate(45deg)", /* 각도 */
             }
           })}>
@@ -519,33 +518,29 @@ export class TestSection extends React.Component<any> {
                   standardDate: this.state.standardDate.subtract(7, 'day')
                 });
               }}/>
-
-              {/*<MdNavigateBefore size={new Pixel(40).toString()} color={colors.theme.navigator.default} onClick={() => {*/}
-              {/*  this.setState({*/}
-              {/*    // todo: while이 문제인듯*/}
-              {/*    standardDate: this.state.standardDate.subtract(7, 'day')*/}
-              {/*  });*/}
-              {/*}}/>*/}
             </div>
 
             <div css={css({
               display: "flex",
               alignItems: "center",
               '.button': {
-                backgroundColor: Colors.theme.main.work,
-                border: "none",
-                color: "white",
+                backgroundColor: "transparent",
+                borderRadius: 10,
+                borderWidth: "2px",
+                borderColor: Colors.theme.text.box.default,
+                borderStyle: "solid",
+                // border: "2px solid #4CAF50",
+                color: Colors.theme.text.box.default,
                 paddingLeft: 0,
                 paddingRight: 0,
-
               }
             })}>
               <button
                 css={css({
                   width: new Pixel(60).toString(),
-                  borderRadius: 10,
+
                   height: new Pixel(30).toString(),
-                  fontFamily: fontConfig.web.light.fontFamily,
+                  fontFamily: fontConfig.web.medium.fontFamily,
 
                 })}
                 className={"button"}
