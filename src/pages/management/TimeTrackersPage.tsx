@@ -11,13 +11,13 @@ import Colors from "src/constants/Colors";
 import WeeklySection from "src/pages/management/sections/WeeklySection";
 import Percentage from "src/graphic/size/percentage";
 import TestSection from "src/pages/management/sections/TestSection";
+import Header from "src/pages/components/bars/navigation/Header";
 
 const TimeTrackersPage: React.FC = () => {
 
   return <Container css={css({
   })}>
     <>
-
       <style > {`
             .navlink-custom > a:hover {
                 color: ${Colors.theme.text.tab.disabled};
@@ -35,6 +35,7 @@ const TimeTrackersPage: React.FC = () => {
       {/*    <WeeklySection/>*/}
       {/*  </Tab>*/}
       {/*</Tabs>*/}
+      <Header />
       <TestSection/>
     </>
 

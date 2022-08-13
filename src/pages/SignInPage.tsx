@@ -1,10 +1,12 @@
-import React from "react";
+import React, {Fragment} from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
 import Title from "src/pages/components/Title";
+import Container from "react-bootstrap/Container";
+import {LinkContainer} from "react-router-bootstrap";
 
 const SignInSection: React.FC = () => {
   return <div>
@@ -50,28 +52,30 @@ const SignInSection: React.FC = () => {
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(14).toString()
       })} placeholder={"password"} id={"sign-in-password"}/>
+      <LinkContainer to={"/time-track"}>
+        <div css={css({
+          display: "flex",
+          alignItems: "center",
+          '.button-work': {
+            backgroundColor: Colors.theme.main.work,
+            border: "none",
+            color: Colors.theme.button.default,
+          },
 
-      <div css={css({
-        display: "flex",
-        alignItems: "center",
-        '.button-work': {
-          backgroundColor: Colors.theme.main.work,
-          border: "none",
-          color: Colors.theme.button.default,
-        },
+        })}>
+          <button
+            css={css({
+              width: new Pixel(280).toString(),
+              borderRadius: 7,
+              height: new Pixel(30).toString(),
+              marginBottom: new Pixel(20).toString()
+            })}
+            className={'button-work'}
+            type={"submit"}
+          >sign in</button>
+        </div>
+      </LinkContainer>
 
-      })}>
-        <button
-          css={css({
-            width: new Pixel(280).toString(),
-            borderRadius: 7,
-            height: new Pixel(30).toString(),
-            marginBottom: new Pixel(20).toString()
-          })}
-          className={'button-work'}
-          type={"submit"}
-        >sign in</button>
-      </div>
     </div>
     <div css={css({
       width: new Pixel(380).toString(),
@@ -88,10 +92,13 @@ const SignInSection: React.FC = () => {
       <span css={css({
         paddingRight: new Pixel(7).toString()
       })}>no account yet?</span>
-      <span css={css({
-        fontFamily: "ObjectSans-HeavySlanted",
-        color: Colors.theme.main.work
-      })}> Join us</span>
+      <LinkContainer to={"/sign-up"}>
+        <span css={css({
+          fontFamily: "ObjectSans-HeavySlanted",
+          color: Colors.theme.main.work
+        })}> Join us</span>
+      </LinkContainer>
+
 
     </div>
 
@@ -100,11 +107,13 @@ const SignInSection: React.FC = () => {
 
 const SignInPage: React.FC = () => {
   return <div css={css({
+    height: "100vh",
     fontFamily: "ObjectSans-Slanted",
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    width: "100vw",
   })}>
     <div css={css({
       width: 500,
@@ -128,6 +137,7 @@ const Description: React.FC = () => {
     fontSize: new Pixel(18).value,
     paddingLeft: new Pixel(24).value,
     paddingRight: new Pixel(24).value,
+    minWidth: "500px"
   })}>
     <span>Make a goal, record, feedback.</span><br/>
     <span>You will definitely achieve your goal and feel good.</span><br/>

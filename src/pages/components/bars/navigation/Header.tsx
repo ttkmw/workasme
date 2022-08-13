@@ -39,11 +39,8 @@ const Menus: React.FC<{ isSigned: boolean }> = (props: { isSigned: boolean }) =>
       }
     }
   })}>
-    <LinkContainer to={"/time-trackers"}>
+    <LinkContainer to={"/time-track"}>
       <Nav.Link className={"menu-name"}>Time Track</Nav.Link>
-    </LinkContainer>
-    <LinkContainer to={"/sign-up"}>
-      <Nav.Link className={"menu-name"}>Sign In</Nav.Link>
     </LinkContainer>
   </div>
 

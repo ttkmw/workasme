@@ -5,6 +5,7 @@ import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Title from "src/pages/components/Title";
 import Colors from "src/constants/Colors";
+import {LinkContainer} from "react-router-bootstrap";
 
 
 
@@ -14,10 +15,11 @@ const SignUpPage: React.FC = () => {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    width: "100vw",
+    height: "100vh"
   })}>
     <SignUpSection/>
-
   </div>
 }
 
@@ -78,27 +80,30 @@ const SignUpSection: React.FC = () => {
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(14).toString()
       })} placeholder={"nickname"} id={"nickname"}/>
-      <div css={css({
-        display: "flex",
-        alignItems: "center",
-        '.button-work': {
-          backgroundColor: Colors.theme.main.work,
-          border: "none",
-          color: Colors.theme.button.default,
-        },
+      <LinkContainer to={"/time-track"}>
+        <div css={css({
+          display: "flex",
+          alignItems: "center",
+          '.button-work': {
+            backgroundColor: Colors.theme.main.work,
+            border: "none",
+            color: Colors.theme.button.default,
+          },
 
-      })}>
-        <button
-          css={css({
-            width: new Pixel(280).toString(),
-            borderRadius: 7,
-            height: new Pixel(30).toString(),
-            marginBottom: new Pixel(20).toString()
-          })}
-          className={'button-work'}
-          type={"submit"}
-        >sign up</button>
-      </div>
+        })}>
+          <button
+            css={css({
+              width: new Pixel(280).toString(),
+              borderRadius: 7,
+              height: new Pixel(30).toString(),
+              marginBottom: new Pixel(20).toString()
+            })}
+            className={'button-work'}
+            type={"submit"}
+          >sign up</button>
+        </div>
+      </LinkContainer>
+
     </div>
     <div css={css({
       width: new Pixel(380).toString(),
@@ -115,10 +120,13 @@ const SignUpSection: React.FC = () => {
       <span css={css({
         paddingRight: new Pixel(7).toString()
       })}>has account already?</span>
-      <span css={css({
-        fontFamily: "ObjectSans-HeavySlanted",
-        color: Colors.theme.main.work
-      })}> Sign in</span>
+      <LinkContainer to={"/"}>
+        <span css={css({
+          fontFamily: "ObjectSans-HeavySlanted",
+          color: Colors.theme.main.work
+        })}> Sign in</span>
+      </LinkContainer>
+
 
     </div>
   </div>;
