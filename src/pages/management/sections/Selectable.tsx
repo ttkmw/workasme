@@ -9,6 +9,7 @@ import {ReactSelectableComponentProps} from "react-selectable";
 import Colors from "src/constants/Colors";
 import assert from "assert";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
+import TimeBlock from "src/pages/components/TimeBlock";
 
 interface SelectableProps extends ReactSelectableComponentProps {
   selectableRef: any,
@@ -51,47 +52,13 @@ class Selectable extends Component<SelectableProps> {
         // margin: "30px",
       })} ref={selectableRef}>
         {this.props.children}
-        {Selectable.getTimeBlock(isMatching, timeBlockDto, timeCellHeight, timeBlockHeightRatio)}
+        <TimeBlock isMatching={isMatching} timeBlockDto={timeBlockDto} timeCellHeight={timeCellHeight}
+                   timeBlockHeightRatio={timeBlockHeightRatio}/>
       </div>
     </div>;
-
-    // timeCellHeight.multiply(timeBlockHeightRatio == null ? new Percentage(100) : timeBlockHeightRatio)
-  }
-
-  private static getTimeBlock(isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage) {
-
-
-    if (isMatching && timeBlockDto !== undefined && timeBlockHeightRatio !== undefined) {
-      // height.minus(new Pixel(6)).toString(),
-      return <div css={css({
-        width: "95%",
-        height: timeCellHeight.multiply(timeBlockHeightRatio!).minus(new Pixel(6)).toString(),
-        position: "absolute",
-        top: new Pixel(3).toString(),
-        left: "2.5%",
-        background: timeBlockDto!.isGood ? Colors.theme.main.orgasmTimeBLock : Colors.theme.main.workTimeBlock,
-        zIndex: 9,
-        color: timeBlockDto!.isGood ? Colors.theme.main.orgasme : Colors.theme.main.work,
-        paddingLeft: "25px",
-        paddingRight: "5px",
-        paddingTop: "3px",
-        fontSize: "12px",
-        fontFamily: "Gaegu-Regular",
-        "text-overflow": "ellipsis",
-        overflow: "hidden",
-        "-webkit-line-clamp": 1,
-        "word-break": "break-all",
-        "white-space": "nowrap",
-        borderRadius: "5px",
-        opacity: "80%"
-
-        // "-webkit-box-orient": "vertical"
-      })}>
-        {timeBlockDto!.title}
-      </div>;
-    }
   }
 }
+
 
 function getTextWidth(text, font) {
   const canvas = document.createElement('canvas');
@@ -118,7 +85,6 @@ function getTextWidth(text, font) {
 // })}>
 //   hoho
 // </div>
-
 export default Selectable;
 
 
