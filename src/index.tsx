@@ -11,6 +11,8 @@ import SignPage from "src/pages/sign/SignPage";
 import TimeTrackersPage from "src/pages/management/TimeTrackersPage";
 import {Provider} from "react-redux";
 import {store} from "src/context/store";
+import SignInPage from "src/pages/SignInPage";
+import SignUpPage from "src/pages/SignUpPage";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -22,6 +24,7 @@ ReactDOM.render(
           <Route exact path={"/"}  component={HomePage}/>
           <Route exact path={"/sign"}  component={SignPage}/>
           <Route exact path={"/time-trackers"}  component={TimeTrackersPage}/>
+          <Route exact path={"/sign-up"} component={SignUpPage} />
         </Switch>
       </Router>
     </Provider>

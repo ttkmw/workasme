@@ -15,14 +15,17 @@ import {selectSign} from "src/context/signSlice";
 import fontConfig from "src/graphic/text/font";
 
 
-const Menus: React.FC<{isSigned: boolean}> = (props: {isSigned: boolean}) => {
+const Menus: React.FC<{ isSigned: boolean }> = (props: { isSigned: boolean }) => {
   const {isSigned} = props;
 
   // css={css({
   //
   //          })}
-  return <>
-    <LinkContainer css={css({
+  return <div css={css({
+    display: "flex",
+    flexDirection: "row",
+
+    ".menu-name": {
       color: "rgba(0, 0, 0, .9)",
       fontFamily: fontConfig.web.light.fontFamily,
       paddingTop: 5,
@@ -30,11 +33,19 @@ const Menus: React.FC<{isSigned: boolean}> = (props: {isSigned: boolean}) => {
       marginTop: 3,
       height: 30,
       display: "flex",
-      alignItems: "center"
-    })} to={"/time-trackers"}>
-      <Nav.Link>Time Track</Nav.Link>
+      alignItems: "center",
+      ":hover": {
+        color: "inherit"
+      }
+    }
+  })}>
+    <LinkContainer to={"/time-trackers"}>
+      <Nav.Link className={"menu-name"}>Time Track</Nav.Link>
     </LinkContainer>
-  </>
+    <LinkContainer to={"/sign-up"}>
+      <Nav.Link className={"menu-name"}>Sign In</Nav.Link>
+    </LinkContainer>
+  </div>
 
 };
 

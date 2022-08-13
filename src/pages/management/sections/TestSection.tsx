@@ -529,7 +529,6 @@ export class TestSection extends React.Component<any> {
                 borderWidth: "2px",
                 borderColor: Colors.theme.text.box.default,
                 borderStyle: "solid",
-                // border: "2px solid #4CAF50",
                 color: Colors.theme.text.box.default,
                 paddingLeft: 0,
                 paddingRight: 0,
