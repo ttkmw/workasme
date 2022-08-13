@@ -1,4 +1,3 @@
-import {DateTime} from "src/model/DateTime";
 import dayjs, {Dayjs} from "dayjs";
 import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
 import moment from "moment";
@@ -80,9 +79,9 @@ export class TimeRecord {
     return this._startDateTime.format("YYYY-MM-DD");
   }
 
-  public getMatching(savedTimes: WeekTimes): TimeBlockDto | undefined {
+  public getMatching(savedTimes: WeekTimes, standardDate: Dayjs): TimeBlockDto | undefined {
     if (this.isFirstTime()) {
-      const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes);
+      const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes, standardDate);
       if (edgeTimeOfDay !== undefined) {
         return edgeTimeOfDay;
       }
@@ -103,9 +102,10 @@ export class TimeRecord {
     return undefined;
   }
 
-  public match(savedTimes: WeekTimes) {
+  public match(savedTimes: WeekTimes, standardDate: Dayjs) {
+    console.log("standardDate", TimeRecord.getFormattedDate(standardDate, RelativeDay.TODAY))
     if (this.isFirstTime()) {
-      const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes);
+      const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes, standardDate);
       if (edgeTimeOfDay !== undefined) {
         return true;
         // if (moment(lastTimeBeforeTodayFirstTime.endDateTime.getDateTime()).isAfter(this.getFirstDateTime())) {
@@ -129,10 +129,10 @@ export class TimeRecord {
     return false;
   }
 
-  private getEdgeTimeOfDay(savedTimes: WeekTimes): TimeBlockDto | undefined {
+  private getEdgeTimeOfDay(savedTimes: WeekTimes, standardDate: Dayjs): TimeBlockDto | undefined {
     let currentDate = this.getCurrentDate();
-    const firstDateOfThisWeek: Dayjs = TimeRecord.getFirstDateOfThisWeek(savedTimes);
-    while (TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY) !== TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY) && currentDate.isAfter(firstDateOfThisWeek)) {
+    const firstDateOfThisWeek: Dayjs = TimeRecord.getFirstDateOfThisWeek(standardDate);
+    while (TimeRecord.getFormattedDate(currentDate, RelativeDay.YESTERDAY) !== TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY) && firstDateOfThisWeek.isBefore(currentDate.add(1, "days"))) {
       console.log("currentDate, firstDateOfThisWeek", TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY), TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY));
       const formattedCurrentDate: string = TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY);
       const timeBlocksOfDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(formattedCurrentDate);
@@ -152,6 +152,12 @@ export class TimeRecord {
       currentDate = currentDate.subtract(1, 'days');
     }
 
+    if (savedTimes.edgeTimeBeforeThisWeek !== undefined) {
+      return (moment(savedTimes.edgeTimeBeforeThisWeek.startDateTime.getDateTime()).isBefore(this.getFirstDateTime())
+        && moment(savedTimes.edgeTimeBeforeThisWeek.endDateTime.getDateTime()).isAfter(this.getFirstDateTime())
+      ) ? savedTimes.edgeTimeBeforeThisWeek : undefined;
+    }
+
     return savedTimes.edgeTimeBeforeThisWeek;
   }
 
@@ -159,9 +165,10 @@ export class TimeRecord {
     return dayjs(this.getStartDate());
   }
 
-  private static getFirstDateOfThisWeek(savedTimes: WeekTimes): Dayjs {
+  private static getFirstDateOfThisWeek(standardDate: Dayjs): Dayjs {
     let firstDateOfThisWeek: Dayjs | undefined = undefined;
-    for (let date of Array.from(savedTimes.timesWithinThisWeek.keys())) {
+
+    for (let date of TimeRecord.calculateWeekdaysForView(standardDate)) {
       const weekDate = dayjs(date);
       if (firstDateOfThisWeek === undefined) {
         firstDateOfThisWeek = weekDate;
@@ -182,13 +189,13 @@ export class TimeRecord {
     return this.getStartTime() === TimeRecord.FIRST_TIME;
   }
 
-  public calculateHeightTimes(savedTimes: WeekTimes, isMatching: boolean): Percentage | undefined {
+  public calculateHeightTimes(savedTimes: WeekTimes, isMatching: boolean, standardDate: Dayjs): Percentage | undefined {
     if (!isMatching) {
       return undefined;
     }
 
     if (this.isFirstTime()) {
-      const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes);
+      const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes, standardDate);
       if (edgeTimeOfDay !== undefined) {
         const endDateTimeOfEdgeTime: moment.Moment = moment(edgeTimeOfDay.endDateTime.getDateTime());
         if (endDateTimeOfEdgeTime.isAfter(this.getFirstDateTime())) {
@@ -218,9 +225,49 @@ export class TimeRecord {
     return timeBlockEndDateTime.isBefore(maxEndDateTime) ? timeBlockEndDateTime : maxEndDateTime;
   }
 
+
+
   private getMaxEndDateTime() {
     return this._startDateTime.isBefore(this.getFirstDateTime()) ? this.getFirstDateTime() : this.getFirstDateTime().add(1, "days");
   }
 
+  public static calculateWeekdaysForView(day: Dayjs): Dayjs[] {
 
+    const startDate = TimeRecord.getStartDate(day);
+    const result: Dayjs[] = [];
+    for (let i = 0; i < 7; i++) {
+      result.push(startDate.add(i, 'day'))
+    }
+
+    return result;
+
+  }
+
+  private static getStartDate(day: dayjs.Dayjs) {
+    if (day.day() == 0) {
+      return day;
+    }
+
+    if (day.day() == 1) {
+      return day.subtract(1, 'day')
+    }
+
+    if (day.day() == 2) {
+      return day.subtract(2, 'day')
+    }
+
+    if (day.day() == 3) {
+      return day.subtract(3, 'day')
+    }
+
+    if (day.day() == 4) {
+      return day.subtract(4, 'day')
+    }
+
+    if (day.day() == 5) {
+      return day.subtract(5, 'day')
+    }
+
+    return day.subtract(6, 'day')
+  }
 }

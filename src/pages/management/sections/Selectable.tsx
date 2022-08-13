@@ -59,7 +59,9 @@ class Selectable extends Component<SelectableProps> {
   }
 
   private static getTimeBlock(isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage) {
-    if (isMatching) {
+    
+
+    if (isMatching && timeBlockDto !== undefined && timeBlockHeightRatio !== undefined) {
       // height.minus(new Pixel(6)).toString(),
       return <div css={css({
         width: "95%",
