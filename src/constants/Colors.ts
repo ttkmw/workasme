@@ -6,9 +6,9 @@ export default {
   theme: {
     main: {
       work: "#d94d3b",
+      workTimeBlock: "#FFF1C1",
       orgasme: "#802578",
-      workLight: "#F1948A",
-      keep: "#FF8364"
+      orgasmTimeBLock: "#EAE7AF"
     },
     form: {
       border: {

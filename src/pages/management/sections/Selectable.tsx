@@ -15,14 +15,14 @@ interface SelectableProps extends ReactSelectableComponentProps {
   isSelected: boolean,
   isMatching: boolean,
   timeBlockDto: TimeBlockDto | undefined,
-  timeBlockHeightRatio ?: Percentage
+  timeBlockHeightRatio?: Percentage
   timeCellHeight: Pixel
 }
 
 function getBackgroundColor(isSelected: boolean) {
   if (isSelected) {
     return 'orange'
-  }  else
+  } else
     return 'white'
 }
 
@@ -33,13 +33,13 @@ class Selectable extends Component<SelectableProps> {
 
     return <div css={css({
       ".unselected": {
-          backgroundColor: "white",
+        backgroundColor: "white",
         borderBottom: 1,
         borderBottomStyle: "solid",
         borderBottomColor: Colors.theme.table.innerLine,
       },
       ".selected": {
-        backgroundColor: Colors.theme.main.work,
+        backgroundColor: Colors.theme.main.workTimeBlock,
 
         borderBottom: 0
       }
@@ -69,7 +69,7 @@ class Selectable extends Component<SelectableProps> {
         position: "absolute",
         top: new Pixel(3).toString(),
         left: "2.5%",
-        background: timeBlockDto!.isGood ? "#EAE7AF" : "#FFF1C1",
+        background: timeBlockDto!.isGood ? Colors.theme.main.orgasmTimeBLock : Colors.theme.main.workTimeBlock,
         zIndex: 9,
         color: timeBlockDto!.isGood ? Colors.theme.main.orgasme : Colors.theme.main.work,
         paddingLeft: "25px",

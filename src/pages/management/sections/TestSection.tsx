@@ -474,38 +474,78 @@ export class TestSection extends React.Component<any> {
             display: "flex",
             flexDirection: "row",
             position: "relative",
-            left: 17,
+            // left: 17,
             marginTop: 25,
-            marginBottom: 25
+            marginBottom: 25,
+            ".arrow-prev, .arrow-next": {
+              position: "relative",
+              float: "left",
+              width: "20px",
+              height: "20px"
+            },
+
+            ".arrow-prev::after": {
+              position: "absolute",
+              top: "3px",
+              left: "2.5px",
+              content: '""',
+              width: "15px", /* 사이즈 */
+              height: "15px", /* 사이즈 */
+              "border-top": `4px solid ${Colors.theme.main.work}`, /* 선 두께 */
+              "border-right": `4px solid ${Colors.theme.main.work}`, /* 선 두께 */
+              transform: "rotate(225deg)", /* 각도 */
+            },
+
+            ".arrow-next::after": {
+              position: "absolute",
+
+              top: "3px",
+              left: "2.5px",
+              content: '""',
+              width: "15px", /* 사이즈 */
+              height: "15px", /* 사이즈 */
+              "border-top": `4px solid ${Colors.theme.main.work}`, /* 선 두께 */
+              "border-right": `4px solid ${Colors.theme.main.work}`, /* 선 두께 */
+              transform: "rotate(45deg)", /* 각도 */
+            }
           })}>
             <div css={css({
               display: "flex",
               alignItems: "center",
             })}>
-              <MdNavigateBefore size={new Pixel(40).toString()} color={colors.theme.navigator.default} onClick={() => {
+              <span className="arrow-prev" onClick={() => {
                 this.setState({
                   // todo: while이 문제인듯
                   standardDate: this.state.standardDate.subtract(7, 'day')
                 });
               }}/>
+
+              {/*<MdNavigateBefore size={new Pixel(40).toString()} color={colors.theme.navigator.default} onClick={() => {*/}
+              {/*  this.setState({*/}
+              {/*    // todo: while이 문제인듯*/}
+              {/*    standardDate: this.state.standardDate.subtract(7, 'day')*/}
+              {/*  });*/}
+              {/*}}/>*/}
             </div>
 
             <div css={css({
               display: "flex",
               alignItems: "center",
               '.button': {
-                backgroundColor: "transparent",
+                backgroundColor: Colors.theme.main.work,
                 border: "none",
-                color: Colors.theme.main.work
+                color: "white",
+                paddingLeft: 0,
+                paddingRight: 0,
 
               }
             })}>
               <button
                 css={css({
-                  width: new Pixel(70).toString(),
+                  width: new Pixel(60).toString(),
                   borderRadius: 10,
                   height: new Pixel(30).toString(),
-                  fontFamily: "ObjectSans-Regular",
+                  fontFamily: fontConfig.web.light.fontFamily,
 
                 })}
                 className={"button"}
@@ -517,18 +557,17 @@ export class TestSection extends React.Component<any> {
               >today
               </button>
             </div>
-
             <div css={css({
               display: "flex",
-              alignItems: "center"
+              alignItems: "center",
             })}>
-              <MdNavigateNext css={css({})} size={new Pixel(40).toString()} color={colors.theme.navigator.default}
-                              onClick={() => {
-                                this.setState({
-                                  standardDate: this.state.standardDate.add(7, 'day')
-                                });
-                              }}/>
+              <span className="arrow-next" onClick={() => {
+                this.setState({
+                  standardDate: this.state.standardDate.add(7, 'day')
+                });
+              }}/>
             </div>
+
 
 
           </div>
@@ -574,15 +613,8 @@ export class TestSection extends React.Component<any> {
                         const isMatching = timeCell.match(serverData, this.state.standardDate);
                         const timeBlockHeightRatio = timeCell.calculateHeightTimes(serverData, isMatching, this.state.standardDate)
                         const timeBlockDto: TimeBlockDto | undefined = timeCell.getMatching(serverData, this.state.standardDate);
-                        if (isMatching && timeBlockHeightRatio === undefined) {
-                          console.log("jkladfj;slkafjadfl;aj;lksjf;")
-                        }
-                        // const heightTimes = calculateHeightTimes(serverData, timeRecord, parseDayOfWeek(day.day()));
                         return (
                           <div>
-
-                            {/*timeBlockHeightRatio ?: Percentage*/}
-                            {/*timeCellHeight: Pixel*/}
                             <SelectableComponent
                               selectableKey={timeCell.id}
                               key={timeCell.id}
