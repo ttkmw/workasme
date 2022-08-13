@@ -1,6 +1,7 @@
 import {DateTime} from "src/model/DateTime";
 
 export interface TimeBlockDto {
+  readonly id: number;
   readonly title: string;
   readonly startDateTime: DateTime;
   readonly endDateTime: DateTime;

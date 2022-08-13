@@ -237,113 +237,125 @@ function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
 
 const serverData: WeekTimes = new WeekTimes(
   new Map<string, TimeBlockDto[]>([
-    ["2022-08-07", [
+    ["2022-08-14", [
       {
+        id: 1,
         title: "엣지타임",
-        startDateTime: new DateTime("2022-08-06T23:00"),
-        endDateTime: new DateTime("2022-08-07T04:00"),
+        startDateTime: new DateTime("2022-08-14T23:00"),
+        endDateTime: new DateTime("2022-08-14T04:00"),
         isGood: true,
         category: "NONE",
         memo: "엣지타임"
       }
     ]],
-    ["2022-08-08", [
+    ["2022-08-15", [
       {
-        title: "영홥 보고 친구랑 잠깐 수다떨음",
-        startDateTime: new DateTime("2022-08-08T01:00"),
-        endDateTime: new DateTime("2022-08-08T04:00"),
+        id: 2,
+        title: "영화 보고 친구랑 잠깐 수다떨음",
+        startDateTime: new DateTime("2022-08-15T01:00"),
+        endDateTime: new DateTime("2022-08-15T04:00"),
         isGood: false,
         category: "SOCIAL",
         memo: undefined
       },
       {
+        id: 3,
         title: "일했지",
-        startDateTime: new DateTime("2022-08-08T15:00"),
-        endDateTime: new DateTime("2022-08-08T19:00"),
+        startDateTime: new DateTime("2022-08-15T15:00"),
+        endDateTime: new DateTime("2022-08-15T19:00"),
         isGood: false,
         category: "INTELLECTUAL",
         memo: undefined
       },
     ]],
-    ["2022-08-09", [
+    ["2022-08-16", [
       {
+        id: 4,
         title: "샤워하고 밥먹고 전화하다가 엄마한테 등짝맞고 공부하다가 플스함",
-        startDateTime: new DateTime("2022-08-09T01:00"),
-        endDateTime: new DateTime("2022-08-09T04:00"),
+        startDateTime: new DateTime("2022-08-16T01:00"),
+        endDateTime: new DateTime("2022-08-16T04:00"),
         isGood: false,
         category: "NONE",
         memo: "why should id live like this"
       },
     ]],
-    ["2022-08-10", [
+    ["2022-08-17", [
       {
+        id: 5,
         title: "코딩함",
-        startDateTime: new DateTime("2022-08-10T01:00"),
-        endDateTime: new DateTime("2022-08-10T05:00"),
+        startDateTime: new DateTime("2022-08-17T01:00"),
+        endDateTime: new DateTime("2022-08-17T05:00"),
         isGood: true,
         category: "INTELLECTUAL",
         memo: undefined
       },
       {
+        id: 6,
         title: "카페에 왔다",
-        startDateTime: new DateTime("2022-08-10T10:00"),
-        endDateTime: new DateTime("2022-08-10T13:00"),
+        startDateTime: new DateTime("2022-08-17T10:00"),
+        endDateTime: new DateTime("2022-08-17T13:00"),
         isGood: true,
         category: "INTELLECTUAL",
         memo: undefined
       },
     ]],
-    ["2022-08-11", [
+    ["2022-08-18", [
       {
+        id: 7,
         title: "베라 피티를 함",
-        startDateTime: new DateTime("2022-08-11T01:00"),
-        endDateTime: new DateTime("2022-08-11T04:00"),
+        startDateTime: new DateTime("2022-08-18T01:00"),
+        endDateTime: new DateTime("2022-08-18T04:00"),
         isGood: true,
         category: "PHYSICAL",
         memo: "개힘들다"
       },
     ]],
-    ["2022-08-12", [
+    ["2022-08-19", [
       {
+        id: 8,
         title: "산책을 함",
-        startDateTime: new DateTime("2022-08-12T01:00"),
-        endDateTime: new DateTime("2022-08-12T04:00"),
+        startDateTime: new DateTime("2022-08-19T01:00"),
+        endDateTime: new DateTime("2022-08-19T04:00"),
         isGood: false,
         category: "SPIRITUAL",
         memo: "개운하다"
       },
     ]],
 
-    ["2022-08-13", [
+    ["2022-08-20", [
       {
+        id: 9,
         title: "잠을 뒤척임",
-        startDateTime: new DateTime("2022-08-13T02:00"),
-        endDateTime: new DateTime("2022-08-13T05:00"),
+        startDateTime: new DateTime("2022-08-20T02:00"),
+        endDateTime: new DateTime("2022-08-20T05:00"),
         isGood: false,
         category: "NONE",
         memo: "힘들다"
       },
     ]],
 
-    ["2022-08-14", [
+    ["2022-08-21", [
       {
+        id: 10,
         title: "잠을 뒤척임",
-        startDateTime: new DateTime("2022-08-14T00:00"),
-        endDateTime: new DateTime("2022-08-14T05:00"),
+        startDateTime: new DateTime("2022-08-21T00:00"),
+        endDateTime: new DateTime("2022-08-21T05:00"),
         isGood: false,
         category: "NONE",
         memo: "힘들다"
       },
     ]]
   ]),
-  {
-    title: "엣지타임",
-    startDateTime: new DateTime("2022-08-06T23:00"),
-    endDateTime: new DateTime("2022-08-07T04:00"),
-    isGood: true,
-    category: "NONE",
-    memo: "엣지타임"
-  }
+  // {
+  //   id: 1,
+  //   title: "엣지타임",
+  //   startDateTime: new DateTime("2022-08-06T23:00"),
+  //   endDateTime: new DateTime("2022-08-07T04:00"),
+  //   isGood: true,
+  //   category: "NONE",
+  //   memo: "엣지타임"
+  // }
+  undefined
 );
 
 export class TestSection extends React.Component<any> {
@@ -442,7 +454,7 @@ export class TestSection extends React.Component<any> {
   private modal: any;
 
   private checkBoxSize = new Pixel(15);
-  private recordSize = new Pixel(30);
+  private timeCellHeight = new Pixel(30);
   private outlineBorder = new Pixel(1);
   private noBorder = new Pixel(0);
 
@@ -475,8 +487,11 @@ export class TestSection extends React.Component<any> {
           })}>
             <MdNavigateBefore size={new Pixel(50).toString()} color={colors.theme.navigator.default} onClick={() => {
               this.setState({
+                // todo: while이 문제인듯
                 standardDate: this.state.standardDate.subtract(7, 'day')
               });
+
+              // console.log("kkkkjakldfjladjklda")
             }}/>
             <div css={css({
               display: "flex",
@@ -510,8 +525,11 @@ export class TestSection extends React.Component<any> {
             <MdNavigateNext css={css({})} size={new Pixel(50).toString()} color={colors.theme.navigator.default}
                             onClick={() => {
                               this.setState({
-                                standardDate: this.state.standardDate.add(7, 'day')
+                                standardDate: dayjs(this.state.standardDate.add(7, 'day'))
                               });
+
+                              console.log("kqwwjerlqjekqler")
+                              console.log();
                             }}/>
           </div>
         </div>
@@ -550,29 +568,31 @@ export class TestSection extends React.Component<any> {
                   })}>
 
                     {
-                      timeRecords.map((timeRecord) => {
+                      timeRecords.map((timeCell) => {
 
-                        let selected = this.state.selectedKeys.indexOf(timeRecord.id) > -1 || isIdInSelectedKeys(timeRecord.id, this.state.selectedKeys);
-                        const isMatching = timeRecord.match(serverData);
-                        // if (isMatching) {
-                        //   console.log("isMatching", isMatching, timeRecord.getStartDateTime());
-                        // }
-                        // const isMatching = match(serverData, timeRecord, parseDayOfWeek(day.day()));
-
-                        const heightTimes = timeRecord.calculateHeightTimes(serverData, isMatching)
+                        let selected = this.state.selectedKeys.indexOf(timeCell.id) > -1 || isIdInSelectedKeys(timeCell.id, this.state.selectedKeys);
+                        const isMatching = timeCell.match(serverData);
+                        const timeBlockHeightRatio = timeCell.calculateHeightTimes(serverData, isMatching)
+                        const timeBlockDto: TimeBlockDto | undefined = timeCell.getMatching(serverData);
+                        if (isMatching && timeBlockHeightRatio === undefined) {
+                          console.log("jkladfj;slkafjadfl;aj;lksjf;")
+                        }
                         // const heightTimes = calculateHeightTimes(serverData, timeRecord, parseDayOfWeek(day.day()));
                         return (
                           <div>
 
+                            {/*timeBlockHeightRatio ?: Percentage*/}
+                            {/*timeCellHeight: Pixel*/}
                             <SelectableComponent
-                              selectableKey={timeRecord.id}
-                              key={timeRecord.id}
+                              selectableKey={timeCell.id}
+                              key={timeCell.id}
                               isSelected={selected}
                               isMatching={isMatching}
-                              heightTimes={heightTimes}
-                              height={this.recordSize}
+                              timeBlockDto={timeBlockDto}
+                              timeBlockHeightRatio={timeBlockHeightRatio}
+                              timeCellHeight={this.timeCellHeight}
                             >
-                              <NumberBox number={timeRecord.getAlias()} numberSize={this.checkBoxSize}
+                              <NumberBox number={timeCell.getAlias()} numberSize={this.checkBoxSize}
                                          numberFont={fontConfig.web.medium.fontFamily}
                                          numberColor={!selected ? Colors.theme.text.box.default : "white"}
                                          boxWidth={new Pixel(14)} boxHeight={new Pixel(35)}

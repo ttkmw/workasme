@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, ReactElement} from "react";
 import {createSelectable, TSelectableItemProps} from "react-selectable-fast";
 /** @jsxRuntime classic */
 /** @jsx jsx */
@@ -8,14 +8,15 @@ import Percentage from "src/graphic/size/percentage";
 import {ReactSelectableComponentProps} from "react-selectable";
 import Colors from "src/constants/Colors";
 import assert from "assert";
+import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 
 interface SelectableProps extends ReactSelectableComponentProps {
   selectableRef: any,
   isSelected: boolean,
-  isSelecting: boolean,
-  isMatching: boolean
-  heightTimes ?: Percentage
-  height: Pixel
+  isMatching: boolean,
+  timeBlockDto: TimeBlockDto | undefined,
+  timeBlockHeightRatio ?: Percentage
+  timeCellHeight: Pixel
 }
 
 function getBackgroundColor(isSelected: boolean) {
@@ -27,7 +28,7 @@ function getBackgroundColor(isSelected: boolean) {
 
 class Selectable extends Component<SelectableProps> {
   render() {
-    const {selectableRef, isSelected, isMatching, heightTimes, height} = this.props
+    const {selectableRef, isSelected, isMatching, timeBlockDto, timeBlockHeightRatio, timeCellHeight} = this.props
 
 
     return <div css={css({
@@ -46,31 +47,32 @@ class Selectable extends Component<SelectableProps> {
       <div className={!isSelected ? 'unselected' : 'selected'} css={css({
         position: "relative",
         // width: this.width.toString(),
-        height: height.toString(),
+        height: timeCellHeight.toString(),
         // margin: "30px",
       })} ref={selectableRef}>
         {this.props.children}
-        {Selectable.getDiv(isMatching, height.multiply(heightTimes == null ? new Percentage(100) : heightTimes))}
+        {Selectable.getTimeBlock(isMatching, timeBlockDto, timeCellHeight, timeBlockHeightRatio)}
       </div>
     </div>;
+
+    // timeCellHeight.multiply(timeBlockHeightRatio == null ? new Percentage(100) : timeBlockHeightRatio)
   }
 
-  private static getDiv(isMatching: boolean, height: Pixel) {
-
-    console.log(getTextWidth("kkkkfdajdfkladjfk ...", "ObjectSans-Slanted"));
+  private static getTimeBlock(isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage) {
     if (isMatching) {
-
+      // height.minus(new Pixel(6)).toString(),
       return <div css={css({
         width: "95%",
-        height: height.minus(new Pixel(6)).toString(),
+        height: timeCellHeight.multiply(timeBlockHeightRatio!).minus(new Pixel(6)).toString(),
         position: "absolute",
         top: new Pixel(3).toString(),
         left: "2.5%",
-        background: Colors.theme.main.orgasme,
+        background: timeBlockDto!.isGood ? "#80558C" : "#F5B17B",
         zIndex: 9,
-        color: "white",
-        paddingLeft: "5px",
+        color: timeBlockDto!.isGood ? "white" : "#d94d3b",
+        paddingLeft: "25px",
         paddingRight: "5px",
+        paddingTop: "3px",
         fontSize: "12px",
         fontFamily: "ObjectSans-Slanted",
         "text-overflow": "ellipsis",
@@ -78,10 +80,12 @@ class Selectable extends Component<SelectableProps> {
         "-webkit-line-clamp": 1,
         "word-break": "break-all",
         "white-space": "nowrap",
-        borderRadius: "5px"
+        borderRadius: "5px",
+        opacity: "80%"
+
         // "-webkit-box-orient": "vertical"
       })}>
-        kkkkf
+        {timeBlockDto!.title}
       </div>;
     }
   }

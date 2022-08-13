@@ -80,10 +80,33 @@ export class TimeRecord {
     return this._startDateTime.format("YYYY-MM-DD");
   }
 
+  public getMatching(savedTimes: WeekTimes): TimeBlockDto | undefined {
+    if (this.isFirstTime()) {
+      const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes);
+      if (edgeTimeOfDay !== undefined) {
+        return edgeTimeOfDay;
+      }
+    }
+
+    const atSameDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(this.getStartDate());
+    if (atSameDate === undefined) {
+      return undefined;
+    }
+
+    for (let i = 0; i < atSameDate.length; i++) {
+      const candidate = atSameDate[i];
+      if (this.getStartDateTime() === candidate.startDateTime.getDateTime()) {
+        return candidate;
+      }
+    }
+
+    return undefined;
+  }
+
   public match(savedTimes: WeekTimes) {
     if (this.isFirstTime()) {
-      const lastTimeBeforeTodayFirstTime = this.getEdgeTimeOfDay(savedTimes);
-      if (lastTimeBeforeTodayFirstTime !== undefined) {
+      const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes);
+      if (edgeTimeOfDay !== undefined) {
         return true;
         // if (moment(lastTimeBeforeTodayFirstTime.endDateTime.getDateTime()).isAfter(this.getFirstDateTime())) {
         //
@@ -106,26 +129,27 @@ export class TimeRecord {
     return false;
   }
 
-  private getEdgeTimeOfDay(savedTimes: WeekTimes): TimeBlockDto {
+  private getEdgeTimeOfDay(savedTimes: WeekTimes): TimeBlockDto | undefined {
     let currentDate = this.getCurrentDate();
     const firstDateOfThisWeek: Dayjs = TimeRecord.getFirstDateOfThisWeek(savedTimes);
-    while (TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY) !== TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY)) {
+    while (TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY) !== TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY) && currentDate.isAfter(firstDateOfThisWeek)) {
+      console.log("currentDate, firstDateOfThisWeek", TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY), TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY));
       const formattedCurrentDate: string = TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY);
-      const timesOfDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(formattedCurrentDate);
-      currentDate = currentDate.subtract(1, 'days');
+      const timeBlocksOfDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(formattedCurrentDate);
 
-      if (timesOfDate === undefined || timesOfDate.length === 0) {
+      if (timeBlocksOfDate === undefined || timeBlocksOfDate.length === 0) {
         currentDate = currentDate.subtract(1, 'days');
         continue;
       }
 
-      for (let timeOfDate of timesOfDate) {
+      for (let timeOfDate of timeBlocksOfDate) {
         if (moment(timeOfDate.startDateTime.getDateTime()).isBefore(this.getFirstDateTime())
           && moment(timeOfDate.endDateTime.getDateTime()).isAfter(this.getFirstDateTime())
         ) {
           return timeOfDate;
         }
       }
+      currentDate = currentDate.subtract(1, 'days');
     }
 
     return savedTimes.edgeTimeBeforeThisWeek;
@@ -166,9 +190,9 @@ export class TimeRecord {
     if (this.isFirstTime()) {
       const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes);
       if (edgeTimeOfDay !== undefined) {
-        const endDateTimeOfEdgeTime: moment.Moment =  moment(edgeTimeOfDay.endDateTime.getDateTime());
+        const endDateTimeOfEdgeTime: moment.Moment = moment(edgeTimeOfDay.endDateTime.getDateTime());
         if (endDateTimeOfEdgeTime.isAfter(this.getFirstDateTime())) {
-            return new Percentage(endDateTimeOfEdgeTime.diff(this.getFirstDateTime(), 'hours') * 100);
+          return new Percentage(endDateTimeOfEdgeTime.diff(this.getFirstDateTime(), 'hours') * 100);
         }
       }
     }
@@ -180,13 +204,12 @@ export class TimeRecord {
 
     for (let todayTime of todayTimes) {
       if (this.getStartDateTime() === todayTime.startDateTime.getDateTime()) {
-          const endDateTimeOfTimeBlock: moment.Moment = this.getEndDateTimeOfTimeBlock(todayTime);
-          console.log("getStartDateTime", todayTime.startDateTime.getDateTime(), endDateTimeOfTimeBlock);
-          return new Percentage(endDateTimeOfTimeBlock.diff(this._startDateTime, 'hours') * 100);
+        const endDateTimeOfTimeBlock: moment.Moment = this.getEndDateTimeOfTimeBlock(todayTime);
+        return new Percentage(endDateTimeOfTimeBlock.diff(this._startDateTime, 'hours') * 100);
       }
     }
 
-    return undefined;
+    throw Error("이상한 상황");
   }
 
   private getEndDateTimeOfTimeBlock(timeBlock: TimeBlockDto): moment.Moment {
@@ -198,4 +221,6 @@ export class TimeRecord {
   private getMaxEndDateTime() {
     return this._startDateTime.isBefore(this.getFirstDateTime()) ? this.getFirstDateTime() : this.getFirstDateTime().add(1, "days");
   }
+
+
 }
