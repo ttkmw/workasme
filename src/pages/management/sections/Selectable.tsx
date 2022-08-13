@@ -59,7 +59,7 @@ class Selectable extends Component<SelectableProps> {
   }
 
   private static getTimeBlock(isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage) {
-    
+
 
     if (isMatching && timeBlockDto !== undefined && timeBlockHeightRatio !== undefined) {
       // height.minus(new Pixel(6)).toString(),
@@ -69,14 +69,14 @@ class Selectable extends Component<SelectableProps> {
         position: "absolute",
         top: new Pixel(3).toString(),
         left: "2.5%",
-        background: timeBlockDto!.isGood ? "#80558C" : "#F5B17B",
+        background: timeBlockDto!.isGood ? "#EAE7AF" : "#FFF1C1",
         zIndex: 9,
-        color: timeBlockDto!.isGood ? "white" : "#d94d3b",
+        color: timeBlockDto!.isGood ? Colors.theme.main.orgasme : Colors.theme.main.work,
         paddingLeft: "25px",
         paddingRight: "5px",
         paddingTop: "3px",
         fontSize: "12px",
-        fontFamily: "ObjectSans-Slanted",
+        fontFamily: "Gaegu-Regular",
         "text-overflow": "ellipsis",
         overflow: "hidden",
         "-webkit-line-clamp": 1,

@@ -337,7 +337,7 @@ const serverData: WeekTimes = new WeekTimes(
     ["2022-08-14", [
       {
         id: 10,
-        title: "잠을 뒤척임",
+        title: "sleep bad",
         startDateTime: new DateTime("2022-08-14T00:00"),
         endDateTime: new DateTime("2022-08-14T05:00"),
         isGood: false,

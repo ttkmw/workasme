@@ -51,3 +51,13 @@ li.rc-time-picker-panel-select-option-selected {
     font-family: "Pattaya-Regular";
     src: url("assets/fonts/Pattaya/Pattaya-Regular.ttf");
 }
+
+@font-face {
+    font-family: "NanumPenScript-Regular";
+    src: url("assets/fonts/Nanum_Pen_Script/NanumPenScript-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Gaegu-Regular";
+    src: url("assets/fonts/Gaegu/Gaegu-Regular.ttf");
+}
