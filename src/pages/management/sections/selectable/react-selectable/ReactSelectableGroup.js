@@ -26,6 +26,7 @@ class ReactSelectableGroup extends Component {
     this._openSelector = this._openSelector.bind(this);
     this._mouseDown = this._mouseDown.bind(this);
     this._mouseUp = this._mouseUp.bind(this);
+    this._mouseClick = this._mouseClick.bind(this);
     this._selectElements = this._selectElements.bind(this);
     this._registerSelectable = this._registerSelectable.bind(this);
     this._unregisterSelectable = this._unregisterSelectable.bind(this);
@@ -87,7 +88,7 @@ class ReactSelectableGroup extends Component {
     });
 
 
-    this._selectElements(e, false, this._mouseDownData.initialW, this._mouseDownData.initialH, Math.min(e.pageX - this._rect.x, this._mouseDownData.initialW), Math.min(e.pageY - this._rect.y, this._mouseDownData.initialH));
+    this._selectElements(e, false, this._mouseDownData.initialW, this._mouseDownData.initialH);
     // this._throttledSelect(e);
   }
 
@@ -164,10 +165,27 @@ class ReactSelectableGroup extends Component {
 
     if (preventDefault) e.preventDefault();
 
+    window.addEventListener('click', this._mouseClick);
     window.addEventListener('mousemove', this._openSelector);
   }
 
 
+  _mouseClick (e) {
+
+    // if (e.defaultPrevented) return
+    e.stopPropagation();
+    window.removeEventListener('click', this._mouseClick);
+
+    this._selectElements(e, false, e.x, e.y);
+    this._selectElements(e, true, e.x, e.y);
+    this._mouseDownData = null;
+    this.setState({
+      isBoxSelecting: false,
+      boxWidth: 0,
+      boxHeight: 0
+    });
+
+  }
   /**
    * Called when the user has completed selection
    */
@@ -191,8 +209,7 @@ class ReactSelectableGroup extends Component {
       }
     }
 
-    this._selectElements(e, true, this._mouseDownData.initialW, this._mouseDownData.initialH, Math.min(e.pageX - this._rect.x, this._mouseDownData.initialW), Math.min(e.pageY - this._rect.y, this._mouseDownData.initialH));
-
+    this._selectElements(e, true, this._mouseDownData.initialW, this._mouseDownData.initialH);
     this._mouseDownData = null;
     this.setState({
       isBoxSelecting: false,
@@ -205,7 +222,7 @@ class ReactSelectableGroup extends Component {
   /**
    * Selects multiple children given x/y coords of the mouse
    */
-  _selectElements (e, isEnd = false, initialW, initialH, lastW, lastH) {
+  _selectElements (e, isEnd = false, initialW, initialH) {
     const {tolerance, onSelection, onEndSelection} = this.props;
 
     // console.log("_selectElements", e)
@@ -216,7 +233,7 @@ class ReactSelectableGroup extends Component {
 
     // console.log(_selectbox);
 
-    if (!_selectbox) return;
+    // if (!_selectbox) return;
 
 
     // const aObj = (_selectbox instanceof HTMLElement) ? getBoundsForNode(_selectbox) : _selectbox;

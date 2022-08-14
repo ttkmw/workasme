@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import Pixel from "src/graphic/size/pixel";
 import Percentage from "src/graphic/size/percentage";
@@ -42,45 +42,21 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
       toggleScrollLock();
     };
 
+    const onClickTimeCell = (e) => {
+      setIsEditFormOpen((prevState) => !prevState);
+      e.stopPropagation();
+    }
 
     if (isMatching && timeBlockDto !== undefined && timeBlockHeightRatio !== undefined) {
-      // height.minus(new Pixel(6)).toString(),
-      return <div>
-        <div
-          css={css({
-            width: "95%",
-            height: timeCellHeight.multiply(timeBlockHeightRatio!).minus(new Pixel(6)).toString(),
-            position: "absolute",
-            top: new Pixel(3).toString(),
-            left: "2.5%",
-            background: timeBlockDto!.isGood ? Colors.theme.main.orgasmTimeBLock : Colors.theme.main.workTimeBlock,
-            zIndex: 10,
-            color: timeBlockDto!.isGood ? Colors.theme.main.orgasme : Colors.theme.main.work,
-            paddingLeft: "25px",
-            paddingRight: "5px",
-            paddingTop: "3px",
-            fontSize: "12px",
-            fontFamily: "Gaegu-Regular",
-            "text-overflow": "ellipsis",
-            overflow: "hidden",
-            "-webkit-line-clamp": 1,
-            "word-break": "break-all",
-            "white-space": "nowrap",
-            borderRadius: "5px",
-            opacity: "80%"
-          })}
-          onClick={(e) => {
-            setIsEditFormOpen((prevState) => !prevState);
-            e.stopPropagation()
-          }}
-          onMouseMove={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          {timeBlockDto!.title}
-        </div>
+      return <div onClick={(e) => {e.stopPropagation();}}
+                  onMouseMove={(e) => {
+                    e.stopPropagation();
+                  }}>
+        <TimeCell timeBlockDto={timeBlockDto}
+                  timeBlockHeightRatio={timeBlockHeightRatio} timeCellHeight={timeCellHeight} onClick={onClickTimeCell}/>
         {isEditFormOpen && (
-          <Modal onClickOutside={onClickOutside} onKeyDown={onKeyDown} modalRef={(n: any) => (modal = n)} buttonRef={(n: any) => (closeButton = n)} closeModal={onCloseModal}>
+          <Modal onClickOutside={onClickOutside} onKeyDown={onKeyDown} modalRef={(n: any) => (modal = n)}
+                 buttonRef={(n: any) => (closeButton = n)} closeModal={onCloseModal}>
             <TimeBlockEditForm onSubmit={() => console.log("kkk")}/>
           </Modal>
         )}
@@ -88,6 +64,40 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
     }
 
     return <div/>
+  }
+
+const TimeCell: React.FC<{ timeCellHeight: Pixel, timeBlockHeightRatio: Percentage, timeBlockDto: TimeBlockDto, onClick: (e) => void }> =
+  (props: { timeCellHeight: Pixel, timeBlockHeightRatio: Percentage, timeBlockDto: TimeBlockDto, onClick: (e) => void }) => {
+    const {timeCellHeight, timeBlockHeightRatio, timeBlockDto, onClick} = props;
+
+
+    return <div
+      css={css({
+        width: "95%",
+        height: timeCellHeight.multiply(timeBlockHeightRatio!).minus(new Pixel(6)).toString(),
+        position: "absolute",
+        top: new Pixel(3).toString(),
+        left: "2.5%",
+        background: timeBlockDto!.isGood ? Colors.theme.main.orgasmTimeBLock : Colors.theme.main.workTimeBlock,
+        zIndex: 10,
+        color: timeBlockDto!.isGood ? Colors.theme.main.orgasme : Colors.theme.main.work,
+        paddingLeft: "25px",
+        paddingRight: "5px",
+        paddingTop: "3px",
+        fontSize: "12px",
+        fontFamily: "Gaegu-Regular",
+        "text-overflow": "ellipsis",
+        overflow: "hidden",
+        "-webkit-line-clamp": 1,
+        "word-break": "break-all",
+        "white-space": "nowrap",
+        borderRadius: "5px",
+        opacity: "80%",
+      })}
+      onClick={onClick}
+    >
+      {timeBlockDto!.title}
+    </div>
   }
 
 
