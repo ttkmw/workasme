@@ -9,6 +9,8 @@ import {ReactSelectableComponentProps} from "react-selectable";
 import Colors from "src/constants/Colors";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import TimeBlock from "src/pages/components/timeblock/TimeBlock";
+import dayjs, {Dayjs} from "dayjs";
+import {WeekTimes} from "src/model/WeekTimes";
 
 interface SelectableProps extends ReactSelectableComponentProps {
   selectableRef: any,
@@ -16,19 +18,14 @@ interface SelectableProps extends ReactSelectableComponentProps {
   isMatching: boolean,
   timeBlockDto: TimeBlockDto | undefined,
   timeBlockHeightRatio?: Percentage
-  timeCellHeight: Pixel
-}
-
-function getBackgroundColor(isSelected: boolean) {
-  if (isSelected) {
-    return 'orange'
-  } else
-    return 'white'
+  timeCellHeight: Pixel,
+  handleStandardDateChange: (dayjs: Dayjs) => void;
+  updateTimeBlocks: (timeBlocks: WeekTimes) => void;
 }
 
 class Selectable extends Component<SelectableProps> {
   render() {
-    const {selectableRef, isSelected, isMatching, timeBlockDto, timeBlockHeightRatio, timeCellHeight} = this.props
+    const {selectableRef, isSelected, isMatching, timeBlockDto, timeBlockHeightRatio, timeCellHeight, handleStandardDateChange, updateTimeBlocks} = this.props
 
     return <div
       css={css({
@@ -53,7 +50,7 @@ class Selectable extends Component<SelectableProps> {
       >
         {this.props.children}
         <TimeBlock isMatching={isMatching} timeBlockDto={timeBlockDto} timeCellHeight={timeCellHeight}
-                   timeBlockHeightRatio={timeBlockHeightRatio}/>
+                   timeBlockHeightRatio={timeBlockHeightRatio} handleStandardDateChange={handleStandardDateChange} updateTimeBlocks={updateTimeBlocks}/>
       </div>
     </div>;
   }

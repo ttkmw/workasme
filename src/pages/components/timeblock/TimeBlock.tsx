@@ -8,13 +8,15 @@ import {css, jsx} from "@emotion/react";
 import Colors from "src/constants/Colors";
 import TimeBlockEditForm from "src/pages/components/timeblock/TimeBlockEditForm";
 import Modal from "src/pages/components/Mordal";
+import {Dayjs} from "dayjs";
+import {WeekTimes} from "src/model/WeekTimes";
 
 
 
 
-const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage }> =
-  (props: { isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage }) => {
-    const {isMatching, timeBlockDto, timeCellHeight, timeBlockHeightRatio} = props;
+const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage, handleStandardDateChange: (day: Dayjs) => void, updateTimeBlocks: (timeBlocks: WeekTimes) => void}> =
+  (props: { isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage, handleStandardDateChange: (day: Dayjs) => void,  updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+    const {isMatching, timeBlockDto, timeCellHeight, timeBlockHeightRatio, handleStandardDateChange, updateTimeBlocks} = props;
     const [isEditFormOpen, setIsEditFormOpen] = useState(false);
     let modal: any = undefined;
     let closeButton: any = undefined;
@@ -60,7 +62,7 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
         {isEditFormOpen && (
           <Modal onClickOutside={onClickOutside} onKeyDown={onKeyDown} modalRef={(n: any) => (modal = n)}
                  buttonRef={(n: any) => (closeButton = n)} closeModal={onCloseModal}>
-            <TimeBlockEditForm onSubmit={() => console.log("kkk")} timeBlockDto={timeBlockDto}/>
+            <TimeBlockEditForm onSubmit={() => console.log("kkk")} timeBlockDto={timeBlockDto} handleStandardDateChange={handleStandardDateChange} updateTimeBlocks={updateTimeBlocks} closeModal={onCloseModal}/>
           </Modal>
         )}
       </div>;

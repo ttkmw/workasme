@@ -8,29 +8,137 @@ import TimePicker from "src/pages/components/TimePicker";
 import Colors from "src/constants/Colors";
 import {options} from "src/pages/components/timeblock/CategoryOptions";
 import Pixel from "src/graphic/size/pixel";
+import dayjs, {Dayjs} from "dayjs";
+import {WeekTimes} from "src/model/WeekTimes";
+import {DateTime} from "src/model/DateTime";
+
+const serverData2: WeekTimes = new WeekTimes(
+  new Map<string, TimeBlockDto[]>([
+    ["2022-08-14", [
+      {
+        id: 1,
+        title: "엣지타임",
+        startDateTime: new DateTime("2022-08-14T23:00"),
+        endDateTime: new DateTime("2022-08-15T01:00"),
+        isGood: true,
+        category: "NONE",
+        memo: "엣지타임"
+      }
+    ]],
+    ["2022-08-15", [
+      {
+        id: 2,
+        title: "영화 보고 친구랑 잠깐 수다떨음",
+        startDateTime: new DateTime("2022-08-15T01:00"),
+        endDateTime: new DateTime("2022-08-15T04:00"),
+        isGood: false,
+        category: "SOCIAL",
+        memo: undefined
+      },
+      {
+        id: 3,
+        title: "일했지",
+        startDateTime: new DateTime("2022-08-15T15:00"),
+        endDateTime: new DateTime("2022-08-15T19:00"),
+        isGood: false,
+        category: "INTELLECTUAL",
+        memo: undefined
+      },
+    ]],
+    ["2022-08-16", [
+      {
+        id: 4,
+        title: "샤워하고 밥먹고 전화하다가 엄마한테 등짝맞고 공부하다가 플스함",
+        startDateTime: new DateTime("2022-08-16T01:00"),
+        endDateTime: new DateTime("2022-08-16T04:00"),
+        isGood: false,
+        category: "NONE",
+        memo: "why should id live like this"
+      },
+    ]],
+    ["2022-08-17", [
+      {
+        id: 5,
+        title: "코딩함",
+        startDateTime: new DateTime("2022-08-17T01:00"),
+        endDateTime: new DateTime("2022-08-17T05:00"),
+        isGood: true,
+        category: "INTELLECTUAL",
+        memo: undefined
+      },
+      {
+        id: 6,
+        title: "카페에 왔다",
+        startDateTime: new DateTime("2022-08-17T10:00"),
+        endDateTime: new DateTime("2022-08-17T13:00"),
+        isGood: true,
+        category: "INTELLECTUAL",
+        memo: undefined
+      },
+    ]],
+    ["2022-08-18", [
+      {
+        id: 7,
+        title: "베라 피티를 함",
+        startDateTime: new DateTime("2022-08-18T01:00"),
+        endDateTime: new DateTime("2022-08-18T04:00"),
+        isGood: true,
+        category: "PHYSICAL",
+        memo: "개힘들다"
+      },
+    ]],
+    ["2022-08-19", [
+      {
+        id: 8,
+        title: "산책을 함",
+        startDateTime: new DateTime("2022-08-19T01:00"),
+        endDateTime: new DateTime("2022-08-19T04:00"),
+        isGood: false,
+        category: "SPIRITUAL",
+        memo: "개운하다"
+      },
+    ]],
+
+    ["2022-08-20", [
+      {
+        id: 9,
+        title: "잠을 뒤척임",
+        startDateTime: new DateTime("2022-08-20T02:00"),
+        endDateTime: new DateTime("2022-08-20T05:00"),
+        isGood: false,
+        category: "NONE",
+        memo: "힘들다"
+      },
+    ]],
+
+    ["2022-08-21", [
+      {
+        id: 10,
+        title: "sleep bad",
+        startDateTime: new DateTime("2022-08-21T00:00"),
+        endDateTime: new DateTime("2022-08-21T05:00"),
+        isGood: false,
+        category: "NONE",
+        memo: "힘들다"
+      },
+    ]]
+  ]),
+  undefined
+);
 
 
-
-const onSubmitHandler = (e, timeBlockDto: TimeBlockDto) => {
+const onSubmitHandler = (e, timeBlockDto: TimeBlockDto, handleStandardDateChange: (day: Dayjs) => void, closeModal: (e) => void, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
   e.preventDefault();
   console.log("Inner Text", e.target.innerText, timeBlockDto.id);
 
-  window.location.reload();
-  // const form = document.getElementById("time-block-form");
-  //
-  // const event = new Event('submit', {
-  //   'bubbles'    : true, // Whether the event will bubble up through the DOM or not
-  //   'cancelable' : true  // Whether the event may be canceled or not
-  // });
-  //
-  // form!.dispatchEvent( event );
-
-  // call api, 분기처리
+  handleStandardDateChange(dayjs(timeBlockDto.startDateTime.getDateTime()))
+  updateTimeBlocks(serverData2);
+  closeModal(e)
 }
 
-const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlockDto }> =
-  (props: { onSubmit: (e) => void, timeBlockDto: TimeBlockDto }) => {
-    const {onSubmit, timeBlockDto} = props;
+const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlockDto, handleStandardDateChange: (day: Dayjs) => void, closeModal: (e) => void, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+  (props: { onSubmit: (e) => void, timeBlockDto: TimeBlockDto, handleStandardDateChange: (day: Dayjs) => void, closeModal: (e) => void,  updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
+    const {onSubmit, timeBlockDto, handleStandardDateChange, closeModal, updateTimeBlocks} = props;
     const [isGood, setIsGood] = useState(timeBlockDto.isGood)
     const toggleIsGood = () => setIsGood(!isGood)
 
@@ -305,7 +413,7 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
               height: new Pixel(40).toString()
             })}
             className={!isGood ? 'button-work': 'button-orgasm'}
-            onClick={(e) => onSubmitHandler(e, timeBlockDto)}
+            onClick={(e) => onSubmitHandler(e, timeBlockDto, handleStandardDateChange, closeModal, updateTimeBlocks)}
             // type={"submit"}
           >remove</button>
 

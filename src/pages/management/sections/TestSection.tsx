@@ -68,96 +68,6 @@ const isNodeInRoot = (node, root) => {
   return false;
 };
 
-function exceedsYesterday(lastOfYesterdayData: TimeBlockDto | undefined, comparableRecord: TimeRecord) {
-  if (lastOfYesterdayData === undefined) {
-    return false;
-  }
-
-  const yesterdayDate = lastOfYesterdayData.endDateTime.getDate();
-  const comparable = new Date(yesterdayDate + "T" + "02:00");
-  const endDateTime = new Date(lastOfYesterdayData.endDateTime.getDateTime());
-
-  return lastOfYesterdayData.endDateTime.getDate() === comparableRecord.getEndDate() && comparable.getTime() < endDateTime.getTime();
-}
-
-function getFirstTimeOfTheDayAfterTargetDay(yesterdayData: TimeBlockDto[]): TimeBlockDto {
-  return yesterdayData[0];
-}
-
-function match(serverData: WeekTimes, record: TimeRecord, targetDayOfWeek: string) {
-
-  const targetTimes = serverData.getTimesOf(targetDayOfWeek);
-  for (let i = 0; i < targetTimes.length; i++) {
-    const targetTime = targetTimes[i];
-    // const startTimePieces = data.endDateTime.toISOString().split("T")[1].split(".")[0].split(":");
-    if (record.getStartDateTime() === targetTime.startDateTime.getDateTime()) {
-      return true
-    }
-  }
-
-  // const theDayAfterTargetDayTimes = serverData.getTimesOfheDayAfterTargetDay(targetDayOfWeek);
-
-  // const firstOftheDayAfterTargetDay = getFirstTimeOfTheDayAfterTargetDay(theDayAfterTargetDayTimes);
-  // if (firstOftheDayAfterTargetDay === undefined) {
-  //   return false;
-  // }
-  // return (record.getStartTime() === '00:00' || record.getStartTime() === '01:00') || record.getStartTime() === '02:00' &&
-  //   record.getStartDateTime() === firstOftheDayAfterTargetDay.startDateTime.getDateTime();
-  return false;
-}
-
-function calculateHeightTimes(serverData: WeekTimes, record: TimeRecord, todayDayOfWeek) {
-
-  // const yesterdayData = serverData.getTimesOfheDayAfterTargetDay(todayDayOfWeek);
-  const lastOfYesterdayData = getFirstTimeOfTheDayAfterTargetDay([]);
-
-  let itemStartDateTime = new Date();
-  itemStartDateTime.setHours(parseInt(record.getAlias()));
-
-  const itemEndDateTime = new Date();
-  itemEndDateTime.setHours(parseInt(record.getAlias()) + 1);
-
-  if (lastOfYesterdayData !== undefined && record.getStartTime() === '03:00' && exceedsYesterday(lastOfYesterdayData, record)) {
-    const endDate = lastOfYesterdayData.endDateTime.getDate();
-    const comparable = new Date(endDate + "T" + "03:00");
-    const endDateTime = new Date(lastOfYesterdayData.endDateTime.getDateTime());
-    return new Percentage((endDateTime.getTime() - comparable.getTime()) / (itemEndDateTime.getTime() - itemStartDateTime.getTime()) * 100);
-  }
-
-  const todayData = serverData.getTimesOf(todayDayOfWeek);
-  // todo: check!!! 왜 undefined야
-  if (todayData === undefined) {
-    return null;
-  }
-  for (let i = 0; i < todayData.length; i++) {
-    const data = todayData[i];
-
-    const startDateTime = new Date(data.startDateTime.getDateTime());
-    // const startTimePieces = data.endDateTime.toISOString().split("T")[1].split(".")[0].split(":");
-    const startTime = data.startDateTime.getTime();
-    if (record.getStartTime() === startTime) {
-
-      const endDate = data.endDateTime.getDate();
-      const comparable = new Date(endDate + "T" + "03:00");
-      const endDateTime = new Date(data.endDateTime.getDateTime());
-      // 일단 끄트머리(2시)에서 끊는거까진 함. 남은걸 다음 요일에 뿌려주는걸 안함.
-
-      if (comparable.getTime() < endDateTime.getTime()) {
-        // console.log("kkkkkkkk");
-        // console.log(comparable.getDate());
-        // console.log(startDateTime.getDate());
-        // console.log(endDateTime.getDate());
-        // console.log((comparable.getTime() - startDateTime.getTime()) / (itemEndDateTime.getTime() - itemStartDateTime.getTime()) * 100)
-
-        return new Percentage((comparable.getTime() - startDateTime.getTime()) / (itemEndDateTime.getTime() - itemStartDateTime.getTime()) * 100);
-      }
-
-      return new Percentage((endDateTime.getTime() - startDateTime.getTime()) / (itemEndDateTime.getTime() - itemStartDateTime.getTime()) * 100);
-
-    }
-  }
-}
-
 function isIdInSelectedKeys(id, selectedKeys: number[]) {
   function getBiggest(selectedKeys: number[]) {
     let biggest: number | undefined = undefined;
@@ -350,6 +260,8 @@ const serverData: WeekTimes = new WeekTimes(
   undefined
 );
 
+
+
 function onRegister() {
   return e => {
     let title = e.currentTarget[0];
@@ -379,6 +291,7 @@ function onRegister() {
 export class TestSection extends React.Component<any> {
   selectableRef;
   state;
+  timeBlocks;
 
   constructor(props) {
     super(props)
@@ -386,7 +299,8 @@ export class TestSection extends React.Component<any> {
       selectedKeys: [],
       tolerance: 0,
       selectOnMouseMove: false,
-      standardDate: dayjs()
+      standardDate: dayjs(),
+      timeBlocks: new WeekTimes(new Map<string, TimeBlockDto[]>([]),undefined)
     };
     this.selectableRef = React.createRef();
 
@@ -396,10 +310,17 @@ export class TestSection extends React.Component<any> {
     this.toggleSelectOnMouseMove = this.toggleSelectOnMouseMove.bind(this);
   }
 
-  changeStandardDate(day: Dayjs) {
+  handleStandardDateChange(day: Dayjs) {
+    console.log("this", this)
     this.setState({
       standardDate: day
     });
+  }
+
+  updateTimeBlocks(timeBlocks: WeekTimes) {
+    this.setState({
+      timeBlocks: timeBlocks
+    })
   }
 
 
@@ -411,7 +332,12 @@ export class TestSection extends React.Component<any> {
 
 
   componentDidMount() {
-    // document.addEventListener('click', this.clearItems);
+    this.setState({
+      timeBlocks: serverData
+    })
+  }
+
+  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<{}>, snapshot?: any) {
   }
 
   componentWillUnmount() {
@@ -634,11 +560,10 @@ export class TestSection extends React.Component<any> {
 
                     {
                       timeRecords.map((timeCell) => {
-
                         let selected = this.state.selectedKeys.indexOf(timeCell.id) > -1 || isIdInSelectedKeys(timeCell.id, this.state.selectedKeys);
-                        const isMatching = timeCell.match(serverData, this.state.standardDate);
-                        const timeBlockHeightRatio = timeCell.calculateHeightTimes(serverData, isMatching, this.state.standardDate)
-                        const timeBlockDto: TimeBlockDto | undefined = timeCell.getMatching(serverData, this.state.standardDate);
+                        const isMatching = timeCell.match(this.state.timeBlocks, this.state.standardDate);
+                        const timeBlockHeightRatio = timeCell.calculateHeightTimes(this.state.timeBlocks, isMatching, this.state.standardDate)
+                        const timeBlockDto: TimeBlockDto | undefined = timeCell.getMatching(this.state.timeBlocks, this.state.standardDate);
                         return (
                           <div>
                             <SelectableComponent
@@ -649,6 +574,8 @@ export class TestSection extends React.Component<any> {
                               timeBlockDto={timeBlockDto}
                               timeBlockHeightRatio={timeBlockHeightRatio}
                               timeCellHeight={this.timeCellHeight}
+                              handleStandardDateChange={this.handleStandardDateChange.bind(this)}
+                              updateTimeBlocks={this.updateTimeBlocks.bind(this)}
                             >
                               <NumberBox number={timeCell.getAlias()} numberSize={this.checkBoxSize}
                                          numberFont={fontConfig.web.medium.fontFamily}
