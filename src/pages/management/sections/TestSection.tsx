@@ -310,13 +310,6 @@ export class TestSection extends React.Component<any> {
     this.toggleSelectOnMouseMove = this.toggleSelectOnMouseMove.bind(this);
   }
 
-  handleStandardDateChange(day: Dayjs) {
-    console.log("this", this)
-    this.setState({
-      standardDate: day
-    });
-  }
-
   updateTimeBlocks(timeBlocks: WeekTimes) {
     this.setState({
       timeBlocks: timeBlocks
@@ -574,7 +567,6 @@ export class TestSection extends React.Component<any> {
                               timeBlockDto={timeBlockDto}
                               timeBlockHeightRatio={timeBlockHeightRatio}
                               timeCellHeight={this.timeCellHeight}
-                              handleStandardDateChange={this.handleStandardDateChange.bind(this)}
                               updateTimeBlocks={this.updateTimeBlocks.bind(this)}
                             >
                               <NumberBox number={timeCell.getAlias()} numberSize={this.checkBoxSize}

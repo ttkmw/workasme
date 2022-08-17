@@ -19,13 +19,12 @@ interface SelectableProps extends ReactSelectableComponentProps {
   timeBlockDto: TimeBlockDto | undefined,
   timeBlockHeightRatio?: Percentage
   timeCellHeight: Pixel,
-  handleStandardDateChange: (dayjs: Dayjs) => void;
   updateTimeBlocks: (timeBlocks: WeekTimes) => void;
 }
 
 class Selectable extends Component<SelectableProps> {
   render() {
-    const {selectableRef, isSelected, isMatching, timeBlockDto, timeBlockHeightRatio, timeCellHeight, handleStandardDateChange, updateTimeBlocks} = this.props
+    const {selectableRef, isSelected, isMatching, timeBlockDto, timeBlockHeightRatio, timeCellHeight, updateTimeBlocks} = this.props
 
     return <div
       css={css({
@@ -50,7 +49,7 @@ class Selectable extends Component<SelectableProps> {
       >
         {this.props.children}
         <TimeBlock isMatching={isMatching} timeBlockDto={timeBlockDto} timeCellHeight={timeCellHeight}
-                   timeBlockHeightRatio={timeBlockHeightRatio} handleStandardDateChange={handleStandardDateChange} updateTimeBlocks={updateTimeBlocks}/>
+                   timeBlockHeightRatio={timeBlockHeightRatio} updateTimeBlocks={updateTimeBlocks}/>
       </div>
     </div>;
   }

@@ -127,18 +127,15 @@ const serverData2: WeekTimes = new WeekTimes(
 );
 
 
-const onSubmitHandler = (e, timeBlockDto: TimeBlockDto, handleStandardDateChange: (day: Dayjs) => void, closeModal: (e) => void, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
+const onSubmitHandler = (e, timeBlockDto: TimeBlockDto, closeModal: (e) => void, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
   e.preventDefault();
-  console.log("Inner Text", e.target.innerText, timeBlockDto.id);
-
-  handleStandardDateChange(dayjs(timeBlockDto.startDateTime.getDateTime()))
   updateTimeBlocks(serverData2);
   closeModal(e)
 }
 
-const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlockDto, handleStandardDateChange: (day: Dayjs) => void, closeModal: (e) => void, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
-  (props: { onSubmit: (e) => void, timeBlockDto: TimeBlockDto, handleStandardDateChange: (day: Dayjs) => void, closeModal: (e) => void,  updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
-    const {onSubmit, timeBlockDto, handleStandardDateChange, closeModal, updateTimeBlocks} = props;
+const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlockDto, closeModal: (e) => void, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+  (props: { onSubmit: (e) => void, timeBlockDto: TimeBlockDto, closeModal: (e) => void,  updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
+    const {onSubmit, timeBlockDto, closeModal, updateTimeBlocks} = props;
     const [isGood, setIsGood] = useState(timeBlockDto.isGood)
     const toggleIsGood = () => setIsGood(!isGood)
 
@@ -413,7 +410,7 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
               height: new Pixel(40).toString()
             })}
             className={!isGood ? 'button-work': 'button-orgasm'}
-            onClick={(e) => onSubmitHandler(e, timeBlockDto, handleStandardDateChange, closeModal, updateTimeBlocks)}
+            onClick={(e) => onSubmitHandler(e, timeBlockDto, closeModal, updateTimeBlocks)}
             // type={"submit"}
           >remove</button>
 
