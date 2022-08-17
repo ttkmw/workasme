@@ -9,6 +9,7 @@ import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
 import '../../../index.css';
 import {TimeRecord} from "src/model/TimeRecord";
+import {options} from "src/pages/components/timeblock/CategoryOptions";
 
 interface FormProps {
   onSubmit: (e) => void,
@@ -41,6 +42,9 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
         '.input-key': {
           width: "100px"
         },
+        "input": {
+          paddingLeft: "10px"
+        },
         "label": {
           marginBottom: "0px"
         },
@@ -71,6 +75,7 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
           }
         })} id="title"/>
       </div>
+
       <div className="form-group" css={css({
         display: "flex",
         flexDirection: "row",
@@ -92,7 +97,7 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
           >
             <DatePicker dateTime={earliestRecord.getStartDateTime()}/>
             <div>-</div>
-            <TimePicker initialValue={earliestRecord.getStartDateTime().slice(0,2)}/>
+            <TimePicker initialValue={earliestRecord.getStartDateTime().split("T")[1].slice(0,2)}/>
           </div>
         </div>
       </div>
@@ -114,7 +119,7 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
                id={"endDateTime"}>
             <DatePicker dateTime={latestRecord.getEndDateTime()}/>
             <div>-</div>
-            <TimePicker initialValue={latestRecord.getEndDateTime().slice(0,2)}/>
+            <TimePicker initialValue={latestRecord.getEndDateTime().split("T")[1].slice(0,2)}/>
           </div>
         </div>
       </div>
@@ -233,11 +238,9 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
           })}
 
                   name="category" id="category-select">
-            <option value="none">None</option>
-            <option value="spiritual">Spiritual</option>
-            <option value="intellectual">Intellectual</option>
-            <option value="social">Social</option>
-            <option value="physical">Physical</option>
+            {options.map((option) => {
+              return <option value={option.value}>{option.label}</option>;
+            })}
           </select>
         </div>
       </div>

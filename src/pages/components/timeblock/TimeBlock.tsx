@@ -33,6 +33,9 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
       }
     };
     const onClickOutside = (event: any) => {
+      console.log(modal);
+      console.log(event.target);
+      console.log(modal.contains(event.target));
       if (modal && modal.contains(event.target)) return;
       onClose(event);
     };
@@ -57,7 +60,7 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
         {isEditFormOpen && (
           <Modal onClickOutside={onClickOutside} onKeyDown={onKeyDown} modalRef={(n: any) => (modal = n)}
                  buttonRef={(n: any) => (closeButton = n)} closeModal={onCloseModal}>
-            <TimeBlockEditForm onSubmit={() => console.log("kkk")}/>
+            <TimeBlockEditForm onSubmit={() => console.log("kkk")} timeBlockDto={timeBlockDto}/>
           </Modal>
         )}
       </div>;

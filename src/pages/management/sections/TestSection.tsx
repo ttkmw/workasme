@@ -396,6 +396,12 @@ export class TestSection extends React.Component<any> {
     this.toggleSelectOnMouseMove = this.toggleSelectOnMouseMove.bind(this);
   }
 
+  changeStandardDate(day: Dayjs) {
+    this.setState({
+      standardDate: day
+    });
+  }
+
 
   // clearSelectionUsingRef = () => {
   //   if (this.selectionRef) {
