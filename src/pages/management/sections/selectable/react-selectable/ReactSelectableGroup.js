@@ -117,6 +117,7 @@ class ReactSelectableGroup extends Component {
    * be added, and if so, attach event listeners
    */
   _mouseDown (e) {
+    console.log("mousedown")
     const {onBeginSelection, preventDefault} = this.props;
 
     // Disable if target is control by react-dnd

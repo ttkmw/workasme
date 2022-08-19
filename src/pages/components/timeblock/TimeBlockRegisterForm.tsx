@@ -74,6 +74,14 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
             outline: "0px"
           }
         })} id="title"/>
+        {/*<input css={css({*/}
+        {/*  border: 0,*/}
+        {/*  borderBottom: 1,*/}
+        {/*  borderBottomStyle: "solid",*/}
+        {/*  borderBottomColor: Colors.theme.table.innerLine,*/}
+        {/*  marginLeft: "5%",*/}
+        {/*  width: "90%"*/}
+        {/*})} type={"text"}/>*/}
       </div>
 
       <div className="form-group" css={css({

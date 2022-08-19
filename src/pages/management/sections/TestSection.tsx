@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Dispatch, SetStateAction, useState} from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -101,13 +101,6 @@ function isIdInSelectedKeys(id, selectedKeys: number[]) {
   const smallest = getSmallest(selectedKeys);
 
   return id <= biggest && smallest <= id;
-}
-
-const WeekView: React.FC<{ weekDays: Dayjs[] }> = (props: { weekDays: Dayjs[] }) => {
-  const {weekDays} = props;
-  // const [timeRecordsOnWeekView, setTimeRecordsOnWeekView] = useState<TimeRecordOnWeekView[]>([]);
-
-  return <div></div>;
 }
 
 function createAllTimeRecords(day: Dayjs): TimeRecord[] {
@@ -261,7 +254,6 @@ const serverData: WeekTimes = new WeekTimes(
 );
 
 
-
 function onRegister() {
   return e => {
     let title = e.currentTarget[0];
@@ -300,7 +292,7 @@ export class TestSection extends React.Component<any> {
       tolerance: 0,
       selectOnMouseMove: false,
       standardDate: dayjs(),
-      timeBlocks: new WeekTimes(new Map<string, TimeBlockDto[]>([]),undefined)
+      timeBlocks: new WeekTimes(new Map<string, TimeBlockDto[]>([]), undefined)
     };
     this.selectableRef = React.createRef();
 
@@ -517,6 +509,21 @@ export class TestSection extends React.Component<any> {
 
           </div>
         </div>
+        <div css={css({
+          flexDirection: "row",
+          display: "flex"
+        })}>
+          {
+            weekdays.map((day, i) => {
+              return <div css={css({
+                width: "160px"
+              })}>
+                <DateGuide day={day}/>
+                <TodoList checkBoxSize={this.checkBoxSize}/>
+              </div>
+            })
+          }
+        </div>
         <ReactSelectableGroup onSelection={this.handleSelection}
                               onEndSelection={() => this.showModal(this.state.selectedKeys)}
                               className={"selectable"}
@@ -525,9 +532,10 @@ export class TestSection extends React.Component<any> {
                               selectingClassName={"selectingSelectable"}
 
         >
+
           <div css={css({
             flexDirection: "row",
-            display: "flex"
+            display: "flex",
           })}>
             {
               weekdays.map((day, i) => {
@@ -539,10 +547,12 @@ export class TestSection extends React.Component<any> {
                   timeRecords.push(new TimeRecord(Number(i.toString() + getIdOfTemplate(j)), day, recordTemplate))
                 })
 
-                return <div>
-                  <DateGuide day={day}/>
-                  <TodoList checkBoxSize={this.checkBoxSize}/>
+                return <div css={css({
+
+                })}>
+
                   <div css={css({
+                    width: "160px",
                     borderRight: this.outlineBorder.toString(),
                     borderLeft: this.noBorder.toString(),
                     borderTop: this.outlineBorder.toString(),
@@ -596,7 +606,8 @@ export class TestSection extends React.Component<any> {
                 onKeyDown={this.onKeyDown}
                 onClickOutside={this.onClickOutside}
               >
-                <TimeBlockRegisterForm onSubmit={onRegister} earliestRecord={earliestRecord} latestRecord={latestRecord}/>
+                <TimeBlockRegisterForm onSubmit={onRegister} earliestRecord={earliestRecord}
+                                       latestRecord={latestRecord}/>
               </Modal>
             ) : null}
         </React.Fragment>
@@ -606,38 +617,51 @@ export class TestSection extends React.Component<any> {
   }
 }
 
-const TodoList: React.FC<{ checkBoxSize: Pixel }> = (props: { checkBoxSize: Pixel }) => {
-  const {checkBoxSize} = props;
-  let percent = new Percentage(100);
-  return <div>
-    <div css={css({
-      display: "flex",
-      alignItems: "center",
-      marginLeft: "5px",
-      marginRight: "10px",
-      flexDirection: "column",
-      paddingTop: checkBoxSize.multiply(new Percentage(50)).toString(),
-      paddingBottom: checkBoxSize.multiply(new Percentage(50)).toString()
-    })}>
-      <Todo checkBoxSize={checkBoxSize}/>
-      <Todo checkBoxSize={checkBoxSize}/>
-      <Todo checkBoxSize={checkBoxSize}/>
-    </div>
-  </div>
+export interface TodoDto {
+  isChecked: boolean
+  content: string
 }
 
-const Todo: React.FC<{ checkBoxSize: Pixel }> = (props: { checkBoxSize: Pixel }) => {
+const TodoList: React.FC<{ checkBoxSize: Pixel }> = (props: { checkBoxSize: Pixel }) => {
   const {checkBoxSize} = props;
+  const [todos, setTodos] = useState<TodoDto[]>([
+    {isChecked: false, content: ""},
+    {isChecked: false, content: ""},
+    {isChecked: false, content: ""}
+  ]);
   return <div css={css({
     display: "flex",
     alignItems: "center",
+    marginLeft: "5px",
+    marginRight: "10px",
+    flexDirection: "column",
+    paddingTop: checkBoxSize.multiply(new Percentage(50)).toString(),
+    paddingBottom: checkBoxSize.multiply(new Percentage(50)).toString()
+  })}>
 
+    {todos.map((todo, index) => {
+      return <Todo checkBoxSize={checkBoxSize} todoDto={todo} index={index} todoDtos={todos} setTodoDtos={setTodos}/>
+    })}
+  </div>
+}
+
+const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, index: number, todoDtos: TodoDto[], setTodoDtos: Dispatch<SetStateAction<TodoDto[]>>}> =
+  (props: { checkBoxSize: Pixel, todoDto: TodoDto, index: number, todoDtos: TodoDto[], setTodoDtos: Dispatch<SetStateAction<TodoDto[]>> }) => {
+  const {checkBoxSize, todoDto, index, todoDtos, setTodoDtos} = props;
+
+  return <div css={css({
+    display: "flex",
+    alignItems: "center",
     marginTop: checkBoxSize.multiply(new Percentage(25)).toString(),
     marginBottom: checkBoxSize.multiply(new Percentage(25)).toString()
   })}>
     <CheckBox size={checkBoxSize} borderWidth={new Pixel(1.5)}
               borderColor={Colors.theme.table.innerLine} beforeColor={Colors.theme.screen.background}
               afterColor={Colors.theme.table.innerLine}
+              todoDto={todoDto}
+              index={index}
+              todoDtos={todoDtos}
+              setTodoDtos={setTodoDtos}
     />
     <input css={css({
       border: 0,
@@ -646,7 +670,8 @@ const Todo: React.FC<{ checkBoxSize: Pixel }> = (props: { checkBoxSize: Pixel })
       borderBottomColor: Colors.theme.table.innerLine,
       marginLeft: "5%",
       width: "90%"
-    })} type={"text"}/>
+    })} defaultValue={todoDto.content} type={"text"}/>
+
   </div>
 }
 
@@ -657,6 +682,7 @@ const DateGuide: React.FC<{ day: Dayjs }> = (props: { day: Dayjs }) => {
 
   const fontSize = new Pixel(20);
   return <div css={css({
+    width: "160px",
     marginTop: 0,
     marginBottom: 0,
     paddingLeft: "5px",
