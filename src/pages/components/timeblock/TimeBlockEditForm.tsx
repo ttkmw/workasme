@@ -149,25 +149,46 @@ const serverData2: WeekTimes = new WeekTimes(
 );
 
 
-const onSubmitHandler = (e, timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
-  e.preventDefault();
-  console.log("editedit")
-  console.log(e.target)
+const onSubmitHandler = (e, exTimeBlock: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
+  // e.preventDefault();
+
+  if (e.target.innerText !== 'edit' && e.target.innerText !== 'remove') {
+    return;
+  }
+  //
   if (e.target.innerText === 'edit') {
+    alert("should api call modified")
     let title = e.currentTarget[0].value;
     let startDate = e.currentTarget[1].value;
     let startTime = e.currentTarget[2].value;
     let endDate = e.currentTarget[3].value;
     let endTime = e.currentTarget[4].value;
-    let isGood = e.currentTarget[5].value;
+    let isGood = e.currentTarget[5].checked;
     let category = e.currentTarget[6].value;
-    console.log(title);
-    console.log(startDate);
-    console.log(startTime);
-    console.log(endDate);
-    console.log(endTime);
-    console.log(isGood);
-    console.log(category);
+    let memo = e.currentTarget[7].value;
+    const [startMonth, startDay, startYear] = startDate.split('.')
+    const [endMonth, endDay, endYear] = endDate.split('.')
+
+    const newTimeBlock: TimeBlockDto = {id: exTimeBlock.id, title: title,
+      startDateTime: {dateTime: startYear + '-' + startMonth + '-' + startDay + "T" + startTime + ":00"},
+      endDateTime: {dateTime: endYear + '-' + endMonth + '-' + endDay + "T" + endTime + ":00"},
+      isGood: isGood,
+      category: category,
+      memo: memo
+    }
+
+    const formattedDate = exTimeBlock.startDateTime.dateTime.split("T")[0];
+    let timeBlockDtosAtDate: TimeBlockDto[] | undefined = timeBlocks.timesWithinThisWeek.get(formattedDate);
+    let newTimeBlockDtos = timeBlockDtosAtDate!.map((timeBlockDto) => {
+      if (newTimeBlock.id === timeBlockDto.id) {
+        return newTimeBlock;
+      } else {
+        return timeBlockDto;
+      }
+    })
+
+    timeBlocks.timesWithinThisWeek.set(formattedDate, newTimeBlockDtos);
+    updateTimeBlocks(timeBlocks);
 
   }
 
@@ -178,7 +199,11 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
   (props: { onSubmit: (e) => void, timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
     const {onSubmit, timeBlockDto, closeModal, timeBlocks, updateTimeBlocks} = props;
     const [isGood, setIsGood] = useState(timeBlockDto.isGood)
-    const toggleIsGood = () => setIsGood(!isGood)
+    const toggleIsGood = (e) => {
+      console.log("toggleIsGood")
+      e.stopPropagation();
+      setIsGood(!isGood);
+    }
 
     return <form
       css={css({
@@ -349,7 +374,7 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
         })}>
           <input
             onClick={toggleIsGood}
-            checked={isGood}
+            defaultChecked={isGood}
             type="checkbox"/>
           <span className="slider round"/>
         </label>

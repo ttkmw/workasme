@@ -359,6 +359,7 @@ export class TestSection extends React.Component<any> {
 
 
   componentDidMount() {
+    console.log("!!!!!!!!!!!!!! did mount!!!!!!!!!!!!")
     this.setState({
       timeBlocks: serverData
     })
@@ -729,6 +730,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
     useOutsideAlerter(wrapperRef, day, index, timeBlocks, updateTimeBlocks);
 
     const onKeyPress = (event, day, index) => {
+      // todo: 엔티티가 아니면, 즉 아이디가 없으면 생성 콜을 해야함.
       if (event.charCode == 13) {
         let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
         const target = event.target as HTMLInputElement;
@@ -772,6 +774,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
                 timeBlocks={timeBlocks}
                 updateTimeBlocks={updateTimeBlocks}
       />
+
       <input ref={wrapperRef} css={css({
         border: 0,
         borderBottom: 1,
