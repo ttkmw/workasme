@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, RefObject, SetStateAction, useEffect, useRef, useState} from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -25,6 +25,8 @@ import Modal from "src/pages/components/Mordal";
 import TimeBlockRegisterForm from "src/pages/components/timeblock/TimeBlockRegisterForm";
 import {TodoDto} from "src/dtos/TodoDto";
 import timeBlock from "src/pages/components/timeblock/TimeBlock";
+import {wrapper} from "react-bootstrap/lib/utils/deprecationWarning";
+import {instanceOf} from "prop-types";
 
 
 const SelectableComponent = createSelectable(Selectable);
@@ -321,6 +323,7 @@ export class TestSection extends React.Component<any> {
   selectableRef;
   state;
   timeBlocks;
+  wrapperRef;
 
   constructor(props) {
     super(props)
@@ -332,6 +335,7 @@ export class TestSection extends React.Component<any> {
       timeBlocks: new WeekTimes(new Map<string, TimeBlockDto[]>([]), undefined, new Map<string, TodoDto[]>([]))
     };
     this.selectableRef = React.createRef();
+    this.wrapperRef = React.createRef();
 
     this.handleSelection = this.handleSelection.bind(this);
     this.clearItems = this.clearItems.bind(this);
@@ -354,11 +358,12 @@ export class TestSection extends React.Component<any> {
 
 
   componentDidMount() {
-    console.log("componentDidMount")
     this.setState({
       timeBlocks: serverData
     })
   }
+
+
 
   componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<{}>, snapshot?: any) {
   }
@@ -422,6 +427,8 @@ export class TestSection extends React.Component<any> {
     // @ts-ignore
     document.querySelector('html').classList.toggle('scroll-lock');
   };
+
+
   private closeButton: any;
   private TriggerButton: any;
   private modal: any;
@@ -641,7 +648,11 @@ export class TestSection extends React.Component<any> {
 }
 
 
-const TodoList: React.FC<{ checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+
+
+
+
+const TodoList: React.FC<{ checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}> =
   (props: { checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
   const {checkBoxSize, todoDtos, day, timeBlocks, updateTimeBlocks} = props;
   return <div css={css({
@@ -659,11 +670,51 @@ const TodoList: React.FC<{ checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs,
   </div>
 }
 
+function handleClickOutside(event, ref) {
+  if (ref.current.value == '' || ref.current.value == undefined) {
+    return;
+  }
+  if (ref.current.value == ref.current.defaultValue) {
+    return;
+  }
+
+  // console.log("contains", !ref.current.contains(event.target))
+  if (ref.current && !ref.current.contains(event.target)) {
+    alert("call api modified")
+    ref.current.defaultValue = ref.current.value;
+  }
+}
+
+function useOutsideAlerter(ref) {
+  useEffect(() => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    // Bind the event listener
+    document.addEventListener("mousedown", (e) => handleClickOutside(e, ref));
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", (e) => handleClickOutside(e, ref));
+    };
+  }, [ref]);
+}
+
+//https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
 const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, todoDtos: TodoDto[], timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void}> =
   (props: { checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, todoDtos: TodoDto[], timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void}) => {
     const {checkBoxSize, todoDto, day, index, todoDtos, timeBlocks, updateTimeBlocks} = props;
 
-    return <div css={css({
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef)
+
+    function onKeyPress(e: any) {
+
+      console.log("keyPress", e);
+      return undefined;
+    }
+
+    return <div
+      css={css({
       display: "flex",
       alignItems: "center",
       marginTop: checkBoxSize.multiply(new Percentage(25)).toString(),
@@ -678,13 +729,21 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
                 timeBlocks={timeBlocks}
                 updateTimeBlocks={updateTimeBlocks}
       />
-      <input css={css({
+      <input ref={wrapperRef} css={css({
         border: 0,
         borderBottom: 1,
         borderBottomStyle: "solid",
         borderBottomColor: Colors.theme.table.innerLine,
         marginLeft: "5%",
         width: "90%"
+      })} onKeyPress={(event => {
+        if (event.charCode == 13) {
+          const target = event.target as HTMLInputElement;
+          if (target.value !== target.defaultValue) {
+            alert("should api call")
+            target.defaultValue = target.value;
+          }
+        }
       })} defaultValue={todoDto.content} type={"text"}/>
 
     </div>
@@ -694,7 +753,8 @@ const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBl
   (props: { weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
   const {weekdays, checkBoxSize, timeBlocks, updateTimeBlocks} = props;
 
-  return <div css={css({
+  return <div
+    css={css({
     flexDirection: "row",
     display: "flex"
   })}>
