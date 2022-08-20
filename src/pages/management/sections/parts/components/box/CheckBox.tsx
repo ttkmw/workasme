@@ -28,9 +28,11 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
     } = props;
 
     const onChange = (day, index) => {
+      alert("should api call modified")
       let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-      let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate?.map((todoDto, todoDtoIndex) => {
+      let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate!.map((todoDto, todoDtoIndex) => {
         if (todoDtoIndex == index) {
+          //여기에서 api 콜한 결과를 리턴
           return {id: todoDto.id, isChecked: !todoDto.isChecked, content: todoDto.content}
         } else {
           return todoDto;
@@ -39,11 +41,6 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
 
       timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
       updateTimeBlocks(timeBlocks);
-
-      if (someDayIsFullOfContents(timeBlocks.todoWithinThisWeek)) {
-        addBlankTodoAtThisWeek(timeBlocks.todoWithinThisWeek)
-        updateTimeBlocks(timeBlocks);
-      }
 
       // setTodoDtos(((prevState: TodoDto[]) => {
       //   return prevState.map((todoDto, todoDtoIndex) => {

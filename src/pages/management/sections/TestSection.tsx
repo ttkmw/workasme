@@ -27,6 +27,7 @@ import {TodoDto} from "src/dtos/TodoDto";
 import timeBlock from "src/pages/components/timeblock/TimeBlock";
 import {wrapper} from "react-bootstrap/lib/utils/deprecationWarning";
 import {instanceOf} from "prop-types";
+import {addBlankTodoAtThisWeek, someDayIsFullOfContents} from "src/service/TodoListService";
 
 
 const SelectableComponent = createSelectable(Selectable);
@@ -665,12 +666,12 @@ const TodoList: React.FC<{ checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs,
     paddingBottom: checkBoxSize.multiply(new Percentage(50)).toString()
   })}>
     {todoDtos.map((todo, index) => {
-      return <Todo checkBoxSize={checkBoxSize} todoDto={todo} day={day} index={index} todoDtos={todoDtos} timeBlocks={timeBlocks} updateTimeBlocks={updateTimeBlocks}/>
+      return <Todo checkBoxSize={checkBoxSize} todoDto={todo} day={day} index={index} timeBlocks={timeBlocks} updateTimeBlocks={updateTimeBlocks}/>
     })}
   </div>
 }
 
-function handleClickOutside(event, ref) {
+function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) {
   if (ref.current.value == '' || ref.current.value == undefined) {
     return;
   }
@@ -680,38 +681,79 @@ function handleClickOutside(event, ref) {
 
   // console.log("contains", !ref.current.contains(event.target))
   if (ref.current && !ref.current.contains(event.target)) {
+
+    let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
     alert("should api call modified")
-    ref.current.defaultValue = ref.current.value;
+
+    let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate!.map((todoDto, todoDtoIndex) => {
+      if (todoDtoIndex == index) {
+        //여기에서 api 콜한 결과를 리턴
+        return {id: todoDto.id, isChecked: todoDto.isChecked, content: ref.current.value}
+      } else {
+        return todoDto;
+      }
+    })
+
+    timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
+    updateTimeBlocks(timeBlocks);
+
+    if (someDayIsFullOfContents(timeBlocks.todoWithinThisWeek)) {
+      addBlankTodoAtThisWeek(timeBlocks.todoWithinThisWeek)
+      updateTimeBlocks(timeBlocks);
+    }
+    // ref.current.defaultValue = ref.current.value;
   }
 }
 
-function useOutsideAlerter(ref) {
+function useOutsideAlerter(ref: RefObject<any>, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) {
   useEffect(() => {
     /**
      * Alert if clicked on outside of element
      */
     // Bind the event listener
-    document.addEventListener("mousedown", (e) => handleClickOutside(e, ref));
+    document.addEventListener("mousedown", (e) => handleClickOutside(e, ref, day, index, timeBlocks, updateTimeBlocks));
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", (e) => handleClickOutside(e, ref));
+      document.removeEventListener("mousedown", (e) => handleClickOutside(e, ref, day, index, timeBlocks, updateTimeBlocks));
     };
   }, [ref]);
 }
 
 //https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
-const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, todoDtos: TodoDto[], timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void}> =
-  (props: { checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, todoDtos: TodoDto[], timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void}) => {
-    const {checkBoxSize, todoDto, day, index, todoDtos, timeBlocks, updateTimeBlocks} = props;
+const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void}> =
+  (props: { checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void}) => {
+    const {checkBoxSize, todoDto, day, index, timeBlocks, updateTimeBlocks} = props;
 
     const wrapperRef = useRef(null);
-    useOutsideAlerter(wrapperRef)
+    useOutsideAlerter(wrapperRef, day, index, timeBlocks, updateTimeBlocks);
 
-    function onKeyPress(e: any) {
+    const onKeyPress = (event, day, index) => {
+      if (event.charCode == 13) {
+        let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+        const target = event.target as HTMLInputElement;
+        if (target.defaultValue !== target.value) {
+          alert("should api call modified")
 
-      console.log("keyPress", e);
-      return undefined;
-    }
+          let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate!.map((todoDto, todoDtoIndex) => {
+            if (todoDtoIndex == index) {
+              //여기에서 api 콜한 결과를 리턴
+              return {id: todoDto.id, isChecked: todoDto.isChecked, content: target.value}
+            } else {
+              return todoDto;
+            }
+          })
+
+          timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
+          updateTimeBlocks(timeBlocks);
+
+          if (someDayIsFullOfContents(timeBlocks.todoWithinThisWeek)) {
+            addBlankTodoAtThisWeek(timeBlocks.todoWithinThisWeek)
+            updateTimeBlocks(timeBlocks);
+          }
+          // target.defaultValue = target.value;
+        }
+      }
+    };
 
     return <div
       css={css({
@@ -736,16 +778,9 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
         borderBottomColor: Colors.theme.table.innerLine,
         marginLeft: "5%",
         width: "90%"
-      })} onKeyPress={(event => {
-        if (event.charCode == 13) {
-          const target = event.target as HTMLInputElement;
-          if (target.value !== target.defaultValue) {
-            alert("should api call modified")
-            target.defaultValue = target.value;
-          }
-        }
-      })} defaultValue={todoDto.content} type={"text"}/>
+      })} onKeyPress={(e) => onKeyPress(e, day, index)} defaultValue={todoDto.content} type={"text"}/>
 
+      {/*다음으로 할 작업은 인풋 api 콜 되는부분에서 setTodos를 해서 defaultValue를 수정하는것. 마찬가지로 check에서도 체크했을때 api 콜 가정하여 setTodos 호출해서 check 수정하*/}
     </div>
   }
 
