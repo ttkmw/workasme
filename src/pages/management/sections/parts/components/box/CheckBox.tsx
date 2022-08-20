@@ -12,26 +12,6 @@ import {TimeRecord} from "src/model/TimeRecord";
 import {RelativeDay} from "src/model/RelativeDay";
 import {addBlankTodoAtThisWeek, someDayIsFullOfContents} from "src/service/TodoListService";
 
-
-function somedayIsFullOfTodos(timeBlocks: WeekTimes) {
-  for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys())) {
-    let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(key);
-    if (!todoDtosAtDate!.some(todoDto => !todoDto.isChecked)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function addAllDayBlankTodo(timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) {
-  for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys())) {
-    let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(key);
-    todoDtosAtDate!.push({id: undefined, isChecked: false, content: ''})
-  }
-  updateTimeBlocks(timeBlocks);
-}
-
 const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
   (props: { size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, index: number, day: Dayjs, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
     const {
