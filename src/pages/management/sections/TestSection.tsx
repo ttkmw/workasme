@@ -146,7 +146,7 @@ const serverData: WeekTimes = new WeekTimes(
     ["2022-08-14", [
       {
         id: 1,
-        isChecked: true,
+        isChecked: false,
         content: "해야하는데 아직 못함"
       },
       {
