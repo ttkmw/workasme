@@ -680,7 +680,7 @@ function handleClickOutside(event, ref) {
 
   // console.log("contains", !ref.current.contains(event.target))
   if (ref.current && !ref.current.contains(event.target)) {
-    alert("call api modified")
+    alert("should api call modified")
     ref.current.defaultValue = ref.current.value;
   }
 }
@@ -740,7 +740,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
         if (event.charCode == 13) {
           const target = event.target as HTMLInputElement;
           if (target.value !== target.defaultValue) {
-            alert("should api call")
+            alert("should api call modified")
             target.defaultValue = target.value;
           }
         }
