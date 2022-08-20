@@ -2,6 +2,7 @@ import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import {WeekTimesDto} from "src/dtos/WeekTimesDto";
 import {TodoDto} from "src/dtos/TodoDto";
 import {number} from "prop-types";
+import {addBlankTodoAtThisWeek, someDayIsFullOfContents} from "src/service/TodoListService";
 
 
 
@@ -25,8 +26,8 @@ export class WeekTimes {
       }
     }
 
-    if (somedayIsFullOfTodos(todoWithinThisWeek)) {
-      addAllDayBlankTodo(todoWithinThisWeek)
+    if (someDayIsFullOfContents(todoWithinThisWeek)) {
+      addBlankTodoAtThisWeek(todoWithinThisWeek)
     }
 
     this.todoWithinThisWeek = todoWithinThisWeek;
@@ -48,19 +49,4 @@ function getMaxCountOfTodosAtDate(todoWithinThisWeek: Map<string, TodoDto[]>) {
   return maxCount;
 }
 
-function somedayIsFullOfTodos(todoWithinThisWeek: Map<string, TodoDto[]>) {
-  for (const key of Array.from(todoWithinThisWeek.keys())) {
-    let todoDtosAtDate: TodoDto[] | undefined = todoWithinThisWeek.get(key);
-    if (!todoDtosAtDate!.some(todoDto => !todoDto.isChecked)) {
-      return true;
-    }
-  }
-  return false;
-}
 
-function addAllDayBlankTodo(todoWithinThisWeek: Map<string, TodoDto[]>) {
-  for (const key of Array.from(todoWithinThisWeek.keys())) {
-    let todoDtosAtDate: TodoDto[] | undefined = todoWithinThisWeek.get(key);
-    todoDtosAtDate!.push({id: undefined, isChecked: false, content: ''})
-  }
-}

@@ -10,6 +10,7 @@ import {WeekTimes} from "src/model/WeekTimes";
 import {Dayjs} from "dayjs";
 import {TimeRecord} from "src/model/TimeRecord";
 import {RelativeDay} from "src/model/RelativeDay";
+import {addBlankTodoAtThisWeek, someDayIsFullOfContents} from "src/service/TodoListService";
 
 
 function somedayIsFullOfTodos(timeBlocks: WeekTimes) {
@@ -59,6 +60,10 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
       timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
       updateTimeBlocks(timeBlocks);
 
+      if (someDayIsFullOfContents(timeBlocks.todoWithinThisWeek)) {
+        addBlankTodoAtThisWeek(timeBlocks.todoWithinThisWeek)
+        updateTimeBlocks(timeBlocks);
+      }
 
       // setTodoDtos(((prevState: TodoDto[]) => {
       //   return prevState.map((todoDto, todoDtoIndex) => {
@@ -69,10 +74,6 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
       //     }
       //   });
       // }))
-
-      if (somedayIsFullOfTodos(timeBlocks)) {
-        addAllDayBlankTodo(timeBlocks, updateTimeBlocks);
-      }
 
 
       // setTodoDtos(((prevState: TodoDto[]) => {
