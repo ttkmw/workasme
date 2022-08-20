@@ -14,9 +14,9 @@ import {WeekTimes} from "src/model/WeekTimes";
 
 
 
-const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage, updateTimeBlocks: (timeBlocks: WeekTimes) => void}> =
-  (props: { isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
-    const {isMatching, timeBlockDto, timeCellHeight, timeBlockHeightRatio, updateTimeBlocks} = props;
+const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}> =
+  (props: { isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+    const {isMatching, timeBlockDto, timeCellHeight, timeBlockHeightRatio, timeBlocks, updateTimeBlocks} = props;
     const [isEditFormOpen, setIsEditFormOpen] = useState(false);
     let modal: any = undefined;
     let closeButton: any = undefined;
@@ -62,7 +62,7 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
         {isEditFormOpen && (
           <Modal onClickOutside={onClickOutside} onKeyDown={onKeyDown} modalRef={(n: any) => (modal = n)}
                  buttonRef={(n: any) => (closeButton = n)} closeModal={onCloseModal}>
-            <TimeBlockEditForm onSubmit={() => console.log("kkk")} timeBlockDto={timeBlockDto} updateTimeBlocks={updateTimeBlocks} closeModal={onCloseModal}/>
+            <TimeBlockEditForm onSubmit={() => console.log("kkk")} timeBlockDto={timeBlockDto} timeBlocks={timeBlocks} updateTimeBlocks={updateTimeBlocks} closeModal={onCloseModal}/>
           </Modal>
         )}
       </div>;

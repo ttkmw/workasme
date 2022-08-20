@@ -149,15 +149,34 @@ const serverData2: WeekTimes = new WeekTimes(
 );
 
 
-const onSubmitHandler = (e, timeBlockDto: TimeBlockDto, closeModal: (e) => void, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
+const onSubmitHandler = (e, timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
   e.preventDefault();
-  updateTimeBlocks(serverData2);
+  console.log("editedit")
+  console.log(e.target)
+  if (e.target.innerText === 'edit') {
+    let title = e.currentTarget[0].value;
+    let startDate = e.currentTarget[1].value;
+    let startTime = e.currentTarget[2].value;
+    let endDate = e.currentTarget[3].value;
+    let endTime = e.currentTarget[4].value;
+    let isGood = e.currentTarget[5].value;
+    let category = e.currentTarget[6].value;
+    console.log(title);
+    console.log(startDate);
+    console.log(startTime);
+    console.log(endDate);
+    console.log(endTime);
+    console.log(isGood);
+    console.log(category);
+
+  }
+
   closeModal(e)
 }
 
-const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlockDto, closeModal: (e) => void, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
-  (props: { onSubmit: (e) => void, timeBlockDto: TimeBlockDto, closeModal: (e) => void,  updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
-    const {onSubmit, timeBlockDto, closeModal, updateTimeBlocks} = props;
+const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+  (props: { onSubmit: (e) => void, timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
+    const {onSubmit, timeBlockDto, closeModal, timeBlocks, updateTimeBlocks} = props;
     const [isGood, setIsGood] = useState(timeBlockDto.isGood)
     const toggleIsGood = () => setIsGood(!isGood)
 
@@ -183,7 +202,7 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
         fontFamily: "ObjectSans-Slanted"
       })}
       id={"time-block-form"}
-      // onSubmit={onSubmit}
+      onClick={(event => onSubmitHandler(event, timeBlockDto, closeModal, timeBlocks, updateTimeBlocks))}
     >
       <div className="form-group" css={css({
         display: "flex",
@@ -432,7 +451,7 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
               height: new Pixel(40).toString()
             })}
             className={!isGood ? 'button-work': 'button-orgasm'}
-            onClick={(e) => onSubmitHandler(e, timeBlockDto, closeModal, updateTimeBlocks)}
+            // onClick={(e) => onSubmitHandler(e, timeBlockDto, closeModal, timeBlocks, updateTimeBlocks)}
             // type={"submit"}
           >remove</button>
 
@@ -443,7 +462,9 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
               height: new Pixel(40).toString()
             })}
             className={!isGood ? 'button-work': 'button-orgasm'}
+            // onClick={(e) => onSubmitHandler(e, timeBlockDto, closeModal, timeBlocks, updateTimeBlocks)}
             // type={"submit"}
+            type={"button"}
           >edit</button>
 
         </div>

@@ -608,6 +608,7 @@ export class TestSection extends React.Component<any> {
                               timeBlockDto={timeBlockDto}
                               timeBlockHeightRatio={timeBlockHeightRatio}
                               timeCellHeight={this.timeCellHeight}
+                              timeBlocks={this.state.timeBlocks}
                               updateTimeBlocks={this.updateTimeBlocks.bind(this)}
                             >
                               <NumberBox number={timeCell.getAlias()} numberSize={this.checkBoxSize}
