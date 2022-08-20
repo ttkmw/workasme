@@ -158,6 +158,11 @@ const serverData: WeekTimes = new WeekTimes(
         id: 4,
         isChecked: true,
         content: "하는중"
+      },
+      {
+        id: 5,
+        isChecked: true,
+        content: "고고"
       }
     ]],
     ["2022-08-15", [
