@@ -31,8 +31,8 @@ function addAllDayBlankTodo(timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks
   updateTimeBlocks(timeBlocks);
 }
 
-const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, day: Dayjs, todoDtos: TodoDto[], timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
-  (props: { size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, day: Dayjs, todoDtos: TodoDto[], timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+  (props: { size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, index: number, day: Dayjs, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
     const {
       size,
       borderWidth,
@@ -42,7 +42,6 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
       todoDto,
       index,
       day,
-      todoDtos,
       timeBlocks,
       updateTimeBlocks
     } = props;

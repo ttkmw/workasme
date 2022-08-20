@@ -146,13 +146,18 @@ const serverData: WeekTimes = new WeekTimes(
     ["2022-08-14", [
       {
         id: 1,
-        isChecked: false,
+        isChecked: true,
         content: "해야하는데 아직 못함"
       },
       {
         id: 3,
         isChecked: true,
         content: "쉽게 함"
+      },
+      {
+        id: 4,
+        isChecked: true,
+        content: "하는중"
       }
     ]],
     ["2022-08-15", [
@@ -665,7 +670,6 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
                 todoDto={todoDto}
                 index={index}
                 day={day}
-                todoDtos={todoDtos}
                 timeBlocks={timeBlocks}
                 updateTimeBlocks={updateTimeBlocks}
       />

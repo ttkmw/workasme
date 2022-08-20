@@ -5,7 +5,6 @@ import {number} from "prop-types";
 
 export class WeekTimes {
   constructor(times: Map<string, TimeBlockDto[]>, edgeTimeBeforeThisWeek: TimeBlockDto | undefined, todoWithinThisWeek: Map<string, TodoDto[]>) {
-    console.log("constructor!!!!!!!!!!!!!!!!!!!!", todoWithinThisWeek.keys())
     this.timesWithinThisWeek = times;
     this.edgeTimeBeforeThisWeek = edgeTimeBeforeThisWeek;
 
@@ -22,11 +21,32 @@ export class WeekTimes {
         todoDtosAtDate.push({id: undefined, isChecked: false, content: ''})
       }
     }
-    this.todoWithinThisWeek = todoWithinThisWeek;
 
+    if (somedayIsFullOfTodos(todoWithinThisWeek)) {
+      addAllDayBlankTodo(todoWithinThisWeek)
+    }
+
+    this.todoWithinThisWeek = todoWithinThisWeek;
   }
 
   timesWithinThisWeek: Map<string, TimeBlockDto[]>;
   edgeTimeBeforeThisWeek: TimeBlockDto | undefined
   todoWithinThisWeek: Map<string, TodoDto[]>;
+}
+
+function somedayIsFullOfTodos(todoWithinThisWeek: Map<string, TodoDto[]>) {
+  for (const key of Array.from(todoWithinThisWeek.keys())) {
+    let todoDtosAtDate: TodoDto[] | undefined = todoWithinThisWeek.get(key);
+    if (!todoDtosAtDate!.some(todoDto => !todoDto.isChecked)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function addAllDayBlankTodo(todoWithinThisWeek: Map<string, TodoDto[]>) {
+  for (const key of Array.from(todoWithinThisWeek.keys())) {
+    let todoDtosAtDate: TodoDto[] | undefined = todoWithinThisWeek.get(key);
+    todoDtosAtDate!.push({id: undefined, isChecked: false, content: ''})
+  }
 }
