@@ -1,49 +1,32 @@
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import {WeekTimesDto} from "src/dtos/WeekTimesDto";
+import {TodoDto} from "src/dtos/TodoDto";
+import {number} from "prop-types";
 
 export class WeekTimes {
-  constructor(times: Map<string, TimeBlockDto[]>, edgeTimeBeforeThisWeek: TimeBlockDto | undefined) {
+  constructor(times: Map<string, TimeBlockDto[]>, edgeTimeBeforeThisWeek: TimeBlockDto | undefined, todoWithinThisWeek: Map<string, TodoDto[]>) {
+    console.log("constructor!!!!!!!!!!!!!!!!!!!!", todoWithinThisWeek.keys())
     this.timesWithinThisWeek = times;
     this.edgeTimeBeforeThisWeek = edgeTimeBeforeThisWeek;
+
+    for (const key of Array.from(todoWithinThisWeek.keys())) {
+      let todoDtosAtDate: TodoDto[] | undefined = todoWithinThisWeek.get(key);
+      if (todoDtosAtDate === undefined) {
+        todoDtosAtDate = [
+          {id: undefined, isChecked: false, content: ''},
+          {id: undefined, isChecked: false, content: ''},
+          {id: undefined, isChecked: false, content: ''},
+        ]
+      }
+      while (todoDtosAtDate.length < 3) {
+        todoDtosAtDate.push({id: undefined, isChecked: false, content: ''})
+      }
+    }
+    this.todoWithinThisWeek = todoWithinThisWeek;
+
   }
 
   timesWithinThisWeek: Map<string, TimeBlockDto[]>;
   edgeTimeBeforeThisWeek: TimeBlockDto | undefined
-
-  //todo: check!!!! tomorrow로 해야할 삘
-  // getTimesOfheDayAfterTargetDay(todayDayOfWeek: string): TimeDto[] {
-  //   if (todayDayOfWeek === 'SUNDAY') {
-  //     return this.times.MONDAY;
-  //   }
-  //
-  //   if (todayDayOfWeek === 'MONDAY') {
-  //     return this.times.TUESDAY;
-  //   }
-  //
-  //   if (todayDayOfWeek === 'TUESDAY') {
-  //     return this.times.WEDNESDAY;
-  //   }
-  //
-  //   if (todayDayOfWeek === 'WEDNESDAY') {
-  //     return this.times.THURSDAY;
-  //   }
-  //
-  //   if (todayDayOfWeek === 'THURSDAY') {
-  //     return this.times.FRIDAY;
-  //   }
-  //
-  //   if (todayDayOfWeek === 'FRIDAY') {
-  //     return this.times.SATURDAY;
-  //   }
-  //
-  //   if (todayDayOfWeek === 'SATURDAY') {
-  //     return this.times.NEXT_SUNDAY;
-  //   }
-  //
-  //   throw new Error("이상한 요일입니다.");
-  // }
-
-  getTimesOf(todayDayOfWeek: string): TimeBlockDto[] {
-    return this.timesWithinThisWeek[todayDayOfWeek];
-  }
+  todoWithinThisWeek: Map<string, TodoDto[]>;
 }

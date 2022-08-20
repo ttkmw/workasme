@@ -13,11 +13,9 @@ import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import {DateTime} from "src/model/DateTime";
 import dayjs, {Dayjs} from "dayjs";
 import {TimeRecord} from "src/model/TimeRecord";
-import {parseDayOfWeek, parseDayOfWeekAlias} from "src/util/DayofweekParser"
+import {parseDayOfWeekAlias} from "src/util/DayofweekParser"
 import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
-import {MdNavigateBefore, MdNavigateNext} from 'react-icons/md'
 import Pixel from "src/graphic/size/pixel";
-import colors from "src/constants/Colors";
 import Colors from "src/constants/Colors";
 import CheckBox from "src/pages/management/sections/parts/components/box/CheckBox";
 import fontConfig from "src/graphic/text/font";
@@ -25,119 +23,11 @@ import NumberBox from "src/pages/management/sections/parts/components/box/Number
 import {RelativeDay} from "src/model/RelativeDay";
 import Modal from "src/pages/components/Mordal";
 import TimeBlockRegisterForm from "src/pages/components/timeblock/TimeBlockRegisterForm";
+import {TodoDto} from "src/dtos/TodoDto";
+import timeBlock from "src/pages/components/timeblock/TimeBlock";
 
 
 const SelectableComponent = createSelectable(Selectable);
-
-const timeTemplates: TimeRecordTemplate[] = [
-  new TimeRecordTemplate("03:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("04:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("05:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("06:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("07:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("08:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("09:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("10:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("11:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("12:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("13:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("14:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("15:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("16:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("17:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("18:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("19:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("20:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("21:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("22:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("23:00", RelativeDay.TODAY),
-  new TimeRecordTemplate("00:00", RelativeDay.TOMORROW),
-  new TimeRecordTemplate("01:00", RelativeDay.TOMORROW),
-  new TimeRecordTemplate("02:00", RelativeDay.TOMORROW),
-]
-
-
-const isNodeInRoot = (node, root) => {
-  while (node) {
-    if (node === root) {
-      return true;
-    }
-    node = node.parentNode;
-  }
-
-  return false;
-};
-
-function isIdInSelectedKeys(id, selectedKeys: number[]) {
-  function getBiggest(selectedKeys: number[]) {
-    let biggest: number | undefined = undefined;
-    for (let i = 0; i < selectedKeys.length; i++) {
-      const selectedKey = selectedKeys[i];
-      if (biggest === undefined || biggest < selectedKey) {
-        biggest = selectedKey;
-      }
-    }
-
-
-    return biggest!;
-  }
-
-  function getSmallest(selectedKeys: number[]) {
-    let smallest: number | undefined = undefined;
-
-    for (let i = 0; i < selectedKeys.length; i++) {
-      const selectedKey = selectedKeys[i];
-      if (smallest === undefined || selectedKey < smallest) {
-        smallest = selectedKey;
-      }
-    }
-
-    return smallest!;
-  }
-
-  const biggest = getBiggest(selectedKeys);
-
-
-  const smallest = getSmallest(selectedKeys);
-
-  return id <= biggest && smallest <= id;
-}
-
-function createAllTimeRecords(day: Dayjs): TimeRecord[] {
-  const allTimeRecords: TimeRecord[] = [];
-  const weekdays = calculateWeekdaysForView(day);
-
-  weekdays.map((day, i) => {
-    timeTemplates.map((timeTemplate, j) => {
-      allTimeRecords.push(new TimeRecord(Number(i.toString() + getIdOfTemplate(j)), day, timeTemplate))
-    })
-  })
-  return allTimeRecords;
-}
-
-function getEarliestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
-  let earliest: TimeRecord | undefined = undefined;
-
-  selectedTimeRecords.map((selectedTimeRecord) => {
-    if (earliest === undefined || new Date(selectedTimeRecord.getEndDateTime()).getTime() < new Date(earliest.getStartDateTime()).getTime()) {
-      earliest = selectedTimeRecord;
-    }
-  })
-
-  return earliest!;
-}
-
-function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
-  let latest: TimeRecord | undefined = undefined;
-
-  selectedTimeRecords.map((selectedTimeRecord) => {
-    if (latest === undefined || new Date(latest.getStartDateTime()).getTime() < new Date(selectedTimeRecord.getStartDateTime()).getTime()) {
-      latest = selectedTimeRecord;
-    }
-  })
-
-  return latest!;
-}
 
 const serverData: WeekTimes = new WeekTimes(
   new Map<string, TimeBlockDto[]>([
@@ -250,8 +140,145 @@ const serverData: WeekTimes = new WeekTimes(
       },
     ]]
   ]),
-  undefined
+
+  undefined,
+  new Map<string, TodoDto[]>([
+    ["2022-08-14", [
+      {
+        id: 1,
+        isChecked: false,
+        content: "해야하는데 아직 못함"
+      },
+      {
+        id: 3,
+        isChecked: true,
+        content: "쉽게 함"
+      }
+    ]],
+    ["2022-08-15", [
+      {
+        id: 2,
+        isChecked: true,
+        content: "다했음!"
+      }
+    ]],
+    ["2022-08-16", []],
+    ["2022-08-17", []],
+    ["2022-08-18", []],
+    ["2022-08-19", []],
+    ["2022-08-20", []]
+  ])
 );
+
+const timeTemplates: TimeRecordTemplate[] = [
+  new TimeRecordTemplate("03:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("04:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("05:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("06:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("07:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("08:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("09:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("10:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("11:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("12:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("13:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("14:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("15:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("16:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("17:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("18:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("19:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("20:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("21:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("22:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("23:00", RelativeDay.TODAY),
+  new TimeRecordTemplate("00:00", RelativeDay.TOMORROW),
+  new TimeRecordTemplate("01:00", RelativeDay.TOMORROW),
+  new TimeRecordTemplate("02:00", RelativeDay.TOMORROW),
+]
+
+
+const isNodeInRoot = (node, root) => {
+  while (node) {
+    if (node === root) {
+      return true;
+    }
+    node = node.parentNode;
+  }
+
+  return false;
+};
+
+function isIdInSelectedKeys(id, selectedKeys: number[]) {
+  function getBiggest(selectedKeys: number[]) {
+    let biggest: number | undefined = undefined;
+    for (let i = 0; i < selectedKeys.length; i++) {
+      const selectedKey = selectedKeys[i];
+      if (biggest === undefined || biggest < selectedKey) {
+        biggest = selectedKey;
+      }
+    }
+
+
+    return biggest!;
+  }
+
+  function getSmallest(selectedKeys: number[]) {
+    let smallest: number | undefined = undefined;
+
+    for (let i = 0; i < selectedKeys.length; i++) {
+      const selectedKey = selectedKeys[i];
+      if (smallest === undefined || selectedKey < smallest) {
+        smallest = selectedKey;
+      }
+    }
+
+    return smallest!;
+  }
+
+  const biggest = getBiggest(selectedKeys);
+
+
+  const smallest = getSmallest(selectedKeys);
+
+  return id <= biggest && smallest <= id;
+}
+
+function createAllTimeRecords(day: Dayjs): TimeRecord[] {
+  const allTimeRecords: TimeRecord[] = [];
+  const weekdays = calculateWeekdaysForView(day);
+
+  weekdays.map((day, i) => {
+    timeTemplates.map((timeTemplate, j) => {
+      allTimeRecords.push(new TimeRecord(Number(i.toString() + getIdOfTemplate(j)), day, timeTemplate))
+    })
+  })
+  return allTimeRecords;
+}
+
+function getEarliestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
+  let earliest: TimeRecord | undefined = undefined;
+
+  selectedTimeRecords.map((selectedTimeRecord) => {
+    if (earliest === undefined || new Date(selectedTimeRecord.getEndDateTime()).getTime() < new Date(earliest.getStartDateTime()).getTime()) {
+      earliest = selectedTimeRecord;
+    }
+  })
+
+  return earliest!;
+}
+
+function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
+  let latest: TimeRecord | undefined = undefined;
+
+  selectedTimeRecords.map((selectedTimeRecord) => {
+    if (latest === undefined || new Date(latest.getStartDateTime()).getTime() < new Date(selectedTimeRecord.getStartDateTime()).getTime()) {
+      latest = selectedTimeRecord;
+    }
+  })
+
+  return latest!;
+}
 
 
 function onRegister() {
@@ -292,7 +319,7 @@ export class TestSection extends React.Component<any> {
       tolerance: 0,
       selectOnMouseMove: false,
       standardDate: dayjs(),
-      timeBlocks: new WeekTimes(new Map<string, TimeBlockDto[]>([]), undefined)
+      timeBlocks: new WeekTimes(new Map<string, TimeBlockDto[]>([]), undefined, new Map<string, TodoDto[]>([]))
     };
     this.selectableRef = React.createRef();
 
@@ -317,6 +344,7 @@ export class TestSection extends React.Component<any> {
 
 
   componentDidMount() {
+    console.log("componentDidMount")
     this.setState({
       timeBlocks: serverData
     })
@@ -509,21 +537,8 @@ export class TestSection extends React.Component<any> {
 
           </div>
         </div>
-        <div css={css({
-          flexDirection: "row",
-          display: "flex"
-        })}>
-          {
-            weekdays.map((day, i) => {
-              return <div css={css({
-                width: "160px"
-              })}>
-                <DateGuide day={day}/>
-                <TodoList checkBoxSize={this.checkBoxSize}/>
-              </div>
-            })
-          }
-        </div>
+        <TodoListSection weekdays={weekdays} checkBoxSize={this.checkBoxSize} timeBlocks={this.state.timeBlocks} updateTimeBlocks={this.updateTimeBlocks.bind(this)}/>
+
         <ReactSelectableGroup onSelection={this.handleSelection}
                               onEndSelection={() => this.showModal(this.state.selectedKeys)}
                               className={"selectable"}
@@ -547,9 +562,7 @@ export class TestSection extends React.Component<any> {
                   timeRecords.push(new TimeRecord(Number(i.toString() + getIdOfTemplate(j)), day, recordTemplate))
                 })
 
-                return <div css={css({
-
-                })}>
+                return <div css={css({})}>
 
                   <div css={css({
                     width: "160px",
@@ -617,18 +630,10 @@ export class TestSection extends React.Component<any> {
   }
 }
 
-export interface TodoDto {
-  isChecked: boolean
-  content: string
-}
 
-const TodoList: React.FC<{ checkBoxSize: Pixel }> = (props: { checkBoxSize: Pixel }) => {
-  const {checkBoxSize} = props;
-  const [todos, setTodos] = useState<TodoDto[]>([
-    {isChecked: false, content: ""},
-    {isChecked: false, content: ""},
-    {isChecked: false, content: ""}
-  ]);
+const TodoList: React.FC<{ checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+  (props: { checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+  const {checkBoxSize, todoDtos, day, timeBlocks, updateTimeBlocks} = props;
   return <div css={css({
     display: "flex",
     alignItems: "center",
@@ -638,40 +643,64 @@ const TodoList: React.FC<{ checkBoxSize: Pixel }> = (props: { checkBoxSize: Pixe
     paddingTop: checkBoxSize.multiply(new Percentage(50)).toString(),
     paddingBottom: checkBoxSize.multiply(new Percentage(50)).toString()
   })}>
-
-    {todos.map((todo, index) => {
-      return <Todo checkBoxSize={checkBoxSize} todoDto={todo} index={index} todoDtos={todos} setTodoDtos={setTodos}/>
+    {todoDtos.map((todo, index) => {
+      return <Todo checkBoxSize={checkBoxSize} todoDto={todo} day={day} index={index} todoDtos={todoDtos} timeBlocks={timeBlocks} updateTimeBlocks={updateTimeBlocks}/>
     })}
   </div>
 }
 
-const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, index: number, todoDtos: TodoDto[], setTodoDtos: Dispatch<SetStateAction<TodoDto[]>>}> =
-  (props: { checkBoxSize: Pixel, todoDto: TodoDto, index: number, todoDtos: TodoDto[], setTodoDtos: Dispatch<SetStateAction<TodoDto[]>> }) => {
-  const {checkBoxSize, todoDto, index, todoDtos, setTodoDtos} = props;
+const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, todoDtos: TodoDto[], timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void}> =
+  (props: { checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, todoDtos: TodoDto[], timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void}) => {
+    const {checkBoxSize, todoDto, day, index, todoDtos, timeBlocks, updateTimeBlocks} = props;
+
+    return <div css={css({
+      display: "flex",
+      alignItems: "center",
+      marginTop: checkBoxSize.multiply(new Percentage(25)).toString(),
+      marginBottom: checkBoxSize.multiply(new Percentage(25)).toString()
+    })}>
+      <CheckBox size={checkBoxSize} borderWidth={new Pixel(1.5)}
+                borderColor={Colors.theme.table.innerLine} beforeColor={Colors.theme.screen.background}
+                afterColor={Colors.theme.table.innerLine}
+                todoDto={todoDto}
+                index={index}
+                day={day}
+                todoDtos={todoDtos}
+                timeBlocks={timeBlocks}
+                updateTimeBlocks={updateTimeBlocks}
+      />
+      <input css={css({
+        border: 0,
+        borderBottom: 1,
+        borderBottomStyle: "solid",
+        borderBottomColor: Colors.theme.table.innerLine,
+        marginLeft: "5%",
+        width: "90%"
+      })} defaultValue={todoDto.content} type={"text"}/>
+
+    </div>
+  }
+
+const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}> =
+  (props: { weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
+  const {weekdays, checkBoxSize, timeBlocks, updateTimeBlocks} = props;
 
   return <div css={css({
-    display: "flex",
-    alignItems: "center",
-    marginTop: checkBoxSize.multiply(new Percentage(25)).toString(),
-    marginBottom: checkBoxSize.multiply(new Percentage(25)).toString()
+    flexDirection: "row",
+    display: "flex"
   })}>
-    <CheckBox size={checkBoxSize} borderWidth={new Pixel(1.5)}
-              borderColor={Colors.theme.table.innerLine} beforeColor={Colors.theme.screen.background}
-              afterColor={Colors.theme.table.innerLine}
-              todoDto={todoDto}
-              index={index}
-              todoDtos={todoDtos}
-              setTodoDtos={setTodoDtos}
-    />
-    <input css={css({
-      border: 0,
-      borderBottom: 1,
-      borderBottomStyle: "solid",
-      borderBottomColor: Colors.theme.table.innerLine,
-      marginLeft: "5%",
-      width: "90%"
-    })} defaultValue={todoDto.content} type={"text"}/>
+    {
 
+      weekdays.map((day, i) => {
+        const todoListAtDate: TodoDto[] | undefined =  timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+        return <div css={css({
+          width: "160px"
+        })}>
+          <DateGuide day={day}/>
+          <TodoList checkBoxSize={checkBoxSize} todoDtos={todoListAtDate === undefined ? [] :todoListAtDate!} day={day} timeBlocks={timeBlocks} updateTimeBlocks={updateTimeBlocks}/>
+        </div>
+      })
+    }
   </div>
 }
 

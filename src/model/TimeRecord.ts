@@ -54,7 +54,7 @@ export class TimeRecord {
     return moment.format("YYYY-MM-DDTHH:mm");
   }
 
-  private static getFormattedDate(day: Dayjs, relativeDay: RelativeDay): string {
+  public static getFormattedDate(day: Dayjs, relativeDay: RelativeDay): string {
     const currentDay = day.add(relativeDay.valueOf(), 'day');
     const year = currentDay.year();
     const month = currentDay.month() + 1;

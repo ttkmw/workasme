@@ -11,6 +11,7 @@ import Pixel from "src/graphic/size/pixel";
 import dayjs, {Dayjs} from "dayjs";
 import {WeekTimes} from "src/model/WeekTimes";
 import {DateTime} from "src/model/DateTime";
+import {TodoDto} from "src/dtos/TodoDto";
 
 const serverData2: WeekTimes = new WeekTimes(
   new Map<string, TimeBlockDto[]>([
@@ -123,7 +124,28 @@ const serverData2: WeekTimes = new WeekTimes(
       },
     ]]
   ]),
-  undefined
+  undefined,
+  new Map<string, TodoDto[]>([
+    ["2022-08-14", [
+      {
+        id: 1,
+        isChecked: false,
+        content: "해야하는데 아직 못함"
+      },
+      {
+        id: 3,
+        isChecked: true,
+        content: "쉽게 함"
+      }
+    ]],
+    ["2022-08-15", [
+      {
+        id: 2,
+        isChecked: true,
+        content: "다했음!"
+      }
+    ]],
+  ])
 );
 
 

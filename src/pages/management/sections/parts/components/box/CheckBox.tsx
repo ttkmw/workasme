@@ -1,36 +1,88 @@
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import check from 'src/assets/whiteCheck.svg'
 import Pixel from "src/graphic/size/pixel";
 import Percentage from "src/graphic/size/percentage";
-import {TodoDto} from "src/pages/management/sections/TestSection";
+import {TodoDto} from "src/dtos/TodoDto";
+import {WeekTimes} from "src/model/WeekTimes";
+import {Dayjs} from "dayjs";
+import {TimeRecord} from "src/model/TimeRecord";
+import {RelativeDay} from "src/model/RelativeDay";
 
 
-const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, todoDtos: TodoDto[], setTodoDtos: Dispatch<SetStateAction<TodoDto[]>> }> =
-  (props: { size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, todoDtos: TodoDto[], setTodoDtos: Dispatch<SetStateAction<TodoDto[]>> }) => {
-    const {size, borderWidth, borderColor, beforeColor, afterColor, todoDto, index, todoDtos, setTodoDtos} = props;
+function somedayIsFullOfTodos(timeBlocks: WeekTimes) {
+  for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys())) {
+    let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(key);
+    if (!todoDtosAtDate!.some(todoDto => !todoDto.isChecked)) {
+      return true;
+    }
+  }
 
-    const onChange = index => {
-      setTodoDtos(((prevState: TodoDto[]) => {
-        return prevState.map((todoDto, todoDtoIndex) => {
-          if (todoDtoIndex == index) {
-            return {isChecked: !todoDto.isChecked, content: todoDto.content};
-          } else {
-            return todoDto;
-          }
-        });
-      }))
+  return false;
+}
 
+function addAllDayBlankTodo(timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) {
+  for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys())) {
+    let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(key);
+    todoDtosAtDate!.push({id: undefined, isChecked: false, content: ''})
+  }
+  updateTimeBlocks(timeBlocks);
+}
 
-      setTodoDtos(((prevState: TodoDto[]) => {
-        if (!prevState.some(todoDto => !todoDto.isChecked)) {
-          prevState.push({isChecked: false, content: ''})
-          return prevState;
+const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, day: Dayjs, todoDtos: TodoDto[], timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+  (props: { size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, day: Dayjs, todoDtos: TodoDto[], timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+    const {
+      size,
+      borderWidth,
+      borderColor,
+      beforeColor,
+      afterColor,
+      todoDto,
+      index,
+      day,
+      todoDtos,
+      timeBlocks,
+      updateTimeBlocks
+    } = props;
+
+    const onChange = (day, index) => {
+      let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+      let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate?.map((todoDto, todoDtoIndex) => {
+        if (todoDtoIndex == index) {
+          return {id: todoDto.id, isChecked: !todoDto.isChecked, content: todoDto.content}
+        } else {
+          return todoDto;
         }
-        return prevState
-      }))
+      });
+
+      timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
+      updateTimeBlocks(timeBlocks);
+
+
+      // setTodoDtos(((prevState: TodoDto[]) => {
+      //   return prevState.map((todoDto, todoDtoIndex) => {
+      //     if (todoDtoIndex == index) {
+      //       return {id: undefined, isChecked: !todoDto.isChecked, content: todoDto.content};
+      //     } else {
+      //       return todoDto;
+      //     }
+      //   });
+      // }))
+
+      if (somedayIsFullOfTodos(timeBlocks)) {
+        addAllDayBlankTodo(timeBlocks, updateTimeBlocks);
+      }
+
+
+      // setTodoDtos(((prevState: TodoDto[]) => {
+      //   if (!prevState.some(todoDto => !todoDto.isChecked)) {
+      //     prevState.push({id: undefined, isChecked: false, content: ''})
+      //     return prevState;
+      //   }
+      //   return prevState
+      // }))
     };
 
     const imgSize = size.minus(borderWidth.multiply(new Percentage(200)));
@@ -102,7 +154,7 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
       <label className="container">
         <input type="checkbox" checked={todoDto.isChecked}/>
         {/*todo: onClicke에 api 콜 해서 체크하는 것들 다 저장 */}
-        <span className={"checkmark"} onClick={() => onChange(index)}>
+        <span className={"checkmark"} onClick={() => onChange(day, index)}>
               <img src={check} alt="Check" width={imgSize.toString()}
                    height={imgSize.toString()}/>
       </span>
