@@ -11,7 +11,7 @@ import {css, jsx} from "@emotion/react";
 //http://localhost:3000/time-trackers
 const TimePickerWrapper: React.FC<{dateTime: DateTime}> = (props:{dateTime: DateTime}) => {
   const {dateTime} = props;
-  const [dispatchTime, setDispatchTime] = useState(moment(dateTime.getDateTime()));
+  const [dispatchTime, setDispatchTime] = useState(moment(dateTime.dateTime));
   const handleValueChange = (value) => {
     setDispatchTime(value);
   };

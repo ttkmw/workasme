@@ -38,8 +38,8 @@ const serverData: WeekTimes = new WeekTimes(
       {
         id: 1,
         title: "엣지타임",
-        startDateTime: new DateTime("2022-08-07T23:00"),
-        endDateTime: new DateTime("2022-08-08T01:00"),
+        startDateTime: {dateTime: "2022-08-07T23:00"},
+        endDateTime: {dateTime: "2022-08-08T01:00"},
         isGood: true,
         category: "NONE",
         memo: "엣지타임"
@@ -49,8 +49,8 @@ const serverData: WeekTimes = new WeekTimes(
       {
         id: 2,
         title: "영화 보고 친구랑 잠깐 수다떨음",
-        startDateTime: new DateTime("2022-08-08T01:00"),
-        endDateTime: new DateTime("2022-08-08T04:00"),
+        startDateTime: {dateTime: "2022-08-08T01:00"},
+        endDateTime: {dateTime: "2022-08-08T04:00"},
         isGood: false,
         category: "SOCIAL",
         memo: undefined
@@ -58,8 +58,8 @@ const serverData: WeekTimes = new WeekTimes(
       {
         id: 3,
         title: "일했지",
-        startDateTime: new DateTime("2022-08-08T15:00"),
-        endDateTime: new DateTime("2022-08-08T19:00"),
+        startDateTime: {dateTime: "2022-08-08T15:00"},
+        endDateTime: {dateTime: "2022-08-08T19:00"},
         isGood: false,
         category: "INTELLECTUAL",
         memo: undefined
@@ -69,8 +69,8 @@ const serverData: WeekTimes = new WeekTimes(
       {
         id: 4,
         title: "샤워하고 밥먹고 전화하다가 엄마한테 등짝맞고 공부하다가 플스함",
-        startDateTime: new DateTime("2022-08-09T01:00"),
-        endDateTime: new DateTime("2022-08-09T04:00"),
+        startDateTime: {dateTime: "2022-08-09T01:00"},
+        endDateTime: {dateTime: "2022-08-09T04:00"},
         isGood: false,
         category: "NONE",
         memo: "why should id live like this"
@@ -80,8 +80,8 @@ const serverData: WeekTimes = new WeekTimes(
       {
         id: 5,
         title: "코딩함",
-        startDateTime: new DateTime("2022-08-10T01:00"),
-        endDateTime: new DateTime("2022-08-10T05:00"),
+        startDateTime: {dateTime: "2022-08-10T01:00"},
+        endDateTime: {dateTime: "2022-08-10T05:00"},
         isGood: true,
         category: "INTELLECTUAL",
         memo: undefined
@@ -89,8 +89,8 @@ const serverData: WeekTimes = new WeekTimes(
       {
         id: 6,
         title: "카페에 왔다",
-        startDateTime: new DateTime("2022-08-10T10:00"),
-        endDateTime: new DateTime("2022-08-10T13:00"),
+        startDateTime: {dateTime: "2022-08-10T10:00"},
+        endDateTime: {dateTime: "2022-08-10T13:00"},
         isGood: true,
         category: "INTELLECTUAL",
         memo: undefined
@@ -100,8 +100,8 @@ const serverData: WeekTimes = new WeekTimes(
       {
         id: 7,
         title: "베라 피티를 함",
-        startDateTime: new DateTime("2022-08-11T01:00"),
-        endDateTime: new DateTime("2022-08-11T04:00"),
+        startDateTime: {dateTime: "2022-08-11T01:00"},
+        endDateTime: {dateTime: "2022-08-11T04:00"},
         isGood: true,
         category: "PHYSICAL",
         memo: "개힘들다"
@@ -111,8 +111,8 @@ const serverData: WeekTimes = new WeekTimes(
       {
         id: 8,
         title: "산책을 함",
-        startDateTime: new DateTime("2022-08-12T01:00"),
-        endDateTime: new DateTime("2022-08-12T04:00"),
+        startDateTime: {dateTime: "2022-08-12T01:00"},
+        endDateTime: {dateTime: "2022-08-12T04:00"},
         isGood: false,
         category: "SPIRITUAL",
         memo: "개운하다"
@@ -123,8 +123,8 @@ const serverData: WeekTimes = new WeekTimes(
       {
         id: 9,
         title: "잠을 뒤척임",
-        startDateTime: new DateTime("2022-08-13T02:00"),
-        endDateTime: new DateTime("2022-08-13T05:00"),
+        startDateTime: {dateTime: "2022-08-13T02:00"},
+        endDateTime: {dateTime: "2022-08-13T05:00"},
         isGood: false,
         category: "NONE",
         memo: "힘들다"
@@ -135,8 +135,8 @@ const serverData: WeekTimes = new WeekTimes(
       {
         id: 10,
         title: "sleep bad",
-        startDateTime: new DateTime("2022-08-14T00:00"),
-        endDateTime: new DateTime("2022-08-14T05:00"),
+        startDateTime: {dateTime: "2022-08-14T00:00"},
+        endDateTime: {dateTime: "2022-08-14T05:00"},
         isGood: false,
         category: "NONE",
         memo: "힘들다"

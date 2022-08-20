@@ -94,7 +94,7 @@ export class TimeRecord {
 
     for (let i = 0; i < atSameDate.length; i++) {
       const candidate = atSameDate[i];
-      if (this.getStartDateTime() === candidate.startDateTime.getDateTime()) {
+      if (this.getStartDateTime() === candidate.startDateTime.dateTime) {
         return candidate;
       }
     }
@@ -120,7 +120,7 @@ export class TimeRecord {
 
     for (let i = 0; i < atSameDate.length; i++) {
       const candidate = atSameDate[i];
-      if (this.getStartDateTime() === candidate.startDateTime.getDateTime()) {
+      if (this.getStartDateTime() === candidate.startDateTime.dateTime) {
         return true;
       }
     }
@@ -141,8 +141,8 @@ export class TimeRecord {
       }
 
       for (let timeOfDate of timeBlocksOfDate) {
-        if (moment(timeOfDate.startDateTime.getDateTime()).isBefore(this.getFirstDateTime())
-          && moment(timeOfDate.endDateTime.getDateTime()).isAfter(this.getFirstDateTime())
+        if (moment(timeOfDate.startDateTime.dateTime).isBefore(this.getFirstDateTime())
+          && moment(timeOfDate.endDateTime.dateTime).isAfter(this.getFirstDateTime())
         ) {
           return timeOfDate;
         }
@@ -151,8 +151,8 @@ export class TimeRecord {
     }
 
     if (savedTimes.edgeTimeBeforeThisWeek !== undefined) {
-      return (moment(savedTimes.edgeTimeBeforeThisWeek.startDateTime.getDateTime()).isBefore(this.getFirstDateTime())
-        && moment(savedTimes.edgeTimeBeforeThisWeek.endDateTime.getDateTime()).isAfter(this.getFirstDateTime())
+      return (moment(savedTimes.edgeTimeBeforeThisWeek.startDateTime.dateTime).isBefore(this.getFirstDateTime())
+        && moment(savedTimes.edgeTimeBeforeThisWeek.endDateTime.dateTime).isAfter(this.getFirstDateTime())
       ) ? savedTimes.edgeTimeBeforeThisWeek : undefined;
     }
 
@@ -195,7 +195,7 @@ export class TimeRecord {
     if (this.isFirstTime()) {
       const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes, standardDate);
       if (edgeTimeOfDay !== undefined) {
-        const endDateTimeOfEdgeTime: moment.Moment = moment(edgeTimeOfDay.endDateTime.getDateTime());
+        const endDateTimeOfEdgeTime: moment.Moment = moment(edgeTimeOfDay.endDateTime.dateTime);
         if (endDateTimeOfEdgeTime.isAfter(this.getFirstDateTime())) {
           return new Percentage(endDateTimeOfEdgeTime.diff(this.getFirstDateTime(), 'hours') * 100);
         }
@@ -208,7 +208,7 @@ export class TimeRecord {
     }
 
     for (let todayTime of todayTimes) {
-      if (this.getStartDateTime() === todayTime.startDateTime.getDateTime()) {
+      if (this.getStartDateTime() === todayTime.startDateTime.dateTime) {
         const endDateTimeOfTimeBlock: moment.Moment = this.getEndDateTimeOfTimeBlock(todayTime);
         return new Percentage(endDateTimeOfTimeBlock.diff(this._startDateTime, 'hours') * 100);
       }
@@ -219,7 +219,7 @@ export class TimeRecord {
 
   private getEndDateTimeOfTimeBlock(timeBlock: TimeBlockDto): moment.Moment {
     const maxEndDateTime: moment.Moment = this.getMaxEndDateTime();
-    const timeBlockEndDateTime = moment(timeBlock.endDateTime.getDateTime());
+    const timeBlockEndDateTime = moment(timeBlock.endDateTime.dateTime);
     return timeBlockEndDateTime.isBefore(maxEndDateTime) ? timeBlockEndDateTime : maxEndDateTime;
   }
 
