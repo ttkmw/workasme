@@ -149,14 +149,25 @@ const serverData2: WeekTimes = new WeekTimes(
 );
 
 
-const onSubmitHandler = (e, exTimeBlock: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
+const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
   // e.preventDefault();
 
   if (e.target.innerText !== 'edit' && e.target.innerText !== 'remove') {
     return;
   }
-  //
 
+  if (e.target.innerText === 'remove') {
+    let id = Number(e.currentTarget[0].value);
+    const startDate = exTimeBlockDto.startDateTime.dateTime.split('T')[0];
+    const timeBlockDtosAtDate = timeBlocks.timesWithinThisWeek.get(startDate)!;
+    alert("should api call deleted")
+    const newTimeblockDtos = timeBlockDtosAtDate.filter((timeBlockDto) => {
+      return timeBlockDto.id !== exTimeBlockDto.id;
+    })
+
+    timeBlocks.timesWithinThisWeek.set(startDate, newTimeblockDtos);
+    updateTimeBlocks(timeBlocks);
+  }
 
 
   if (e.target.innerText === 'edit') {
@@ -182,7 +193,7 @@ const onSubmitHandler = (e, exTimeBlock: TimeBlockDto, closeModal: (e) => void, 
       memo: memo
     }
 
-    const formattedDate = exTimeBlock.startDateTime.dateTime.split("T")[0];
+    const formattedDate = exTimeBlockDto.startDateTime.dateTime.split("T")[0];
     let timeBlockDtosAtDate: TimeBlockDto[] | undefined = timeBlocks.timesWithinThisWeek.get(formattedDate);
     let newTimeBlockDtos = timeBlockDtosAtDate!.map((timeBlockDto) => {
       if (newTimeBlock.id === timeBlockDto.id) {
