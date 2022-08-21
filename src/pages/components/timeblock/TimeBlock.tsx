@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {useState} from "react";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import Pixel from "src/graphic/size/pixel";
 import Percentage from "src/graphic/size/percentage";
@@ -8,7 +8,6 @@ import {css, jsx} from "@emotion/react";
 import Colors from "src/constants/Colors";
 import TimeBlockEditForm from "src/pages/components/timeblock/TimeBlockEditForm";
 import Modal from "src/pages/components/Mordal";
-import {Dayjs} from "dayjs";
 import {WeekTimes} from "src/model/WeekTimes";
 
 
@@ -19,7 +18,8 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
     const {isMatching, timeBlockDto, timeCellHeight, timeBlockHeightRatio, timeBlocks, updateTimeBlocks} = props;
     const [isEditFormOpen, setIsEditFormOpen] = useState(false);
     let modal: any = undefined;
-    let closeButton: any = undefined;
+    // let closeButton: any = undefined;
+
 
     const toggleScrollLock = () => {
       // @ts-ignore
@@ -35,9 +35,6 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
       }
     };
     const onClickOutside = (event: any) => {
-      console.log(modal);
-      console.log(event.target);
-      console.log(modal.contains(event.target));
       if (modal && modal.contains(event.target)) return;
       onClose(event);
     };
@@ -61,8 +58,8 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
                   timeBlockHeightRatio={timeBlockHeightRatio} timeCellHeight={timeCellHeight} onClick={onClickTimeCell}/>
         {isEditFormOpen && (
           <Modal onClickOutside={onClickOutside} onKeyDown={onKeyDown} modalRef={(n: any) => (modal = n)}
-                 buttonRef={(n: any) => (closeButton = n)} closeModal={onCloseModal}>
-            <TimeBlockEditForm onSubmit={() => console.log("kkk")} timeBlockDto={timeBlockDto} timeBlocks={timeBlocks} updateTimeBlocks={updateTimeBlocks} closeModal={onCloseModal}/>
+                 buttonRef={(n: any) => {}} closeModal={onCloseModal}>
+            <TimeBlockEditForm timeBlockDto={timeBlockDto} timeBlocks={timeBlocks} updateTimeBlocks={updateTimeBlocks} closeModal={onCloseModal}/>
           </Modal>
         )}
       </div>;
@@ -91,11 +88,11 @@ const TimeCell: React.FC<{ timeCellHeight: Pixel, timeBlockHeightRatio: Percenta
         paddingTop: "3px",
         fontSize: "12px",
         fontFamily: "Gaegu-Regular",
-        "text-overflow": "ellipsis",
+        textOverflow: "ellipsis",
         overflow: "hidden",
-        "-webkit-line-clamp": 1,
-        "word-break": "break-all",
-        "white-space": "nowrap",
+        WebkitLineClamp: 1,
+        wordBreak: "break-all",
+        whiteSpace: "nowrap",
         borderRadius: "5px",
         opacity: "80%",
       })}

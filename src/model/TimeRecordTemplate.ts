@@ -1,4 +1,3 @@
-import {start} from "repl";
 import {RelativeDay} from "src/model/RelativeDay";
 
 export class TimeRecordTemplate {

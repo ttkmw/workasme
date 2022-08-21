@@ -6,11 +6,6 @@ import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import {RelativeDay} from "src/model/RelativeDay";
 import Percentage from "src/graphic/size/percentage";
 
-function parseHour(startTime: string) {
-  const hour = Number();
-  return 0;
-}
-
 export class TimeRecord {
 
   private static readonly FIRST_TIME = '03:00';
@@ -29,10 +24,6 @@ export class TimeRecord {
     //todo: validate startTime
 
     const formattedDay = TimeRecord.getFormattedDate(day, timeRecordTemplate.relativeDay);
-    // const startDateTime = moment(formattedDay + "T" + timeRecordTemplate.startTime);
-    // const endDateTime = moment(startDateTime).add(1, "hours");
-    // console.log("startDateTime", startDateTime.format("YYYY-MM-DDTHH:mm"));
-    // console.log("endDateTime", endDateTime.format("HH:mm"));
     this._startDateTime = moment(formattedDay + "T" + timeRecordTemplate.startTime);
     this._endDateTime = moment(this._startDateTime).add(1, "hours");
   }
@@ -242,27 +233,27 @@ export class TimeRecord {
   }
 
   private static getStartDate(day: dayjs.Dayjs) {
-    if (day.day() == 0) {
+    if (day.day() === 0) {
       return day;
     }
 
-    if (day.day() == 1) {
+    if (day.day() === 1) {
       return day.subtract(1, 'day')
     }
 
-    if (day.day() == 2) {
+    if (day.day() === 2) {
       return day.subtract(2, 'day')
     }
 
-    if (day.day() == 3) {
+    if (day.day() === 3) {
       return day.subtract(3, 'day')
     }
 
-    if (day.day() == 4) {
+    if (day.day() === 4) {
       return day.subtract(4, 'day')
     }
 
-    if (day.day() == 5) {
+    if (day.day() === 5) {
       return day.subtract(5, 'day')
     }
 

@@ -1,5 +1,4 @@
-import React, {Component, ReactElement} from "react";
-import {createSelectable, TSelectableItemProps} from "react-selectable-fast";
+import React, {Component} from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -9,7 +8,6 @@ import {ReactSelectableComponentProps} from "react-selectable";
 import Colors from "src/constants/Colors";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import TimeBlock from "src/pages/components/timeblock/TimeBlock";
-import dayjs, {Dayjs} from "dayjs";
 import {WeekTimes} from "src/model/WeekTimes";
 
 interface SelectableProps extends ReactSelectableComponentProps {
@@ -56,32 +54,6 @@ class Selectable extends Component<SelectableProps> {
   }
 }
 
-
-function getTextWidth(text, font) {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-
-
-  // @ts-ignore
-  context.font = font || getComputedStyle(document.body).font;
-
-  // @ts-ignore
-  return context.measureText(text).width;
-}
-
-// <div css={css({
-//   width: "100%",
-//   height: "100%",
-//   position: "absolute",
-//   top: 0,
-//   left: 0,
-//   opacity: 0.7,
-//   background: "#009938",
-//   zIndex: 9,
-//   margin: "30px"
-// })}>
-//   hoho
-// </div>
 export default Selectable;
 
 

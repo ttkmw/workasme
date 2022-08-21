@@ -1,15 +1,9 @@
 import React from "react";
-import {Tab, Tabs} from "react-bootstrap";
 import Container from 'react-bootstrap/Container';
-import TaskManagementSection from "./sections/TaskManagementSection";
-import TimeManagementSection from "src/pages/management/sections/TimeManagementSection";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
-import WeeklySection from "src/pages/management/sections/WeeklySection";
-import Percentage from "src/graphic/size/percentage";
 import TestSection from "src/pages/management/sections/TestSection";
 import Header from "src/pages/components/bars/navigation/Header";
 

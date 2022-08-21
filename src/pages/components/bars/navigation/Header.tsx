@@ -5,7 +5,6 @@ import {css, jsx} from "@emotion/react";
 import Sizes from "src/constants/Sizes";
 import {Nav, Navbar, NavbarBrand} from "react-bootstrap";
 import brandImage from 'src/assets/brand_at_top_navigation.png'
-import NavbarCollapse from "react-bootstrap/lib/NavbarCollapse";
 import Container from 'react-bootstrap/Container';
 import Colors from "src/constants/Colors";
 import {SerializedStyles} from "@emotion/serialize";
@@ -16,11 +15,6 @@ import fontConfig from "src/graphic/text/font";
 
 
 const Menus: React.FC<{ isSigned: boolean }> = (props: { isSigned: boolean }) => {
-  const {isSigned} = props;
-
-  // css={css({
-  //
-  //          })}
   return <div css={css({
     display: "flex",
     flexDirection: "row",

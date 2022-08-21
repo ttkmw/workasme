@@ -31,7 +31,7 @@ const coordsCollide = (initialW, initialH, lastW, lastH, bTop, bLeft, bWidth, bH
  * @param  {int} tolerance
  * @return {boolean}
  */
-export default (initialW, initialH, lastW, lastH, b, tolerance = 0) => {
+const doObjectsCollide = (initialW, initialH, lastW, lastH, b, tolerance = 0) => {
   const bObj = (b instanceof HTMLElement) ? getBoundsForNode(b) : b;
 
   return coordsCollide(
@@ -46,3 +46,5 @@ export default (initialW, initialH, lastW, lastH, b, tolerance = 0) => {
     tolerance
   );
 };
+
+export default doObjectsCollide;

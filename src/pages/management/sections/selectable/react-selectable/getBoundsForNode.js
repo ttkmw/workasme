@@ -1,4 +1,4 @@
-export default node => {
+const getBoundsForNode = node => {
   const rect = node.getBoundingClientRect();
 
   return {
@@ -8,3 +8,5 @@ export default node => {
     offsetHeight: node.offsetHeight
   };
 };
+
+export default getBoundsForNode;

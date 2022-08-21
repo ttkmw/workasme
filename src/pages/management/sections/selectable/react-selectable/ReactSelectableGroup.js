@@ -51,7 +51,7 @@ class ReactSelectableGroup extends Component {
     this._applyMousedown(false);
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentDidUpdate (nextProps) {
     if (nextProps.enabled !== this.props.enabled) {
       this._applyMousedown(nextProps.enabled);
     }
@@ -117,7 +117,6 @@ class ReactSelectableGroup extends Component {
    * be added, and if so, attach event listeners
    */
   _mouseDown (e) {
-    console.log("mousedown")
     const {onBeginSelection, preventDefault} = this.props;
 
     // Disable if target is control by react-dnd
@@ -162,7 +161,6 @@ class ReactSelectableGroup extends Component {
       initialH: e.y
     };
 
-    // console.log("_mouseDownData", this._mouseDownData);
 
     if (preventDefault) e.preventDefault();
 
@@ -192,7 +190,6 @@ class ReactSelectableGroup extends Component {
    */
   _mouseUp (e) {
 
-    // console.log("_mouseUp")
     const {onNonItemClick} = this.props;
     const {isBoxSelecting} = this.state;
 
@@ -226,19 +223,15 @@ class ReactSelectableGroup extends Component {
   _selectElements (e, isEnd = false, initialW, initialH) {
     const {tolerance, onSelection, onEndSelection} = this.props;
 
-    // console.log("_selectElements", e)
+
 
     const currentItems = [];
     const _selectbox = findDOMNode(this.refs.selectbox);
-
-
-    // console.log(_selectbox);
 
     // if (!_selectbox) return;
 
 
     // const aObj = (_selectbox instanceof HTMLElement) ? getBoundsForNode(_selectbox) : _selectbox;
-    // console.log("aObj", aObj.left, aObj.top)
     this._registry.forEach(itemData => {
       if (
         itemData.domNode

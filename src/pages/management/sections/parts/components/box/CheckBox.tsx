@@ -10,7 +10,6 @@ import {WeekTimes} from "src/model/WeekTimes";
 import {Dayjs} from "dayjs";
 import {TimeRecord} from "src/model/TimeRecord";
 import {RelativeDay} from "src/model/RelativeDay";
-import {addBlankTodoAtThisWeek, someDayIsFullOfContents} from "src/service/TodoListService";
 
 const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
   (props: { size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, index: number, day: Dayjs, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
@@ -31,7 +30,7 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
       alert("should api call modified")
       let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
       let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate!.map((todoDto, todoDtoIndex) => {
-        if (todoDtoIndex == index) {
+        if (todoDtoIndex === index) {
           //여기에서 api 콜한 결과를 리턴
           return {id: todoDto.id, isChecked: !todoDto.isChecked, content: todoDto.content}
         } else {
@@ -76,9 +75,9 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
         paddingLeft: 0,
         paddingRight: 0,
         cursor: "pointer",
-        "-webkit-user-select": "none",
-        "-ms-user-select": "none",
-        "user-select": "none"
+        WebkitUserSelect: "none",
+        msUserSelect: "none",
+        userSelect: "none"
       },
 
       '.container input': {
@@ -129,7 +128,7 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
     })}
     >
       <label className="container">
-        <input type="checkbox" checked={todoDto.isChecked}/>
+        <input type="checkbox" defaultChecked={todoDto.isChecked}/>
         {/*todo: onClicke에 api 콜 해서 체크하는 것들 다 저장 */}
         <span className={"checkmark"} onClick={() => onChange(day, index)}>
               <img src={check} alt="Check" width={imgSize.toString()}

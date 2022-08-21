@@ -4,10 +4,8 @@ import FocusTrap from 'focus-trap-react';
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
-import {DateTime} from "src/model/DateTime";
 import Pixel from "src/graphic/size/pixel";
 import colors from "src/constants/Colors";
-import {MdNavigateBefore} from "react-icons/md";
 import {IoMdClose} from "react-icons/all";
 
 interface ModalProps {

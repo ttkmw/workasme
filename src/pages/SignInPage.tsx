@@ -1,11 +1,10 @@
-import React, {Fragment} from "react";
+import React from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
 import Title from "src/pages/components/Title";
-import Container from "react-bootstrap/Container";
 import {LinkContainer} from "react-router-bootstrap";
 
 const SignInSection: React.FC = () => {

@@ -258,8 +258,8 @@ function createAllTimeRecords(day: Dayjs): TimeRecord[] {
   const allTimeRecords: TimeRecord[] = [];
   const weekdays = calculateWeekdaysForView(day);
 
-  weekdays.map((day, i) => {
-    timeTemplates.map((timeTemplate, j) => {
+  weekdays.forEach((day, i) => {
+    timeTemplates.forEach((timeTemplate, j) => {
       allTimeRecords.push(new TimeRecord(Number(i.toString() + getIdOfTemplate(j)), day, timeTemplate))
     })
   })
@@ -269,7 +269,7 @@ function createAllTimeRecords(day: Dayjs): TimeRecord[] {
 function getEarliestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
   let earliest: TimeRecord | undefined = undefined;
 
-  selectedTimeRecords.map((selectedTimeRecord) => {
+  selectedTimeRecords.forEach((selectedTimeRecord) => {
     if (earliest === undefined || new Date(selectedTimeRecord.getEndDateTime()).getTime() < new Date(earliest.getStartDateTime()).getTime()) {
       earliest = selectedTimeRecord;
     }
@@ -281,7 +281,7 @@ function getEarliestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
 function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
   let latest: TimeRecord | undefined = undefined;
 
-  selectedTimeRecords.map((selectedTimeRecord) => {
+  selectedTimeRecords.forEach((selectedTimeRecord) => {
     if (latest === undefined || new Date(latest.getStartDateTime()).getTime() < new Date(selectedTimeRecord.getStartDateTime()).getTime()) {
       latest = selectedTimeRecord;
     }
@@ -316,22 +316,14 @@ export class TestSection extends React.Component<any> {
   }
 
   updateTimeBlocks(timeBlocks: WeekTimes) {
-    console.log("updateing!!!")
+
     this.setState({
       timeBlocks: timeBlocks
     })
   }
 
 
-  // clearSelectionUsingRef = () => {
-  //   if (this.selectionRef) {
-  //     this.selectionRef.current.clearSelection();
-  //   }
-  // }
-
-
   componentDidMount() {
-    console.log("!!!!!!!!!!!!!! did mount!!!!!!!!!!!!")
     this.setState({
       timeBlocks: serverData
     })
@@ -373,7 +365,7 @@ export class TestSection extends React.Component<any> {
   }
 
   showModal = (selectedKeys: number[]) => {
-    if (selectedKeys.length == 0) {
+    if (selectedKeys.length === 0) {
       return
     }
     this.setState({isShown: true}, () => {
@@ -382,7 +374,6 @@ export class TestSection extends React.Component<any> {
     this.toggleScrollLock();
   };
   onClose = (e) => {
-    console.log("onClose")
     this.clearItems(e)
     this.setState({isShown: false});
     this.toggleScrollLock();
@@ -419,7 +410,7 @@ export class TestSection extends React.Component<any> {
 
     const allTimeRecords: TimeRecord[] = createAllTimeRecords(this.state.standardDate);
     const selectedTimeRecords: TimeRecord[] = [];
-    allTimeRecords.map((timeRecord, i) => {
+    allTimeRecords.forEach((timeRecord, i) => {
       if (isIdInSelectedKeys(timeRecord.id, this.state.selectedKeys)) {
         selectedTimeRecords.push(timeRecord);
       }
@@ -454,8 +445,8 @@ export class TestSection extends React.Component<any> {
               content: '""',
               width: "15px", /* 사이즈 */
               height: "15px", /* 사이즈 */
-              "border-top": `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
-              "border-right": `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
+              borderTop: `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
+              borderRight: `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
               transform: "rotate(225deg)", /* 각도 */
             },
 
@@ -467,8 +458,8 @@ export class TestSection extends React.Component<any> {
               content: '""',
               width: "15px", /* 사이즈 */
               height: "15px", /* 사이즈 */
-              "border-top": `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
-              "border-right": `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
+              borderTop: `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
+              borderRight: `4px solid ${Colors.theme.text.box.default}`, /* 선 두께 */
               transform: "rotate(45deg)", /* 각도 */
             }
           })}>
@@ -551,11 +542,11 @@ export class TestSection extends React.Component<any> {
                 const timeRecords: TimeRecord[] = [];
 
 
-                timeTemplates.map((recordTemplate, j) => {
+                timeTemplates.forEach((recordTemplate, j) => {
                   timeRecords.push(new TimeRecord(Number(i.toString() + getIdOfTemplate(j)), day, recordTemplate))
                 })
 
-                return <div css={css({})}>
+                return <div key={i} css={css({})}>
 
                   <div css={css({
                     width: "160px",
@@ -568,13 +559,13 @@ export class TestSection extends React.Component<any> {
                   })}>
 
                     {
-                      timeRecords.map((timeCell) => {
+                      timeRecords.map((timeCell, timeCellIndex) => {
                         let selected = this.state.selectedKeys.indexOf(timeCell.id) > -1 || isIdInSelectedKeys(timeCell.id, this.state.selectedKeys);
                         const isMatching = timeCell.match(this.state.timeBlocks, this.state.standardDate);
                         const timeBlockHeightRatio = timeCell.calculateHeightTimes(this.state.timeBlocks, isMatching, this.state.standardDate)
                         const timeBlockDto: TimeBlockDto | undefined = timeCell.getMatching(this.state.timeBlocks, this.state.standardDate);
                         return (
-                          <div>
+                          <div key={timeCellIndex}>
                             <SelectableComponent
                               selectableKey={timeCell.id}
                               key={timeCell.id}
@@ -645,25 +636,21 @@ const TodoList: React.FC<{ checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs,
       // "-webkit-align-items": ""
     })}>
       {todoDtos.map((todo, index) => {
-        return <Todo checkBoxSize={checkBoxSize} todoDto={todo} day={day} index={index} timeBlocks={timeBlocks}
+        return <Todo key={index} checkBoxSize={checkBoxSize} todoDto={todo} day={day} index={index} timeBlocks={timeBlocks}
                      updateTimeBlocks={updateTimeBlocks}/>
       })}
     </div>
   }
 
 function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, setIsFocused: Dispatch<SetStateAction<any>>) {
-
-
-
-  // console.log("contains", !ref.current.contains(event.target))
   if (ref.current && !ref.current.contains(event.target)) {
-    if ((ref.current.value != ref.current.defaultValue) && (ref.current.value != '' && ref.current.value != undefined)) {
+    if ((ref.current.value !== ref.current.defaultValue) && (ref.current.value !== '' && ref.current.value !== undefined)) {
 
       let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
       alert("should api call modified")
 
       let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate!.map((todoDto, todoDtoIndex) => {
-        if (todoDtoIndex == index) {
+        if (todoDtoIndex === index) {
           //여기에서 api 콜한 결과를 리턴
           return {id: todoDto.id, isChecked: todoDto.isChecked, content: ref.current.value}
         } else {
@@ -695,7 +682,7 @@ function useOutsideAlerter(ref: RefObject<any>, day: Dayjs, index: number, timeB
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", (e) => handleClickOutside(e, ref, day, index, timeBlocks, updateTimeBlocks, setIsFocused));
     };
-  }, [ref]);
+  }, [ref, day, index, timeBlocks, updateTimeBlocks, setIsFocused]);
 }
 
 //https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
@@ -709,10 +696,10 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
     useOutsideAlerter(wrapperRef, day, index, timeBlocks, updateTimeBlocks, setIsFocused);
 
     function hasFullChecked(timeBlocks) {
-      for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key != TimeRecord.getFormattedDate(day, RelativeDay.TODAY))) {
+      for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key !== TimeRecord.getFormattedDate(day, RelativeDay.TODAY))) {
         let todoDtosAtDate: TodoDto[] = timeBlocks.todoWithinThisWeek.get(key)!;
         //todo: 여기에 로직을 content 대신 id로 바꿔야함.
-        if ((todoDtosAtDate[todoDtosAtDate.length-2].content != '' && todoDtosAtDate[todoDtosAtDate.length-2].content != undefined ) && (todoDtosAtDate[todoDtosAtDate.length-1].content == '' || todoDtosAtDate[todoDtosAtDate.length-1].content == undefined )) {
+        if ((todoDtosAtDate[todoDtosAtDate.length-2].content !== '' && todoDtosAtDate[todoDtosAtDate.length-2].content !== undefined ) && (todoDtosAtDate[todoDtosAtDate.length-1].content === '' || todoDtosAtDate[todoDtosAtDate.length-1].content === undefined )) {
           return true;
         }
       }
@@ -729,7 +716,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
       if (hasFullChecked(timeBlocks)) {
         newTodoDtos.push({id: undefined, isChecked: false, content: ''})
       } else {
-        const otherDays = Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key != TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+        const otherDays = Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key !== TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
         for (const otherDay of otherDays) {
           let todoDtosAtDate = timeBlocks.todoWithinThisWeek.get(otherDay);
           todoDtosAtDate.pop()
@@ -745,7 +732,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
 
     const onKeyPress = (event, day, index, setIsFocused) => {
       // todo: 엔티티가 아니면, 즉 아이디가 없으면 생성 콜을 해야함.
-      if (event.charCode == 13 && !event.shiftKey) {
+      if (event.charCode === 13 && !event.shiftKey) {
         event.preventDefault();
         let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
         const target = event.target as HTMLInputElement;
@@ -753,7 +740,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
           alert("should api call modified")
 
           let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate!.map((todoDto, todoDtoIndex) => {
-            if (todoDtoIndex == index) {
+            if (todoDtoIndex === index) {
               //여기에서 api 콜한 결과를 리턴
               return {id: todoDto.id, isChecked: todoDto.isChecked, content: target.value}
             } else {
@@ -785,13 +772,13 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
         marginBottom: checkBoxSize.multiply(new Percentage(25)).toString(),
       })}
       onMouseEnter={() => {
-        if (todoDto.content == undefined || todoDto.content == '') {
+        if (todoDto.content === undefined || todoDto.content === '') {
           return
         }
         setOnHover(true);
       }}
       onMouseLeave={() => {
-        if (todoDto.content == undefined || todoDto.content == '') {
+        if (todoDto.content === undefined || todoDto.content === '') {
           return
         }
         setOnHover(false);
@@ -884,7 +871,7 @@ const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBl
 
         weekdays.map((day, i) => {
           const todoListAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-          return <div css={css({
+          return <div key={i} css={css({
             width: "160px"
           })}>
             <DateGuide day={day}/>
@@ -937,27 +924,27 @@ function getIdOfTemplate(j: number) {
 
 function calculateWeekdaysForView(day: dayjs.Dayjs): Dayjs[] {
   function getStartDate(day: dayjs.Dayjs) {
-    if (day.day() == 0) {
+    if (day.day() === 0) {
       return day;
     }
 
-    if (day.day() == 1) {
+    if (day.day() === 1) {
       return day.subtract(1, 'day')
     }
 
-    if (day.day() == 2) {
+    if (day.day() === 2) {
       return day.subtract(2, 'day')
     }
 
-    if (day.day() == 3) {
+    if (day.day() === 3) {
       return day.subtract(3, 'day')
     }
 
-    if (day.day() == 4) {
+    if (day.day() === 4) {
       return day.subtract(4, 'day')
     }
 
-    if (day.day() == 5) {
+    if (day.day() === 5) {
       return day.subtract(5, 'day')
     }
 

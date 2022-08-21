@@ -53,6 +53,3 @@ export const parseDayOfWeek = (number: number): string => {
   return "SATURDAY"
 }
 
-
-
-export default {parseDayOfWeekAlias, parseDayOfWeek};

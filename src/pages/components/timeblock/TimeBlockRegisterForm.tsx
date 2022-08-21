@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {DateTime} from "src/model/DateTime";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -21,8 +20,6 @@ interface FormProps {
   updateTimeBlocks: (timeBlocks: WeekTimes) => void
 }
 
-
-const mins = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"];
 
 const onRegister = (e, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
   if (e.target.innerText !== 'record') {
@@ -60,16 +57,12 @@ const onRegister = (e, closeModal: (e) => void, timeBlocks: WeekTimes, updateTim
 
 
   let timeBlockDtosAtDate: TimeBlockDto[] | undefined = timeBlocks.timesWithinThisWeek.get(formattedStartDate);
-  console.log("formated", formattedStartDate);
-  console.log("ex", timeBlockDtosAtDate);
   let newTimeBlockDtosAtDate;
-  if (timeBlockDtosAtDate == undefined) {
+  if (timeBlockDtosAtDate === undefined) {
     newTimeBlockDtosAtDate = [newTimeBlock]
   } else {
     newTimeBlockDtosAtDate = [...timeBlockDtosAtDate, newTimeBlock]
   }
-
-  console.log("new", newTimeBlockDtosAtDate)
 
   timeBlocks.timesWithinThisWeek.set(formattedStartDate, newTimeBlockDtosAtDate);
   updateTimeBlocks(timeBlocks);
@@ -77,12 +70,12 @@ const onRegister = (e, closeModal: (e) => void, timeBlocks: WeekTimes, updateTim
 
 };
 
-function assertIsFormFieldElement(element: Element): asserts element is HTMLInputElement | HTMLSelectElement | HTMLButtonElement {
-// Customize this list as necessary −−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  if (!("value" in element)) {
-    throw new Error(`Element is not a form field element`);
-  }
-}
+// function assertIsFormFieldElement(element: Element): asserts element is HTMLInputElement | HTMLSelectElement | HTMLButtonElement {
+// // Customize this list as necessary −−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//   if (!("value" in element)) {
+//     throw new Error(`Element is not a form field element`);
+//   }
+// }
 
 //https://stackoverflow.com/questions/45283030/html5-input-type-time-without-am-pm-and-with-min-max
 export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => {
@@ -97,10 +90,10 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
           display: "none"
         },
         "input[type=time]::-webkit-clear-button": {
-          "-webkit-appearance": "none",
-          "-moz-appearance": "none",
-          "-o-appearance": "none",
-          "-ms-appearance": "none",
+          WebkitAppearance: "none",
+          MozAppearance: "none",
+          OAppearance: "none",
+          MsAppearance: "none",
           "appearance": "none",
           "margin": "-10px",
         },
@@ -132,9 +125,9 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
           width: "280px",
           borderWidth: "0px",
 
-          "-moz-box-shadow": "0 4px 6px -6px #222",
-          "-webkit-box-shadow": "0 4px 6px -6px #222",
-          "box-shadow": "0 4px 6px -6px #222",
+          MozBoxShadow: "0 4px 6px -6px #222",
+          WebkitBoxShadow: "0 4px 6px -6px #222",
+          boxShadow: "0 4px 6px -6px #222",
           ":focus-visible": {
             outline: "0px"
           }
@@ -227,12 +220,12 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
             left: 0,
             right: 0,
             bottom: 0,
-            "background-color": `${Colors.theme.main.work}`,
-            "-webkit-transition": ".4s",
+            backgroundColor: `${Colors.theme.main.work}`,
+            WebkitTransition: ".4s",
             transition: ".4s",
-            "-moz-box-shadow": "0 4px 6px -6px #222",
-            "-webkit-box-shadow": "0 4px 6px -6px #222",
-            "box-shadow": "0 4px 6px -4px #222",
+            MozBoxShadow: "0 4px 6px -6px #222",
+            WebkitBoxShadow: "0 4px 6px -6px #222",
+            boxShadow: "0 4px 6px -4px #222",
             ":focus-visible": {
               outline: "0px"
             }
@@ -245,30 +238,30 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
             width: "26px",
             left: "4px",
             bottom: "4px",
-            "background-color": "white",
-            "-webkit-transition": ".4s",
+            backgroundColor: "white",
+            WebkitTransition: ".4s",
             transition: ".4s",
           },
 
           ".slider.round": {
-            "border-radius": "34px",
+            borderRadius: "34px",
           },
           ".slider.round:before": {
-            "border-radius": "50%",
+            borderRadius: "50%",
           },
           "input:checked + .slider": {
-            "background-color": `${Colors.theme.main.orgasme}`,
+            backgroundColor: `${Colors.theme.main.orgasme}`,
           },
 
           "input:checked + .slider:before": {
-            "-webkit-transform": "translateX(26px)",
-            "-ms-transform": "translateX(26px)",
+            WebkitTransform: "translateX(26px)",
+            MsTransform: "translateX(26px)",
             transform: "translateX(26px)",
           }
         })}>
           <input
             onClick={toggleIsGood}
-            checked={isGood}
+            defaultChecked={isGood}
             type="checkbox"/>
           <span className="slider round"/>
         </label>
@@ -277,9 +270,9 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
         ".select_box": {
           width: "120px",
           overflow: "hidden",
-          "-moz-box-shadow": "0 4px 6px -6px #222",
-          "-webkit-box-shadow": "0 4px 6px -6px #222",
-          "box-shadow": "0px 4px 6px -6px #222",
+          MozBoxShadow: "0 4px 6px -6px #222",
+          WebkitBoxShadow: "0 4px 6px -6px #222",
+          boxShadow: "0px 4px 6px -6px #222",
           position: "relative",
           padding: "5px 0",
         },
@@ -311,8 +304,8 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
           })}
 
                   name="category" id="category-select">
-            {options.map((option) => {
-              return <option value={option.value}>{option.label}</option>;
+            {options.map((option, index) => {
+              return <option key={index} value={option.value}>{option.label}</option>;
             })}
           </select>
         </div>
@@ -338,7 +331,7 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
             height: "200px",
             // "-moz-box-shadow": "-10px 10px 20px -20px #222",
             // "-webkit-box-shadow": "-10px 10px 20px -20px #222",
-            "box-shadow": "0px 0px 6px -2px #222",
+            boxShadow: "0px 0px 6px -2px #222",
             ":focus-visible": {
               outline: "0px"
             }

@@ -1,7 +1,5 @@
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
-import {WeekTimesDto} from "src/dtos/WeekTimesDto";
 import {TodoDto} from "src/dtos/TodoDto";
-import {number} from "prop-types";
 import {addBlankTodoAtThisWeek, someDayIsFullOfContents} from "src/service/TodoListService";
 
 

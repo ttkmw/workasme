@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 import Grey from "src/graphic/color/grey";
 
-export default {
+const Colors = {
   dev: {},
   theme: {
     main: {
@@ -50,3 +50,5 @@ export default {
     }
   }
 };
+
+export default Colors;

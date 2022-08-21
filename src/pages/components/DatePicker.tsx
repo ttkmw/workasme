@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import * as ReactDatePicker from "react-datepicker";
+import {default as ReactDatePicker} from "react-datepicker";
 
 /** @jsxRuntime classic */
 /** @jsx jsx */
@@ -7,31 +7,20 @@ import {css, jsx} from "@emotion/react";
 import "react-datepicker/dist/react-datepicker.css";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
-import {DateTime} from "src/model/DateTime";
-import {TimeRecord} from "src/model/TimeRecord";
 
 //https://reactdatepicker.com/
 const DatePicker: React.FC<{dateTime: string}> = (props: {dateTime: string}) => {
   const {dateTime} = props;
   const [startDate, setStartDate] = useState(new Date(dateTime));
-  const [isOpen, setIsOpen] = useState(false);
-  const handleChange = (e) => {
-    setIsOpen(!isOpen);
-    setStartDate(e);
-  };
-  const handleClick = (e) => {
-    e.preventDefault();
-    setIsOpen(!isOpen);
-  };
   return (
     <div css={css({
       ".picker-input": {
         // backgroundColor: "orange",
         textAlign: "center",
         width: new Pixel(120).toString(),
-        "-moz-box-shadow": "0 4px 6px -6px #222",
-        "-webkit-box-shadow": "0 4px 6px -6px #222",
-        "box-shadow": "0 4px 6px -6px #222",
+        MozBoxShadow: "0 4px 6px -6px #222",
+        WebkitBoxShadow: "0 4px 6px -6px #222",
+        boxShadow: "0 4px 6px -6px #222",
         borderWidth: "0px",
         // borderLeftWidth: new Pixel(0).toString(),
         // borderTopWidth: new Pixel(0).toString(),
@@ -53,7 +42,7 @@ const DatePicker: React.FC<{dateTime: string}> = (props: {dateTime: string}) => 
       //   backgroundColor: "orange"
       // }
     })}>
-      <ReactDatePicker.default dateFormat="MM.dd.yyyy" calendarClassName="asa" className="picker-input" showPopperArrow={false} selected={startDate} onChange={(date:Date) => setStartDate(date)}/>
+      <ReactDatePicker dateFormat="MM.dd.yyyy" calendarClassName="asa" className="picker-input" showPopperArrow={false} selected={startDate} onChange={(date:Date) => setStartDate(date)}/>
     </div>
   );
 }

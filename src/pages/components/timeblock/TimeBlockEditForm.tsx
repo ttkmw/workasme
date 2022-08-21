@@ -8,149 +8,10 @@ import TimePicker from "src/pages/components/TimePicker";
 import Colors from "src/constants/Colors";
 import {options} from "src/pages/components/timeblock/CategoryOptions";
 import Pixel from "src/graphic/size/pixel";
-import dayjs, {Dayjs} from "dayjs";
 import {WeekTimes} from "src/model/WeekTimes";
-import {DateTime} from "src/model/DateTime";
-import {TodoDto} from "src/dtos/TodoDto";
-
-const serverData2: WeekTimes = new WeekTimes(
-  new Map<string, TimeBlockDto[]>([
-    ["2022-08-14", [
-      {
-        id: 1,
-        title: "엣지타임",
-        startDateTime: {dateTime: "2022-08-14T23:00"},
-        endDateTime: {dateTime: "2022-08-15T01:00"},
-        isGood: true,
-        category: "NONE",
-        memo: "엣지타임"
-      }
-    ]],
-    ["2022-08-15", [
-      {
-        id: 2,
-        title: "영화 보고 친구랑 잠깐 수다떨음",
-        startDateTime: {dateTime: "2022-08-15T01:00"},
-        endDateTime: {dateTime: "2022-08-15T04:00"},
-        isGood: false,
-        category: "SOCIAL",
-        memo: undefined
-      },
-      {
-        id: 3,
-        title: "일했지",
-        startDateTime: {dateTime: "2022-08-15T15:00"},
-        endDateTime: {dateTime: "2022-08-15T19:00"},
-        isGood: false,
-        category: "INTELLECTUAL",
-        memo: undefined
-      },
-    ]],
-    ["2022-08-16", [
-      {
-        id: 4,
-        title: "샤워하고 밥먹고 전화하다가 엄마한테 등짝맞고 공부하다가 플스함",
-        startDateTime: {dateTime: "2022-08-16T01:00"},
-        endDateTime: {dateTime: "2022-08-16T04:00"},
-        isGood: false,
-        category: "NONE",
-        memo: "why should id live like this"
-      },
-    ]],
-    ["2022-08-17", [
-      {
-        id: 5,
-        title: "코딩함",
-        startDateTime: {dateTime: "2022-08-17T01:00"},
-        endDateTime: {dateTime: "2022-08-17T05:00"},
-        isGood: true,
-        category: "INTELLECTUAL",
-        memo: undefined
-      },
-      {
-        id: 6,
-        title: "카페에 왔다",
-        startDateTime: {dateTime: "2022-08-17T10:00"},
-        endDateTime: {dateTime: "2022-08-17T13:00"},
-        isGood: true,
-        category: "INTELLECTUAL",
-        memo: undefined
-      },
-    ]],
-    ["2022-08-18", [
-      {
-        id: 7,
-        title: "베라 피티를 함",
-        startDateTime: {dateTime: "2022-08-18T01:00"},
-        endDateTime: {dateTime: "2022-08-18T04:00"},
-        isGood: true,
-        category: "PHYSICAL",
-        memo: "개힘들다"
-      },
-    ]],
-    ["2022-08-19", [
-      {
-        id: 8,
-        title: "산책을 함",
-        startDateTime: {dateTime: "2022-08-19T01:00"},
-        endDateTime: {dateTime: "2022-08-19T04:00"},
-        isGood: false,
-        category: "SPIRITUAL",
-        memo: "개운하다"
-      },
-    ]],
-
-    ["2022-08-20", [
-      {
-        id: 9,
-        title: "잠을 뒤척임",
-        startDateTime: {dateTime: "2022-08-20T02:00"},
-        endDateTime: {dateTime: "2022-08-20T05:00"},
-        isGood: false,
-        category: "NONE",
-        memo: "힘들다"
-      },
-    ]],
-
-    ["2022-08-21", [
-      {
-        id: 10,
-        title: "sleep bad",
-        startDateTime: {dateTime: "2022-08-21T00:00"},
-        endDateTime: {dateTime: "2022-08-21T05:00"},
-        isGood: false,
-        category: "NONE",
-        memo: "힘들다"
-      },
-    ]]
-  ]),
-  undefined,
-  new Map<string, TodoDto[]>([
-    ["2022-08-14", [
-      {
-        id: 1,
-        isChecked: false,
-        content: "해야하는데 아직 못함"
-      },
-      {
-        id: 3,
-        isChecked: true,
-        content: "쉽게 함"
-      }
-    ]],
-    ["2022-08-15", [
-      {
-        id: 2,
-        isChecked: true,
-        content: "다했음!"
-      }
-    ]],
-  ])
-);
 
 
 const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
-  // e.preventDefault();
 
   if (e.target.innerText !== 'edit' && e.target.innerText !== 'remove') {
     return;
@@ -160,7 +21,7 @@ const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => voi
     let id = Number(e.currentTarget[0].value);
     const startDate = exTimeBlockDto.startDateTime.dateTime.split('T')[0];
     const timeBlockDtosAtDate = timeBlocks.timesWithinThisWeek.get(startDate)!;
-    alert("should api call deleted")
+    alert("should api call deleted with id " + id)
     const newTimeblockDtos = timeBlockDtosAtDate.filter((timeBlockDto) => {
       return timeBlockDto.id !== exTimeBlockDto.id;
     })
@@ -211,12 +72,11 @@ const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => voi
   closeModal(e)
 }
 
-const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
-  (props: { onSubmit: (e) => void, timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
-    const {onSubmit, timeBlockDto, closeModal, timeBlocks, updateTimeBlocks} = props;
+const TimeBlockEditForm: React.FC<{timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+  (props: { timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
+    const {timeBlockDto, closeModal, timeBlocks, updateTimeBlocks} = props;
     const [isGood, setIsGood] = useState(timeBlockDto.isGood)
     const toggleIsGood = (e) => {
-      console.log("toggleIsGood")
       e.stopPropagation();
       setIsGood(!isGood);
     }
@@ -224,10 +84,10 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
     return <form
       css={css({
         "input[type=time]::-webkit-clear-button": {
-          "-webkit-appearance": "none",
-          "-moz-appearance": "none",
-          "-o-appearance": "none",
-          "-ms-appearance": "none",
+          WebkitAppearance: "none",
+          MozAppearance: "none",
+          OAppearance: "none",
+          MsAppearance: "none",
           "appearance": "none",
           "margin": "-10px",
         },
@@ -266,9 +126,9 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
           width: "280px",
           borderWidth: "0px",
 
-          "-moz-box-shadow": "0 4px 6px -6px #222",
-          "-webkit-box-shadow": "0 4px 6px -6px #222",
-          "box-shadow": "0 4px 6px -6px #222",
+          MozBoxShadow: "0 4px 6px -6px #222",
+          WebkitBoxShadow: "0 4px 6px -6px #222",
+          boxShadow: "0 4px 6px -6px #222",
           ":focus-visible": {
             outline: "0px"
           }
@@ -354,12 +214,12 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
             left: 0,
             right: 0,
             bottom: 0,
-            "background-color": `${Colors.theme.main.work}`,
-            "-webkit-transition": ".4s",
+            backgroundColor: `${Colors.theme.main.work}`,
+            WebkitTransition: ".4s",
             transition: ".4s",
-            "-moz-box-shadow": "0 4px 6px -6px #222",
-            "-webkit-box-shadow": "0 4px 6px -6px #222",
-            "box-shadow": "0 4px 6px -4px #222",
+            MozBoxShadow: "0 4px 6px -6px #222",
+            WebkitBoxShadow: "0 4px 6px -6px #222",
+            boxShadow: "0 4px 6px -4px #222",
             ":focus-visible": {
               outline: "0px"
             }
@@ -372,24 +232,24 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
             width: "26px",
             left: "4px",
             bottom: "4px",
-            "background-color": "white",
-            "-webkit-transition": ".4s",
+            backgroundColor: "white",
+            WebkitTransition: ".4s",
             transition: ".4s",
           },
 
           ".slider.round": {
-            "border-radius": "34px",
+            borderRadius: "34px",
           },
           ".slider.round:before": {
-            "border-radius": "50%",
+            borderRadius: "50%",
           },
           "input:checked + .slider": {
-            "background-color": `${Colors.theme.main.orgasme}`,
+            backgroundColor: `${Colors.theme.main.orgasme}`,
           },
 
           "input:checked + .slider:before": {
-            "-webkit-transform": "translateX(26px)",
-            "-ms-transform": "translateX(26px)",
+            WebkitTransform: "translateX(26px)",
+            MsTransform: "translateX(26px)",
             transform: "translateX(26px)",
           }
         })}>
@@ -404,9 +264,9 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
         ".select_box": {
           width: "120px",
           overflow: "hidden",
-          "-moz-box-shadow": "0 4px 6px -6px #222",
-          "-webkit-box-shadow": "0 4px 6px -6px #222",
-          "box-shadow": "0px 4px 6px -6px #222",
+          MozBoxShadow: "0 4px 6px -6px #222",
+          WebkitBoxShadow: "0 4px 6px -6px #222",
+          boxShadow: "0px 4px 6px -6px #222",
           position: "relative",
           padding: "5px 0",
         },
@@ -435,9 +295,11 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
             ":focus-visible": {
               outline: "0px"
             }
-          })} name="category" id="category-select">
-            {options.map((option) => {
-              return <option value={option.value} selected={option.value === timeBlockDto.category}>{option.label}</option>;
+          })} name="category" id="category-select"
+                  defaultValue={timeBlockDto.category}
+          >
+            {options.map((option, index) => {
+              return <option key={index} value={option.value}>{option.label}</option>;
             })}
           </select>
         </div>
@@ -464,7 +326,7 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
             height: "200px",
             // "-moz-box-shadow": "-10px 10px 20px -20px #222",
             // "-webkit-box-shadow": "-10px 10px 20px -20px #222",
-            "box-shadow": "0px 0px 6px -2px #222",
+            boxShadow: "0px 0px 6px -2px #222",
             ":focus-visible": {
               outline: "0px"
             }
