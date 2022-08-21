@@ -393,6 +393,7 @@ export class TestSection extends React.Component<any> {
     }
   };
   onClickOutside = (event: any) => {
+    event.stopPropagation();
     if (this.modal && this.modal.contains(event.target)) return;
     this.onClose(event);
   };
@@ -610,7 +611,7 @@ export class TestSection extends React.Component<any> {
                 buttonRef={(n: any) => (this.closeButton = n)}
                 closeModal={this.onClose}
                 onKeyDown={this.onKeyDown}
-                onClickOutside={this.onClickOutside}
+                onClickOutside={this.onClickOutside.bind(this)}
               >
                 <TimeBlockRegisterForm earliestRecord={earliestRecord}
                                        latestRecord={latestRecord}
