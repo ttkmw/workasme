@@ -160,19 +160,21 @@ const onSubmitHandler = (e, exTimeBlock: TimeBlockDto, closeModal: (e) => void, 
 
 
   if (e.target.innerText === 'edit') {
-    alert("should api call modified")
-    let title = e.currentTarget[0].value;
-    let startDate = e.currentTarget[1].value;
-    let startTime = e.currentTarget[2].value;
-    let endDate = e.currentTarget[3].value;
-    let endTime = e.currentTarget[4].value;
-    let isGood = e.currentTarget[5].checked;
-    let category = e.currentTarget[6].value;
-    let memo = e.currentTarget[7].value;
+    let id = Number(e.currentTarget[0].value);
+    let title = e.currentTarget[1].value;
+    let startDate = e.currentTarget[2].value;
+    let startTime = e.currentTarget[3].value;
+    let endDate = e.currentTarget[4].value;
+    let endTime = e.currentTarget[5].value;
+    let isGood = e.currentTarget[6].checked;
+    let category = e.currentTarget[7].value;
+    let memo = e.currentTarget[8].value;
+
     const [startMonth, startDay, startYear] = startDate.split('.')
     const [endMonth, endDay, endYear] = endDate.split('.')
 
-    const newTimeBlock: TimeBlockDto = {id: exTimeBlock.id, title: title,
+    alert("should api call modified")
+    const newTimeBlock: TimeBlockDto = {id: id, title: title,
       startDateTime: {dateTime: startYear + '-' + startMonth + '-' + startDay + "T" + startTime + ":00"},
       endDateTime: {dateTime: endYear + '-' + endMonth + '-' + endDay + "T" + endTime + ":00"},
       isGood: isGood,
@@ -232,6 +234,11 @@ const TimeBlockEditForm: React.FC<{ onSubmit: (e) => void, timeBlockDto: TimeBlo
       id={"time-block-form"}
       onClick={(event => onSubmitHandler(event, timeBlockDto, closeModal, timeBlocks, updateTimeBlocks))}
     >
+      <div className={"form-group"} css={css({
+        display: "none"
+      })}>
+        <input defaultValue={timeBlockDto.id}/>
+      </div>
       <div className="form-group" css={css({
         display: "flex",
         flexDirection: "row",
