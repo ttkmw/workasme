@@ -727,14 +727,39 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, day, index, timeBlocks, updateTimeBlocks, setIsFocused);
 
+    function hasFullChecked(timeBlocks) {
+      for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys())) {
+        let todoDtosAtDate: TodoDto[] = timeBlocks.todoWithinThisWeek.get(key)!;
+        //todo: 여기에 로직을 content 대신 id로 바꿔야함.
+        if ((todoDtosAtDate[todoDtosAtDate.length-2].content != '' && todoDtosAtDate[todoDtosAtDate.length-2].content != undefined ) && (todoDtosAtDate[todoDtosAtDate.length-1].content == '' || todoDtosAtDate[todoDtosAtDate.length-1].content == undefined )) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     const onDelete = (e, day, index, timeBlocks, updateTimeBlocks) => {
       let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
       const removeTarget = todoDtosAtDate!.filter((todoDto, todoDtoIndex) => todoDtoIndex === index)[0];
       alert("should api call deleted")
       let newTodoDtos = todoDtosAtDate!.filter((todoDto) => {
         return todoDto !== removeTarget});
-      timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos);
-      // todo: 여기서 지운게 제일 긴거였으면, 등등 로직에 다라 다 하나씩 지워야 함.
+
+      if (hasFullChecked(timeBlocks)) {
+
+        newTodoDtos.push({id: undefined, isChecked: false, content: ''})
+      } else {
+        const otherDays = Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key != TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+        for (const otherDay of otherDays) {
+          let todoDtosAtDate = timeBlocks.todoWithinThisWeek.get(otherDay);
+          todoDtosAtDate.pop()
+          timeBlocks.todoWithinThisWeek.set(otherDay, todoDtosAtDate);
+        }
+      }
+
+      timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos);
+
+
       updateTimeBlocks(timeBlocks);
     }
 
