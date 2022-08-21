@@ -728,7 +728,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
     useOutsideAlerter(wrapperRef, day, index, timeBlocks, updateTimeBlocks, setIsFocused);
 
     function hasFullChecked(timeBlocks) {
-      for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys())) {
+      for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key != TimeRecord.getFormattedDate(day, RelativeDay.TODAY))) {
         let todoDtosAtDate: TodoDto[] = timeBlocks.todoWithinThisWeek.get(key)!;
         //todo: 여기에 로직을 content 대신 id로 바꿔야함.
         if ((todoDtosAtDate[todoDtosAtDate.length-2].content != '' && todoDtosAtDate[todoDtosAtDate.length-2].content != undefined ) && (todoDtosAtDate[todoDtosAtDate.length-1].content == '' || todoDtosAtDate[todoDtosAtDate.length-1].content == undefined )) {
@@ -845,7 +845,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
               width: "200%",
               marginLeft: "5%"
 
-            })} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)} defaultValue={todoDto.content}
+            })} autoFocus={isFocused} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)} defaultValue={todoDto.content}
             /> :
             <input ref={wrapperRef} css={css({
             border: 0,
