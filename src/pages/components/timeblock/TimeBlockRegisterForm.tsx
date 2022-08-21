@@ -47,6 +47,8 @@ const onRegister = (e, closeModal: (e) => void, timeBlocks: WeekTimes, updateTim
   const formattedStartDate = startYear + '-' + startMonth + '-' + startDay;
   const startDateTime = startYear + '-' + startMonth + '-' + startDay + "T" + startTime + ":00";
   const endDateTime = endYear + '-' + endMonth + '-' + endDay + "T" + endTime + ":00";
+
+  alert("should api call created")
   const newTimeBlock: TimeBlockDto = {id: 0, title: title,
     startDateTime: {dateTime: startDateTime},
     endDateTime: {dateTime: endDateTime},
