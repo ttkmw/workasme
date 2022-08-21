@@ -10,18 +10,81 @@ import Colors from "src/constants/Colors";
 import '../../../index.css';
 import {TimeRecord} from "src/model/TimeRecord";
 import {options} from "src/pages/components/timeblock/CategoryOptions";
+import {WeekTimes} from "src/model/WeekTimes";
+import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 
 interface FormProps {
-  onSubmit: (e) => void,
   earliestRecord: TimeRecord,
-  latestRecord: TimeRecord
+  latestRecord: TimeRecord,
+  closeModal: (e) => void,
+  timeBlocks: WeekTimes,
+  updateTimeBlocks: (timeBlocks: WeekTimes) => void
 }
 
 
 const mins = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"];
+
+const onRegister = (e, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
+  if (e.target.innerText !== 'record') {
+    return;
+  }
+  e.stopPropagation();
+  let title = e.currentTarget[0].value;
+  let startDate = e.currentTarget[1].value;
+  let startTime = e.currentTarget[2].value;
+  let endDate = e.currentTarget[3].value;
+  let endTime = e.currentTarget[4].value;
+  let isGood = e.currentTarget[5].checked;
+  let category = e.currentTarget[6].value;
+  let memo = e.currentTarget[7].value;
+  const [startMonth, startDay, startYear] = startDate.split('.')
+  const [endMonth, endDay, endYear] = endDate.split('.')
+  //
+  // assertIsFormFieldElement(title);
+  // assertIsFormFieldElement(startDate);
+  // assertIsFormFieldElement(startTime);
+  // assertIsFormFieldElement(endDate);
+  const formattedStartDate = startYear + '-' + startMonth + '-' + startDay;
+  const startDateTime = startYear + '-' + startMonth + '-' + startDay + "T" + startTime + ":00";
+  const endDateTime = endYear + '-' + endMonth + '-' + endDay + "T" + endTime + ":00";
+  const newTimeBlock: TimeBlockDto = {id: 0, title: title,
+    startDateTime: {dateTime: startDateTime},
+    endDateTime: {dateTime: endDateTime},
+    isGood: isGood,
+    category: category,
+    memo: memo
+  }
+
+
+
+  let timeBlockDtosAtDate: TimeBlockDto[] | undefined = timeBlocks.timesWithinThisWeek.get(formattedStartDate);
+  console.log("formated", formattedStartDate);
+  console.log("ex", timeBlockDtosAtDate);
+  let newTimeBlockDtosAtDate;
+  if (timeBlockDtosAtDate == undefined) {
+    newTimeBlockDtosAtDate = [newTimeBlock]
+  } else {
+    newTimeBlockDtosAtDate = [...timeBlockDtosAtDate, newTimeBlock]
+  }
+
+  console.log("new", newTimeBlockDtosAtDate)
+
+  timeBlocks.timesWithinThisWeek.set(formattedStartDate, newTimeBlockDtosAtDate);
+  updateTimeBlocks(timeBlocks);
+  closeModal(e);
+
+};
+
+function assertIsFormFieldElement(element: Element): asserts element is HTMLInputElement | HTMLSelectElement | HTMLButtonElement {
+// Customize this list as necessary −−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  if (!("value" in element)) {
+    throw new Error(`Element is not a form field element`);
+  }
+}
+
 //https://stackoverflow.com/questions/45283030/html5-input-type-time-without-am-pm-and-with-min-max
 export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => {
-  const {onSubmit, earliestRecord, latestRecord} = props;
+  const {earliestRecord, latestRecord, closeModal, timeBlocks, updateTimeBlocks } = props;
   const [isGood, setIsGood] = useState(false)
   const toggleIsGood = () => setIsGood(!isGood)
 
@@ -50,7 +113,7 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
         },
         fontFamily: "ObjectSans-Slanted"
       })}
-      onSubmit={onSubmit}>
+      onClick={(e) => onRegister(e, closeModal, timeBlocks, updateTimeBlocks)}>
       <div className="form-group" css={css({
         display: "flex",
         flexDirection: "row",
@@ -105,7 +168,7 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
           >
             <DatePicker dateTime={earliestRecord.getStartDateTime()}/>
             <div>-</div>
-            <TimePicker initialValue={earliestRecord.getStartDateTime().split("T")[1].slice(0,2)}/>
+            <TimePicker initialValue={earliestRecord.getStartDateTime().split("T")[1].slice(0, 2)}/>
           </div>
         </div>
       </div>
@@ -127,7 +190,7 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
                id={"endDateTime"}>
             <DatePicker dateTime={latestRecord.getEndDateTime()}/>
             <div>-</div>
-            <TimePicker initialValue={latestRecord.getEndDateTime().split("T")[1].slice(0,2)}/>
+            <TimePicker initialValue={latestRecord.getEndDateTime().split("T")[1].slice(0, 2)}/>
           </div>
         </div>
       </div>
@@ -307,9 +370,10 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
               borderRadius: 7,
               height: new Pixel(40).toString()
             })}
-            className={!isGood ? 'button-work': 'button-orgasm'}
-            type={"submit"}
-          >record</button>
+            className={!isGood ? 'button-work' : 'button-orgasm'}
+            type={"button"}
+          >record
+          </button>
         </div>
       </div>
     </form>

@@ -62,7 +62,7 @@ const serverData: WeekTimes = new WeekTimes(
         memo: undefined
       },
     ]],
-    ["2022-08-19", [
+    ["2022-08-09", [
       {
         id: 4,
         title: "샤워하고 밥먹고 전화하다가 엄마한테 등짝맞고 공부하다가 플스함",
@@ -291,32 +291,6 @@ function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
 }
 
 
-function onRegister() {
-  return e => {
-    let title = e.currentTarget[0];
-    let startDate = e.currentTarget[1];
-    let startTime = e.currentTarget[2];
-    let endDate = e.currentTarget[3];
-    let endTime = e.currentTarget[4];
-    let isGood = e.currentTarget[5];
-    let category = e.currentTarget[6];
-
-    assertIsFormFieldElement(title);
-    assertIsFormFieldElement(startDate);
-    assertIsFormFieldElement(startTime);
-    assertIsFormFieldElement(endDate);
-
-    console.log("title", title, title.value);
-    console.log("startDate", startDate, startDate.value);
-    console.log("startTime", startTime, startTime.value);
-    console.log("endDate", endDate, endTime.value);
-    console.log("isGood", isGood, isGood.checked);
-    console.log("category", category, category.value)
-
-
-  };
-}
-
 export class TestSection extends React.Component<any> {
   selectableRef;
   state;
@@ -342,6 +316,7 @@ export class TestSection extends React.Component<any> {
   }
 
   updateTimeBlocks(timeBlocks: WeekTimes) {
+    console.log("updateing!!!")
     this.setState({
       timeBlocks: timeBlocks
     })
@@ -407,6 +382,7 @@ export class TestSection extends React.Component<any> {
     this.toggleScrollLock();
   };
   onClose = (e) => {
+    console.log("onClose")
     this.clearItems(e)
     this.setState({isShown: false});
     this.toggleScrollLock();
@@ -636,8 +612,12 @@ export class TestSection extends React.Component<any> {
                 onKeyDown={this.onKeyDown}
                 onClickOutside={this.onClickOutside}
               >
-                <TimeBlockRegisterForm onSubmit={onRegister} earliestRecord={earliestRecord}
-                                       latestRecord={latestRecord}/>
+                <TimeBlockRegisterForm earliestRecord={earliestRecord}
+                                       latestRecord={latestRecord}
+                                       closeModal={this.onClose.bind(this)}
+                                       timeBlocks={this.state.timeBlocks}
+                                       updateTimeBlocks={this.updateTimeBlocks.bind(this)}
+                />
               </Modal>
             ) : null}
         </React.Fragment>
@@ -746,7 +726,6 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
         return todoDto !== removeTarget});
 
       if (hasFullChecked(timeBlocks)) {
-
         newTodoDtos.push({id: undefined, isChecked: false, content: ''})
       } else {
         const otherDays = Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key != TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
@@ -944,12 +923,7 @@ const DateGuide: React.FC<{ day: Dayjs }> = (props: { day: Dayjs }) => {
   </div>
 }
 
-function assertIsFormFieldElement(element: Element): asserts element is HTMLInputElement | HTMLSelectElement | HTMLButtonElement {
-// Customize this list as necessary −−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−−^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  if (!("value" in element)) {
-    throw new Error(`Element is not a form field element`);
-  }
-}
+
 
 
 function getIdOfTemplate(j: number) {
