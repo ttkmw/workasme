@@ -10,7 +10,6 @@ import ReactSelectableGroup from "src/pages/management/sections/selectable/react
 import Percentage from "src/graphic/size/percentage";
 import {WeekTimes} from "src/model/WeekTimes";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
-import {DateTime} from "src/model/DateTime";
 import dayjs, {Dayjs} from "dayjs";
 import {TimeRecord} from "src/model/TimeRecord";
 import {parseDayOfWeekAlias} from "src/util/DayofweekParser"
@@ -24,10 +23,8 @@ import {RelativeDay} from "src/model/RelativeDay";
 import Modal from "src/pages/components/Mordal";
 import TimeBlockRegisterForm from "src/pages/components/timeblock/TimeBlockRegisterForm";
 import {TodoDto} from "src/dtos/TodoDto";
-import timeBlock from "src/pages/components/timeblock/TimeBlock";
-import {wrapper} from "react-bootstrap/lib/utils/deprecationWarning";
-import {instanceOf} from "prop-types";
 import {addBlankTodoAtThisWeek, someDayIsFullOfContents} from "src/service/TodoListService";
+import {IoMdClose} from "react-icons/all";
 
 
 const SelectableComponent = createSelectable(Selectable);
@@ -366,7 +363,6 @@ export class TestSection extends React.Component<any> {
   }
 
 
-
   componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<{}>, snapshot?: any) {
   }
 
@@ -556,7 +552,8 @@ export class TestSection extends React.Component<any> {
 
           </div>
         </div>
-        <TodoListSection weekdays={weekdays} checkBoxSize={this.checkBoxSize} timeBlocks={this.state.timeBlocks} updateTimeBlocks={this.updateTimeBlocks.bind(this)}/>
+        <TodoListSection weekdays={weekdays} checkBoxSize={this.checkBoxSize} timeBlocks={this.state.timeBlocks}
+                         updateTimeBlocks={this.updateTimeBlocks.bind(this)}/>
 
         <ReactSelectableGroup onSelection={this.handleSelection}
                               onEndSelection={() => this.showModal(this.state.selectedKeys)}
@@ -651,87 +648,100 @@ export class TestSection extends React.Component<any> {
 }
 
 
-
-
-
-
-const TodoList: React.FC<{ checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}> =
+const TodoList: React.FC<{ checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
   (props: { checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
-  const {checkBoxSize, todoDtos, day, timeBlocks, updateTimeBlocks} = props;
-  return <div css={css({
-    display: "flex",
-    alignItems: "center",
-    marginLeft: "5px",
-    marginRight: "10px",
-    flexDirection: "column",
-    paddingTop: checkBoxSize.multiply(new Percentage(50)).toString(),
-    paddingBottom: checkBoxSize.multiply(new Percentage(50)).toString()
-  })}>
-    {todoDtos.map((todo, index) => {
-      return <Todo checkBoxSize={checkBoxSize} todoDto={todo} day={day} index={index} timeBlocks={timeBlocks} updateTimeBlocks={updateTimeBlocks}/>
-    })}
-  </div>
-}
 
-function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) {
-  if (ref.current.value == '' || ref.current.value == undefined) {
-    return;
+    const {checkBoxSize, todoDtos, day, timeBlocks, updateTimeBlocks} = props;
+
+    return <div css={css({
+      display: "flex",
+      // alignItems: "center",
+      marginLeft: "5px",
+      marginRight: "10px",
+      flexDirection: "column",
+      paddingTop: checkBoxSize.multiply(new Percentage(50)).toString(),
+      paddingBottom: checkBoxSize.multiply(new Percentage(50)).toString(),
+      // "-webkit-align-items": ""
+    })}>
+      {todoDtos.map((todo, index) => {
+        return <Todo checkBoxSize={checkBoxSize} todoDto={todo} day={day} index={index} timeBlocks={timeBlocks}
+                     updateTimeBlocks={updateTimeBlocks}/>
+      })}
+    </div>
   }
-  if (ref.current.value == ref.current.defaultValue) {
-    return;
-  }
+
+function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, setIsFocused: Dispatch<SetStateAction<any>>) {
+
+
 
   // console.log("contains", !ref.current.contains(event.target))
   if (ref.current && !ref.current.contains(event.target)) {
+    if ((ref.current.value != ref.current.defaultValue) && (ref.current.value != '' && ref.current.value != undefined)) {
 
-    let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-    alert("should api call modified")
+      let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+      alert("should api call modified")
 
-    let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate!.map((todoDto, todoDtoIndex) => {
-      if (todoDtoIndex == index) {
-        //여기에서 api 콜한 결과를 리턴
-        return {id: todoDto.id, isChecked: todoDto.isChecked, content: ref.current.value}
-      } else {
-        return todoDto;
-      }
-    })
+      let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate!.map((todoDto, todoDtoIndex) => {
+        if (todoDtoIndex == index) {
+          //여기에서 api 콜한 결과를 리턴
+          return {id: todoDto.id, isChecked: todoDto.isChecked, content: ref.current.value}
+        } else {
+          return todoDto;
+        }
+      })
 
-    timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
-    updateTimeBlocks(timeBlocks);
-
-    if (someDayIsFullOfContents(timeBlocks.todoWithinThisWeek)) {
-      addBlankTodoAtThisWeek(timeBlocks.todoWithinThisWeek)
+      timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
       updateTimeBlocks(timeBlocks);
+
+      if (someDayIsFullOfContents(timeBlocks.todoWithinThisWeek)) {
+        addBlankTodoAtThisWeek(timeBlocks.todoWithinThisWeek)
+        updateTimeBlocks(timeBlocks);
+      }
     }
+    setIsFocused(false);
     // ref.current.defaultValue = ref.current.value;
   }
 }
 
-function useOutsideAlerter(ref: RefObject<any>, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) {
+function useOutsideAlerter(ref: RefObject<any>, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, setIsFocused: Dispatch<SetStateAction<any>>) {
   useEffect(() => {
     /**
      * Alert if clicked on outside of element
      */
     // Bind the event listener
-    document.addEventListener("mousedown", (e) => handleClickOutside(e, ref, day, index, timeBlocks, updateTimeBlocks));
+    document.addEventListener("mousedown", (e) => handleClickOutside(e, ref, day, index, timeBlocks, updateTimeBlocks, setIsFocused));
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", (e) => handleClickOutside(e, ref, day, index, timeBlocks, updateTimeBlocks));
+      document.removeEventListener("mousedown", (e) => handleClickOutside(e, ref, day, index, timeBlocks, updateTimeBlocks, setIsFocused));
     };
   }, [ref]);
 }
 
 //https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
-const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void}> =
-  (props: { checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void}) => {
+const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void }> =
+  (props: { checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void }) => {
     const {checkBoxSize, todoDto, day, index, timeBlocks, updateTimeBlocks} = props;
+    const [onHover, setOnHover] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
     const wrapperRef = useRef(null);
-    useOutsideAlerter(wrapperRef, day, index, timeBlocks, updateTimeBlocks);
+    useOutsideAlerter(wrapperRef, day, index, timeBlocks, updateTimeBlocks, setIsFocused);
 
-    const onKeyPress = (event, day, index) => {
+    const onDelete = (e, day, index, timeBlocks, updateTimeBlocks) => {
+      let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+      const removeTarget = todoDtosAtDate!.filter((todoDto, todoDtoIndex) => todoDtoIndex === index)[0];
+      alert("should api call deleted")
+      let newTodoDtos = todoDtosAtDate!.filter((todoDto) => {
+        return todoDto !== removeTarget});
+      timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos);
+      // todo: 여기서 지운게 제일 긴거였으면, 등등 로직에 다라 다 하나씩 지워야 함.
+      updateTimeBlocks(timeBlocks);
+    }
+
+    const onKeyPress = (event, day, index, setIsFocused) => {
       // todo: 엔티티가 아니면, 즉 아이디가 없으면 생성 콜을 해야함.
-      if (event.charCode == 13) {
+      if (event.charCode == 13 && !event.shiftKey) {
+        event.preventDefault();
         let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
         const target = event.target as HTMLInputElement;
         if (target.defaultValue !== target.value) {
@@ -755,16 +765,33 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
           }
           // target.defaultValue = target.value;
         }
+        setIsFocused(false);
       }
     };
 
+
+
     return <div
       css={css({
-      display: "flex",
-      alignItems: "center",
-      marginTop: checkBoxSize.multiply(new Percentage(25)).toString(),
-      marginBottom: checkBoxSize.multiply(new Percentage(25)).toString()
-    })}>
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        marginTop: checkBoxSize.multiply(new Percentage(25)).toString(),
+        marginBottom: checkBoxSize.multiply(new Percentage(25)).toString(),
+      })}
+      onMouseEnter={() => {
+        if (todoDto.content == undefined || todoDto.content == '') {
+          return
+        }
+        setOnHover(true);
+      }}
+      onMouseLeave={() => {
+        if (todoDto.content == undefined || todoDto.content == '') {
+          return
+        }
+        setOnHover(false);
+      }}
+    >
       <CheckBox size={checkBoxSize} borderWidth={new Pixel(1.5)}
                 borderColor={Colors.theme.table.innerLine} beforeColor={Colors.theme.screen.background}
                 afterColor={Colors.theme.table.innerLine}
@@ -774,43 +801,95 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
                 timeBlocks={timeBlocks}
                 updateTimeBlocks={updateTimeBlocks}
       />
+      <div
+        css={css({
+          display: 'flex',
+          flexDirection: 'row',
+          position: "relative",
+          width: "100%",
+          height: 15
+        })}
+      >
 
-      <input ref={wrapperRef} css={css({
-        border: 0,
-        borderBottom: 1,
-        borderBottomStyle: "solid",
-        borderBottomColor: Colors.theme.table.innerLine,
-        marginLeft: "5%",
-        width: "90%"
-      })} onKeyPress={(e) => onKeyPress(e, day, index)} defaultValue={todoDto.content} type={"text"}/>
+        {
+          isFocused ? <textarea ref={wrapperRef} css={css({
+              position: "absolute",
+              top: "0px",
+              left: "0px",
+              zIndex: 50,
+              width: "200%",
+              marginLeft: "5%"
+
+            })} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)} defaultValue={todoDto.content}
+            /> :
+            <input ref={wrapperRef} css={css({
+            border: 0,
+            borderBottom: 1,
+            borderBottomStyle: "solid",
+            borderBottomColor: Colors.theme.table.innerLine,
+            marginLeft: "5%",
+            width: "90%"
+          })} key={TimeRecord.getFormattedDate(day, RelativeDay.TODAY) + index + todoDto.content} onFocus={() => setIsFocused(true)} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)} defaultValue={todoDto.content} type={"text"}/>
+        }
+        {onHover && !isFocused && (
+          <button
+            css={css({
+              paddingLeft: 0,
+              paddingRight: 0,
+              backgroundColor: 'transparent',
+              ":focus-visible": {
+                outline: "0px"
+              },
+              borderWidth: "0px",
+              display: "flex",
+              alignItems: "center"
+            })}
+            onClick={event => onDelete(event, day, index, timeBlocks, updateTimeBlocks)}
+
+          >
+            {/*<span id="close-modal" className="_hide-visual">*/}
+            {/*  Close*/}
+            {/*</span>*/}
+            <IoMdClose css={css({
+              backgroundColor: Colors.theme.main.work,
+            })} size={new Pixel(15).toString()} color={"white"}
+                       onClick={() => {
+                       }}/>
+            {/*<svg className="_modal-close-icon" viewBox="0 0 40 40">*/}
+            {/*  <path d="M 10,10 L 30,30 M 30,10 L 10,30"/>*/}
+            {/*</svg>*/}
+          </button>
+        )}
+      </div>
 
       {/*다음으로 할 작업은 인풋 api 콜 되는부분에서 setTodos를 해서 defaultValue를 수정하는것. 마찬가지로 check에서도 체크했을때 api 콜 가정하여 setTodos 호출해서 check 수정하*/}
     </div>
   }
 
-const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}> =
-  (props: { weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
-  const {weekdays, checkBoxSize, timeBlocks, updateTimeBlocks} = props;
+const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+  (props: { weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+    const {weekdays, checkBoxSize, timeBlocks, updateTimeBlocks} = props;
 
-  return <div
-    css={css({
-    flexDirection: "row",
-    display: "flex"
-  })}>
-    {
+    return <div
+      css={css({
+        flexDirection: "row",
+        display: "flex"
+      })}>
+      {
 
-      weekdays.map((day, i) => {
-        const todoListAtDate: TodoDto[] | undefined =  timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-        return <div css={css({
-          width: "160px"
-        })}>
-          <DateGuide day={day}/>
-          <TodoList checkBoxSize={checkBoxSize} todoDtos={todoListAtDate === undefined ? [] :todoListAtDate!} day={day} timeBlocks={timeBlocks} updateTimeBlocks={updateTimeBlocks}/>
-        </div>
-      })
-    }
-  </div>
-}
+        weekdays.map((day, i) => {
+          const todoListAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+          return <div css={css({
+            width: "160px"
+          })}>
+            <DateGuide day={day}/>
+            <TodoList checkBoxSize={checkBoxSize} todoDtos={todoListAtDate === undefined ? [] : todoListAtDate!}
+                      day={day} timeBlocks={timeBlocks} updateTimeBlocks={updateTimeBlocks}/>
+          </div>
+        })
+      }
+    </div>
+  }
 
 
 const DateGuide: React.FC<{ day: Dayjs }> = (props: { day: Dayjs }) => {

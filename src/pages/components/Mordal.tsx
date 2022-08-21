@@ -9,8 +9,6 @@ import Pixel from "src/graphic/size/pixel";
 import colors from "src/constants/Colors";
 import {MdNavigateBefore} from "react-icons/md";
 import {IoMdClose} from "react-icons/all";
-import {TimeRecord} from "src/model/TimeRecord";
-import TimeBlockRegisterForm from "src/pages/components/timeblock/TimeBlockRegisterForm";
 
 interface ModalProps {
   onClickOutside: (e) => void,
