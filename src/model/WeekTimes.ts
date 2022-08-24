@@ -1,6 +1,5 @@
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import {TodoDto} from "src/dtos/TodoDto";
-import {addBlankTodoAtThisWeek, someDayIsFullOfContents} from "src/service/TodoListService";
 
 
 
@@ -8,26 +7,6 @@ export class WeekTimes {
   constructor(times: Map<string, TimeBlockDto[]>, edgeTimeBeforeThisWeek: TimeBlockDto | undefined, todoWithinThisWeek: Map<string, TodoDto[]>) {
     this.timesWithinThisWeek = times;
     this.edgeTimeBeforeThisWeek = edgeTimeBeforeThisWeek;
-
-    for (const key of Array.from(todoWithinThisWeek.keys())) {
-      let todoDtosAtDate: TodoDto[] | undefined = todoWithinThisWeek.get(key);
-      if (todoDtosAtDate === undefined) {
-        todoDtosAtDate = [
-          {id: undefined, isChecked: false, content: ''},
-          {id: undefined, isChecked: false, content: ''},
-          {id: undefined, isChecked: false, content: ''},
-        ]
-      }
-      const maxCount = getMaxCountOfTodosAtDate(todoWithinThisWeek);
-      while (todoDtosAtDate.length < maxCount) {
-        todoDtosAtDate.push({id: undefined, isChecked: false, content: ''})
-      }
-    }
-
-    if (someDayIsFullOfContents(todoWithinThisWeek)) {
-      addBlankTodoAtThisWeek(todoWithinThisWeek)
-    }
-
     this.todoWithinThisWeek = todoWithinThisWeek;
   }
 
