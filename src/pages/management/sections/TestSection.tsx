@@ -636,7 +636,8 @@ const TodoList: React.FC<{ checkBoxSize: Pixel, todoDtos: TodoDto[], day: Dayjs,
       // "-webkit-align-items": ""
     })}>
       {todoDtos.map((todo, index) => {
-        return <Todo key={index} checkBoxSize={checkBoxSize} todoDto={todo} day={day} index={index} timeBlocks={timeBlocks}
+        return <Todo key={index} checkBoxSize={checkBoxSize} todoDto={todo} day={day} index={index}
+                     timeBlocks={timeBlocks}
                      updateTimeBlocks={updateTimeBlocks}/>
       })}
     </div>
@@ -699,7 +700,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
       for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key !== TimeRecord.getFormattedDate(day, RelativeDay.TODAY))) {
         let todoDtosAtDate: TodoDto[] = timeBlocks.todoWithinThisWeek.get(key)!;
         //todo: 여기에 로직을 content 대신 id로 바꿔야함.
-        if ((todoDtosAtDate[todoDtosAtDate.length-2].content !== '' && todoDtosAtDate[todoDtosAtDate.length-2].content !== undefined ) && (todoDtosAtDate[todoDtosAtDate.length-1].content === '' || todoDtosAtDate[todoDtosAtDate.length-1].content === undefined )) {
+        if ((todoDtosAtDate[todoDtosAtDate.length - 2].content !== '' && todoDtosAtDate[todoDtosAtDate.length - 2].content !== undefined) && (todoDtosAtDate[todoDtosAtDate.length - 1].content === '' || todoDtosAtDate[todoDtosAtDate.length - 1].content === undefined)) {
           return true;
         }
       }
@@ -711,7 +712,8 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
       const removeTarget = todoDtosAtDate!.filter((todoDto, todoDtoIndex) => todoDtoIndex === index)[0];
       alert("should api call deleted")
       let newTodoDtos = todoDtosAtDate!.filter((todoDto) => {
-        return todoDto !== removeTarget});
+        return todoDto !== removeTarget
+      });
 
       if (hasFullChecked(timeBlocks)) {
         newTodoDtos.push({id: undefined, isChecked: false, content: ''})
@@ -760,7 +762,6 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
         setIsFocused(false);
       }
     };
-
 
 
     return <div
@@ -812,16 +813,19 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
               width: "200%",
               marginLeft: "5%"
 
-            })} autoFocus={isFocused} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)} defaultValue={todoDto.content}
+            })} autoFocus={isFocused} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)}
+                                defaultValue={todoDto.content}
             /> :
             <input ref={wrapperRef} css={css({
-            border: 0,
-            borderBottom: 1,
-            borderBottomStyle: "solid",
-            borderBottomColor: Colors.theme.table.innerLine,
-            marginLeft: "5%",
-            width: "90%"
-          })} key={TimeRecord.getFormattedDate(day, RelativeDay.TODAY) + index + todoDto.content} onFocus={() => setIsFocused(true)} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)} defaultValue={todoDto.content} type={"text"}/>
+              border: 0,
+              borderBottom: 1,
+              borderBottomStyle: "solid",
+              borderBottomColor: Colors.theme.table.innerLine,
+              marginLeft: "5%",
+              width: "90%"
+            })} key={TimeRecord.getFormattedDate(day, RelativeDay.TODAY) + index + todoDto.content}
+                   onFocus={() => setIsFocused(true)} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)}
+                   defaultValue={todoDto.content} type={"text"}/>
         }
         {onHover && !isFocused && (
           <button
@@ -910,8 +914,6 @@ const DateGuide: React.FC<{ day: Dayjs }> = (props: { day: Dayjs }) => {
     })}>{String(day.month() + 1) + "." + String(day.date())}</div>
   </div>
 }
-
-
 
 
 function getIdOfTemplate(j: number) {
