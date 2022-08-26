@@ -729,19 +729,19 @@ function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: 
 }
 
 function useOutsideAlerter(ref: RefObject<any>, day: Dayjs, index: number, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, setIsFocused: Dispatch<SetStateAction<any>>) {
-  const handleClickOutsideHandler = (e) => handleClickOutside(e, ref, day, index, todoDto, timeBlocks, updateTimeBlocks, setIsFocused);
+
   useEffect(() => {
     /**
      * Alert if clicked on outside of element
      */
     // Bind the event listener
-
+    const handleClickOutsideHandler = (e) => handleClickOutside(e, ref, day, index, todoDto, timeBlocks, updateTimeBlocks, setIsFocused);
     document.addEventListener("mousedown", handleClickOutsideHandler);
     return () => {
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutsideHandler);
     };
-  }, [ref, day, index, todoDto, timeBlocks, updateTimeBlocks, setIsFocused, handleClickOutsideHandler]);
+  }, [ref, day, index, todoDto, timeBlocks, updateTimeBlocks, setIsFocused]);
 }
 
 //https://stackoverflow.com/questions/32553158/detect-click-outside-react-component

@@ -12,6 +12,7 @@ jobs:
           node-version: 14.x
       - name: Install dependencies
         run: npm install
+#        todo: test 키기
 #      - name: Test
 #        run: npm test --passWithNoTests
 #        env:
