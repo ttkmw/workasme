@@ -54,7 +54,7 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
                   onMouseMove={(e) => {
                     e.stopPropagation();
                   }}>
-        <TimeCell timeBlockDto={timeBlockDto}
+        <TimeContent timeBlockDto={timeBlockDto}
                   timeBlockHeightRatio={timeBlockHeightRatio} timeCellHeight={timeCellHeight} onClick={onClickTimeCell}/>
         {isEditFormOpen && (
           <Modal onClickOutside={onClickOutside} onKeyDown={onKeyDown} modalRef={(n: any) => (modal = n)}
@@ -68,7 +68,7 @@ const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | un
     return <div/>
   }
 
-const TimeCell: React.FC<{ timeCellHeight: Pixel, timeBlockHeightRatio: Percentage, timeBlockDto: TimeBlockDto, onClick: (e) => void }> =
+const TimeContent: React.FC<{ timeCellHeight: Pixel, timeBlockHeightRatio: Percentage, timeBlockDto: TimeBlockDto, onClick: (e) => void }> =
   (props: { timeCellHeight: Pixel, timeBlockHeightRatio: Percentage, timeBlockDto: TimeBlockDto, onClick: (e) => void }) => {
     const {timeCellHeight, timeBlockHeightRatio, timeBlockDto, onClick} = props;
 

@@ -93,7 +93,7 @@ const SignInSection: React.FC = () => {
       })}>no account yet?</span>
       <LinkContainer to={"/sign-up"}>
         <span css={css({
-          fontFamily: "ObjectSans-HeavySlanted",
+          fontFamily: "Gaegu-Regular",
           color: Colors.theme.main.work
         })}> Join us</span>
       </LinkContainer>
@@ -107,7 +107,7 @@ const SignInSection: React.FC = () => {
 const SignInPage: React.FC = () => {
   return <div css={css({
     height: "100vh",
-    fontFamily: "ObjectSans-Slanted",
+    fontFamily: "Gaegu-Regular",
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",

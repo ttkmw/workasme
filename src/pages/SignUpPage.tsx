@@ -11,7 +11,7 @@ import {LinkContainer} from "react-router-bootstrap";
 
 const SignUpPage: React.FC = () => {
   return <div css={css({
-    fontFamily: "ObjectSans-Slanted",
+    fontFamily: "Gaegu-Regular",
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
@@ -122,7 +122,7 @@ const SignUpSection: React.FC = () => {
       })}>has account already?</span>
       <LinkContainer to={"/"}>
         <span css={css({
-          fontFamily: "ObjectSans-HeavySlanted",
+          fontFamily: "Gaegu-Regular",
           color: Colors.theme.main.work
         })}> Sign in</span>
       </LinkContainer>

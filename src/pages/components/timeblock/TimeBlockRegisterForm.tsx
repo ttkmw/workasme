@@ -106,7 +106,7 @@ export const TimeBlockRegisterForm: React.FC<FormProps> = (props: FormProps) => 
         "label": {
           marginBottom: "0px"
         },
-        fontFamily: "ObjectSans-Slanted"
+        fontFamily: "Gaegu-Regular",
       })}
       onClick={(e) => onRegister(e, closeModal, timeBlocks, updateTimeBlocks)}>
       <div className="form-group" css={css({

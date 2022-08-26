@@ -100,7 +100,7 @@ const TimeBlockEditForm: React.FC<{timeBlockDto: TimeBlockDto, closeModal: (e) =
         "input": {
           paddingLeft: "10px"
         },
-        fontFamily: "ObjectSans-Slanted"
+        fontFamily: "Gaegu-Regular",
       })}
       id={"time-block-form"}
       onClick={(event => onSubmitHandler(event, timeBlockDto, closeModal, timeBlocks, updateTimeBlocks))}

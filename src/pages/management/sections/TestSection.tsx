@@ -863,6 +863,8 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
             <input ref={wrapperRef} css={css({
               border: 0,
               borderBottom: 1,
+              paddingTop: 0,
+              paddingBottom: 1,
               borderBottomStyle: "solid",
               borderBottomColor: Colors.theme.table.innerLine,
               marginLeft: "5%",
@@ -918,7 +920,10 @@ const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBl
     return <div
       css={css({
         flexDirection: "row",
-        display: "flex"
+        display: "flex",
+        fontFamily: "Gaegu-Regular",
+        fontSize: checkBoxSize.minus(new Pixel(2)).toString(),
+        lineHeight: checkBoxSize.minus(new Pixel(2)).toString()
       })}>
       {
 
