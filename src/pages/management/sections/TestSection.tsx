@@ -866,7 +866,12 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
               borderBottomStyle: "solid",
               borderBottomColor: Colors.theme.table.innerLine,
               marginLeft: "5%",
-              width: "90%"
+              width: "100%",
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              WebkitLineClamp: 1,
+              wordBreak: "break-all",
+              whiteSpace: "nowrap",
             })} key={TimeRecord.getFormattedDate(day, RelativeDay.TODAY) + index + todoDto.content}
                    onFocus={() => setIsFocused(true)} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)}
                    defaultValue={todoDto.content} type={"text"}/>
