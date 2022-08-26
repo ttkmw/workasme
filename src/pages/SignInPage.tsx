@@ -71,6 +71,7 @@ const SignInSection: React.FC = () => {
             })}
             className={'button-work'}
             type={"submit"}
+            onClick={() => alert("should api call sign in")}
           >sign in</button>
         </div>
       </LinkContainer>

@@ -100,6 +100,7 @@ const SignUpSection: React.FC = () => {
             })}
             className={'button-work'}
             type={"submit"}
+            onClick={() => alert("should api call sign up")}
           >sign up</button>
         </div>
       </LinkContainer>

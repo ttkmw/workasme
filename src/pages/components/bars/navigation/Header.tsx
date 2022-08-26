@@ -76,7 +76,7 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
 
   // todo: refac links
   return <Container css={containerStyle}>
-    <LinkContainer to={"/"}>{brand}</LinkContainer>
+    <LinkContainer to={"/time-track"}>{brand}</LinkContainer>
     {/*/!*todo: check - 이거 뭔지 현재 모름.*!/*/}
     {/*<Navbar.Toggle aria-controls="basic-navbar-nav"/>*/}
     {collapse}
