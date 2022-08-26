@@ -422,7 +422,8 @@ export class TestSection extends React.Component<any> {
       <div>
         <div css={css({
           display: "flex",
-          justifyContent: "flex-end"
+          justifyContent: "flex-end",
+          minWidth: new Pixel(700).toString(),
         })}>
           <div css={css({
             display: "flex",
