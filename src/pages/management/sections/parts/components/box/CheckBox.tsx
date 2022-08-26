@@ -28,7 +28,7 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
 
     const onChange = (day, index) => {
       let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-      if (todoDtosAtDate === undefined) {
+      if (todoDtosAtDate === undefined || todoDtosAtDate.length === 0) {
         return;
       }
 

@@ -534,6 +534,7 @@ export class TestSection extends React.Component<any> {
           <div css={css({
             flexDirection: "row",
             display: "flex",
+            minWidth: new Pixel(700).toString()
           })}>
             {
               weekdays.map((day, i) => {
@@ -545,14 +546,23 @@ export class TestSection extends React.Component<any> {
                   timeRecords.push(new TimeRecord(Number(i.toString() + getIdOfTemplate(j)), day, recordTemplate))
                 })
 
-                return <div key={i} css={css({})}>
+                let borderRight: Pixel;
+                if (i === 6) {
+                  borderRight = this.noBorder;
+                } else {
+                  borderRight = this.outlineBorder;
+                }
+
+                return <div key={i} css={css({
+                  width: "100%"
+                })}>
 
                   <div css={css({
-                    width: "160px",
-                    borderRight: this.outlineBorder.toString(),
+                    width: "100%",
+                    borderRight: borderRight.toString(),
                     borderLeft: this.noBorder.toString(),
                     borderTop: this.outlineBorder.toString(),
-                    borderBottom: this.outlineBorder.toString(),
+                    borderBottom: this.noBorder.toString(),
                     borderStyle: "solid",
                     borderColor: Colors.theme.table.outLine
                   })}>
@@ -711,7 +721,6 @@ function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: 
       // })
 
       timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
-      console.log("todoWithinThisWeek", day, timeBlocks.todoWithinThisWeek)
       updateTimeBlocks(timeBlocks);
     }
     setIsFocused(false);
@@ -745,17 +754,6 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, day, index, todoDto, timeBlocks, updateTimeBlocks, setIsFocused);
 
-    function hasFullChecked(timeBlocks) {
-      for (const key of Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key !== TimeRecord.getFormattedDate(day, RelativeDay.TODAY))) {
-        let todoDtosAtDate: TodoDto[] = timeBlocks.todoWithinThisWeek.get(key)!;
-        //todo: 여기에 로직을 content 대신 id로 바꿔야함.
-        if ((todoDtosAtDate[todoDtosAtDate.length - 2].content !== '' && todoDtosAtDate[todoDtosAtDate.length - 2].content !== undefined) && (todoDtosAtDate[todoDtosAtDate.length - 1].content === '' || todoDtosAtDate[todoDtosAtDate.length - 1].content === undefined)) {
-          return true;
-        }
-      }
-      return false;
-    }
-
     const onDelete = (e, day, index, timeBlocks, updateTimeBlocks) => {
       let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
       const removeTarget = todoDtosAtDate!.filter((todoDto, todoDtoIndex) => todoDtoIndex === index)[0];
@@ -764,16 +762,16 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
         return todoDto !== removeTarget
       });
 
-      if (hasFullChecked(timeBlocks)) {
-        newTodoDtos.push({id: undefined, isChecked: false, content: ''})
-      } else {
-        const otherDays = Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key !== TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-        for (const otherDay of otherDays) {
-          let todoDtosAtDate = timeBlocks.todoWithinThisWeek.get(otherDay);
-          todoDtosAtDate.pop()
-          timeBlocks.todoWithinThisWeek.set(otherDay, todoDtosAtDate);
-        }
-      }
+      // if (hasFullChecked(timeBlocks)) {
+      //   newTodoDtos.push({id: undefined, isChecked: false, content: ''})
+      // } else {
+      //   const otherDays = Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key !== TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+      //   for (const otherDay of otherDays) {
+      //     let todoDtosAtDate = timeBlocks.todoWithinThisWeek.get(otherDay);
+      //     todoDtosAtDate.pop()
+      //     timeBlocks.todoWithinThisWeek.set(otherDay, todoDtosAtDate);
+      //   }
+      // }
 
       timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos);
 
@@ -855,7 +853,10 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
               left: "0px",
               zIndex: 50,
               width: "200%",
-              marginLeft: "5%"
+              marginLeft: "5%",
+              ":focus-visible": {
+                outline: "0px"
+              },
 
             })} autoFocus={isFocused} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)}
                                 defaultValue={todoDto.content}
@@ -874,6 +875,9 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
               WebkitLineClamp: 1,
               wordBreak: "break-all",
               whiteSpace: "nowrap",
+              ":focus-visible": {
+                outline: "0px"
+              },
             })} key={TimeRecord.getFormattedDate(day, RelativeDay.TODAY) + index + todoDto.content}
                    onFocus={() => setIsFocused(true)} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)}
                    defaultValue={todoDto.content} type={"text"}/>
@@ -923,14 +927,15 @@ const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBl
         display: "flex",
         fontFamily: "Gaegu-Regular",
         fontSize: checkBoxSize.minus(new Pixel(2)).toString(),
-        lineHeight: checkBoxSize.minus(new Pixel(2)).toString()
+        lineHeight: checkBoxSize.minus(new Pixel(2)).toString(),
+        minWidth: new Pixel(700).toString()
       })}>
       {
 
         weekdays.map((day, i) => {
 
           return <div key={i} css={css({
-            width: "160px"
+            width: "100%"
           })}>
             <DateGuide day={day}/>
             <TodoList checkBoxSize={checkBoxSize} weekdays={weekdays} day={day} timeBlocks={timeBlocks}
@@ -948,7 +953,7 @@ const DateGuide: React.FC<{ day: Dayjs }> = (props: { day: Dayjs }) => {
 
   const fontSize = new Pixel(20);
   return <div css={css({
-    width: "160px",
+    width: "100%",
     marginTop: 0,
     marginBottom: 0,
     paddingLeft: "5px",
