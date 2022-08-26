@@ -685,7 +685,6 @@ function getCountOfTodoAtDate(todoWithinThisWeek: Map<string, TodoDto[]>, weekda
 }
 
 function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: number, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, setIsFocused: Dispatch<SetStateAction<any>>) {
-  console.log("handleClickOutside", TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
   if (ref.current && !ref.current.contains(event.target)) {
     if ((ref.current.value !== ref.current.defaultValue) && (ref.current.value !== '' && ref.current.value !== undefined)) {
 

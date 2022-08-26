@@ -27,11 +27,18 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
     } = props;
 
     const onChange = (day, index) => {
-      alert("should api call modified")
       let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-      let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate!.map((todoDto, todoDtoIndex) => {
+      if (todoDtosAtDate === undefined) {
+        return;
+      }
+
+      alert("should api call modified")
+      let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate.map((todoDto, todoDtoIndex) => {
         if (todoDtoIndex === index) {
           //여기에서 api 콜한 결과를 리턴
+          if (todoDto.content === undefined ||todoDto.content === '') {
+            return todoDto;
+          }
           return {id: todoDto.id, isChecked: !todoDto.isChecked, content: todoDto.content}
         } else {
           return todoDto;
@@ -41,24 +48,6 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
       timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
       updateTimeBlocks(timeBlocks);
 
-      // setTodoDtos(((prevState: TodoDto[]) => {
-      //   return prevState.map((todoDto, todoDtoIndex) => {
-      //     if (todoDtoIndex == index) {
-      //       return {id: undefined, isChecked: !todoDto.isChecked, content: todoDto.content};
-      //     } else {
-      //       return todoDto;
-      //     }
-      //   });
-      // }))
-
-
-      // setTodoDtos(((prevState: TodoDto[]) => {
-      //   if (!prevState.some(todoDto => !todoDto.isChecked)) {
-      //     prevState.push({id: undefined, isChecked: false, content: ''})
-      //     return prevState;
-      //   }
-      //   return prevState
-      // }))
     };
 
     const imgSize = size.minus(borderWidth.multiply(new Percentage(200)));
@@ -128,9 +117,9 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
     })}
     >
       <label className="container">
-        <input type="checkbox" defaultChecked={todoDto.isChecked}/>
+        <input type="checkbox"  checked={todoDto.isChecked} readOnly={true}/>
         {/*todo: onClicke에 api 콜 해서 체크하는 것들 다 저장 */}
-        <span className={"checkmark"} onClick={() => onChange(day, index)}>
+        <span className={"checkmark"} onClick={() => onChange(day, index)} defaultChecked={todoDto.isChecked}>
               <img src={check} alt="Check" width={imgSize.toString()}
                    height={imgSize.toString()}/>
       </span>
