@@ -741,7 +741,7 @@ function useOutsideAlerter(ref: RefObject<any>, day: Dayjs, index: number, todoD
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutsideHandler);
     };
-  }, [ref, day, index, todoDto, timeBlocks, updateTimeBlocks, setIsFocused]);
+  }, [ref, day, index, todoDto, timeBlocks, updateTimeBlocks, setIsFocused, handleClickOutsideHandler]);
 }
 
 //https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
