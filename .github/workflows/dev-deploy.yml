@@ -12,10 +12,10 @@ jobs:
           node-version: 14.x
       - name: Install dependencies
         run: npm install
-      - name: Test
-        run: npm test --passWithNoTests
-        env:
-          CI: true
+#      - name: Test
+#        run: npm test --passWithNoTests
+#        env:
+#          CI: true
       - name: Generate build
         run: npm run build
       # Share artifact inside workflow
