@@ -12,13 +12,11 @@ import {TimeRecord} from "src/model/TimeRecord";
 import {RelativeDay} from "src/model/RelativeDay";
 import Colors from "src/constants/Colors";
 
-const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
-  (props: { size: Pixel, borderWidth: Pixel, beforeColor: string, afterColor: string | undefined, index: number, day: Dayjs, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, index: number, day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+  (props: { size: Pixel, borderWidth: Pixel, index: number, day: Dayjs, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
     const {
       size,
       borderWidth,
-      beforeColor,
-      afterColor,
       todoDto,
       index,
       day,
@@ -29,7 +27,7 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, beforeColor: string,
     let borderColor;
     if (todoDto.isChecked) {
       borderColor = Colors.theme.main.orgasme
-    } else if (todoDto.content != '') {
+    } else if (todoDto.content !== '') {
       borderColor = Colors.theme.main.work
     } else {
       borderColor = Colors.theme.table.innerLine
