@@ -800,7 +800,7 @@ const TodoContent: React.FC<{timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock
   let borderBottomColor;
   if (todoDto.isChecked) {
     borderBottomColor = Colors.theme.main.orgasme;
-  } else if (todoDto.content != undefined && todoDto.content != '') {
+  } else if (todoDto.content !== undefined && todoDto.content !== '') {
     borderBottomColor = Colors.theme.main.work;
   } else {
     borderBottomColor = Colors.theme.table.innerLine;
