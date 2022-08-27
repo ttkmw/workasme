@@ -31,14 +31,14 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
       if (todoDtosAtDate === undefined || todoDtosAtDate.length === 0) {
         return;
       }
-
-      alert("should api call modified")
       let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate.map((todoDto, todoDtoIndex) => {
         if (todoDtoIndex === index) {
           //여기에서 api 콜한 결과를 리턴
           if (todoDto.content === undefined ||todoDto.content === '') {
             return todoDto;
           }
+
+          alert("should api call modified")
           return {id: todoDto.id, isChecked: !todoDto.isChecked, content: todoDto.content}
         } else {
           return todoDto;
