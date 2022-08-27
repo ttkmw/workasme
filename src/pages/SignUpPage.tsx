@@ -80,7 +80,7 @@ const SignUpSection: React.FC = () => {
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(14).toString()
       })} placeholder={"nickname"} id={"nickname"}/>
-      <LinkContainer to={"/time-track"}>
+
         <div css={css({
           display: "flex",
           alignItems: "center",
@@ -89,21 +89,25 @@ const SignUpSection: React.FC = () => {
             border: "none",
             color: Colors.theme.button.default,
           },
-
+          width: new Pixel(280).toString(),
+          height: new Pixel(30).toString(),
+          marginBottom: new Pixel(20).toString()
         })}>
+          <LinkContainer to={"/time-track"}>
           <button
             css={css({
               width: new Pixel(280).toString(),
               borderRadius: 7,
               height: new Pixel(30).toString(),
-              marginBottom: new Pixel(20).toString()
+
             })}
             className={'button-work'}
             type={"submit"}
             onClick={() => alert("should api call sign up")}
           >sign up</button>
+          </LinkContainer>
         </div>
-      </LinkContainer>
+
 
     </div>
     <div css={css({
