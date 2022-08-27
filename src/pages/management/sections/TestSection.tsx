@@ -829,7 +829,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
       }}
     >
       <CheckBox size={checkBoxSize} borderWidth={new Pixel(1.5)}
-                borderColor={Colors.theme.table.innerLine} beforeColor={Colors.theme.screen.background}
+                beforeColor={Colors.theme.screen.background}
                 afterColor={Colors.theme.table.innerLine}
                 todoDto={todoDto}
                 index={index}

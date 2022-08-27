@@ -10,13 +10,13 @@ import {WeekTimes} from "src/model/WeekTimes";
 import {Dayjs} from "dayjs";
 import {TimeRecord} from "src/model/TimeRecord";
 import {RelativeDay} from "src/model/RelativeDay";
+import Colors from "src/constants/Colors";
 
-const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
-  (props: { size: Pixel, borderWidth: Pixel, borderColor: string | undefined, beforeColor: string, afterColor: string | undefined, index: number, day: Dayjs, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, beforeColor: string, afterColor: string | undefined, todoDto: TodoDto, index: number, day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
+  (props: { size: Pixel, borderWidth: Pixel, beforeColor: string, afterColor: string | undefined, index: number, day: Dayjs, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
     const {
       size,
       borderWidth,
-      borderColor,
       beforeColor,
       afterColor,
       todoDto,
@@ -25,6 +25,22 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
       timeBlocks,
       updateTimeBlocks
     } = props;
+
+    let borderColor;
+    if (todoDto.isChecked) {
+      borderColor = Colors.theme.main.orgasme
+    } else if (todoDto.content != '') {
+      borderColor = Colors.theme.main.work
+    } else {
+      borderColor = Colors.theme.table.innerLine
+    }
+
+    let backgroundColor;
+    if (todoDto.isChecked) {
+      backgroundColor = Colors.theme.main.orgasme
+    } else {
+      backgroundColor = "transparent";
+    }
 
     const onChange = (day, index) => {
       let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
@@ -82,7 +98,7 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
         height: size.toString(),
         width: size.toString(),
         display: 'flex',
-        backgroundColor: beforeColor,
+        backgroundColor: backgroundColor,
 
         borderStyle: "solid",
         borderColor: borderColor,
@@ -90,10 +106,10 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, borderColor: string 
 
       },
 
-      '.container input:checked ~ .checkmark': {
-        backgroundColor: afterColor,
-
-      },
+      // '.container input:checked ~ .checkmark': {
+      //   backgroundColor: backgroundColor,
+      //
+      // },
 
       '.container input ~ .checkmark img': {
         display: 'none',
