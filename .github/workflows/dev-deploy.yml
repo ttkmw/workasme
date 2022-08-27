@@ -47,3 +47,5 @@ jobs:
       - name: Deploy to S3
         run: aws s3 sync . s3://dev.workasme.so --exact-timestamps
         working-directory: react-github-actions-build
+      - name: Invalidate CloudFront Cache
+        run: aws cloudfront create-invalidation --distribution-id=E2173EAV93TEA9 --paths /
