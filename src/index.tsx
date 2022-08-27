@@ -10,20 +10,14 @@ import {Provider} from "react-redux";
 import {store} from "src/context/store";
 import SignInPage from "src/pages/SignInPage";
 import SignUpPage from "src/pages/SignUpPage";
+import DeviceDetector from "src/DeviceDetector";
 
 //브라우저 캐시 지우는거
 //https://thewebdev.info/2021/12/03/how-to-clear-browser-cache-in-react-2/
 ReactDOM.render(
   <Provider store={store}>
 
-    <Router>
-      <Switch>
-        <Route exact path={"/"}  component={SignInPage}/>
-        {/*<Route exact path={"/sign"}  component={SignPage}/>*/}
-        <Route exact path={"/time-track"}  component={TimeTrackersPage}/>
-        <Route exact path={"/sign-up"} component={SignUpPage} />
-      </Switch>
-    </Router>
+    <DeviceDetector />
   </Provider>,
   document.getElementById('root')
 );
