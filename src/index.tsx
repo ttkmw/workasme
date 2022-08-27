@@ -11,6 +11,8 @@ import {store} from "src/context/store";
 import SignInPage from "src/pages/SignInPage";
 import SignUpPage from "src/pages/SignUpPage";
 
+//브라우저 캐시 지우는거
+//https://thewebdev.info/2021/12/03/how-to-clear-browser-cache-in-react-2/
 ReactDOM.render(
   <Provider store={store}>
 
