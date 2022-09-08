@@ -5,7 +5,7 @@ import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Title from "src/pages/components/Title";
 import Colors from "src/constants/Colors";
-import {LinkContainer} from "react-router-bootstrap";
+// import {LinkContainer} from "react-router-bootstrap";
 
 
 
@@ -93,7 +93,6 @@ const SignUpSection: React.FC = () => {
           height: new Pixel(30).toString(),
           marginBottom: new Pixel(20).toString()
         })}>
-          <LinkContainer to={"/time-track"}>
           <button
             css={css({
               width: new Pixel(280).toString(),
@@ -105,7 +104,9 @@ const SignUpSection: React.FC = () => {
             type={"submit"}
             onClick={() => alert("should api call sign up")}
           >sign up</button>
-          </LinkContainer>
+          {/*<LinkContainer to={"/time-track"}>*/}
+
+          {/*</LinkContainer>*/}
         </div>
 
 
@@ -125,12 +126,13 @@ const SignUpSection: React.FC = () => {
       <span css={css({
         paddingRight: new Pixel(7).toString()
       })}>has account already?</span>
-      <LinkContainer to={"/"}>
-        <span css={css({
-          fontFamily: "Gaegu-Regular",
-          color: Colors.theme.main.work
-        })}> Sign in</span>
-      </LinkContainer>
+      <span css={css({
+        fontFamily: "Gaegu-Regular",
+        color: Colors.theme.main.work
+      })}> Sign in</span>
+      {/*<LinkContainer to={"/"}>*/}
+      {/* */}
+      {/*</LinkContainer>*/}
 
 
     </div>

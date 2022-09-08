@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import reportWebVitals from "src/reportWebVitals";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,12 +18,11 @@ ReactDOM.render(
   <Provider store={store}>
     <DeviceDetector>
       <Router>
-        <Switch>
-          <Route exact path={"/"}  component={SignInPage}/>
-          {/*<Route exact path={"/sign"}  component={SignPage}/>*/}
-          <Route exact path={"/time-track"}  component={TimeTrackersPage}/>
-          <Route exact path={"/sign-up"} component={SignUpPage} />
-        </Switch>
+        <Routes>
+          <Route path={"/"}  element={<SignInPage/>}/>
+          <Route path={"/time-track"}  element={<TimeTrackersPage />}/>
+          <Route path={"/sign-up"} element={<SignUpPage />} />
+        </Routes>
       </Router>
     </DeviceDetector>
   </Provider>,

@@ -1,9 +1,5 @@
 import React, {ReactNode} from "react";
 import {isMobile, isTablet} from "react-device-detect";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import SignInPage from "src/pages/SignInPage";
-import TimeTrackersPage from "src/pages/management/TimeTrackersPage";
-import SignUpPage from "src/pages/SignUpPage";
 import DeviceNotSupportedPage from "src/pages/DeviceNotSupportedPage";
 import Pixel from "src/graphic/size/pixel";
 

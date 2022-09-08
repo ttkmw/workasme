@@ -24,6 +24,8 @@ import Modal from "src/pages/components/Mordal";
 import TimeBlockRegisterForm from "src/pages/components/timeblock/TimeBlockRegisterForm";
 import {TodoDto} from "src/dtos/TodoDto";
 import {IoMdClose} from "react-icons/all";
+import {useSelector} from "react-redux";
+import {selectToken} from "src/context/signSlice";
 
 
 const SelectableComponent = createSelectable(Selectable);
@@ -942,7 +944,11 @@ const TodoContent: React.FC<{timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock
 
 const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
   (props: { weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+    const token = useSelector(selectToken);
     const {weekdays, checkBoxSize, timeBlocks, updateTimeBlocks} = props;
+    useEffect(() => {
+      console.log("TodoListSection token", token)
+    }, [token])
 
     return <div
       css={css({

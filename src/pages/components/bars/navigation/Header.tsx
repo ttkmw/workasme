@@ -8,7 +8,7 @@ import brandImage from 'src/assets/brand_at_top_navigation.png'
 import Container from 'react-bootstrap/Container';
 import Colors from "src/constants/Colors";
 import {SerializedStyles} from "@emotion/serialize";
-import {LinkContainer} from 'react-router-bootstrap'
+// import {LinkContainer} from 'react-router-bootstrap'
 import {useSelector} from "react-redux";
 import {selectSign} from "src/context/signSlice";
 import fontConfig from "src/graphic/text/font";
@@ -33,9 +33,11 @@ const Menus: React.FC<{ isSigned: boolean }> = (props: { isSigned: boolean }) =>
       }
     }
   })}>
-    <LinkContainer to={"/time-track"}>
-      <Nav.Link className={"menu-name"}>Time Track</Nav.Link>
-    </LinkContainer>
+    {/*<Nav.Link className={"menu-name"}>Time Track</Nav.Link>*/}
+    <span className={"menu-name"}>Time Track</span>
+    {/*<LinkContainer to={"/time-track"}>*/}
+    {/*  */}
+    {/*</LinkContainer>*/}
   </div>
 
 };
@@ -76,7 +78,8 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
 
   // todo: refac links
   return <Container css={containerStyle}>
-    <LinkContainer to={"/time-track"}>{brand}</LinkContainer>
+    <span>{brand}</span>
+    {/*<LinkContainer to={"/time-track"}></LinkContainer>*/}
     {/*/!*todo: check - 이거 뭔지 현재 모름.*!/*/}
     {/*<Navbar.Toggle aria-controls="basic-navbar-nav"/>*/}
     {collapse}

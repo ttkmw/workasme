@@ -5,9 +5,34 @@ import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
 import Title from "src/pages/components/Title";
-import {LinkContainer} from "react-router-bootstrap";
+// import {LinkContainer} from "react-router-bootstrap";
+import createAxios from "src/api/adapterFactory/axiosFactory";
+import {workasme_host} from "src/api/host/workasme";
+import {selectToken, signIn as signInSlice} from "src/context/signSlice";
+import {useDispatch, useSelector} from "react-redux";
+import { useNavigate } from 'react-router-dom';
+
 
 const SignInSection: React.FC = () => {
+  const token = useSelector(selectToken);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  async function signIn() {
+    const axiosInstance = createAxios({})
+    //todo: try-catch
+    const response = await axiosInstance.post(`${workasme_host}/iam/realms/bintegration/protocol/openid-connect/token`, {
+      "username": "ttkmw",
+      "password": "026060Mcfnxm**",
+    });
+    //
+
+    const accessToken = response.data.access_token;
+    dispatch(signInSlice({accessToken: accessToken}))
+    navigate("/time-track")
+    return;
+  }
+
   return <div>
     <div css={css({
       width: new Pixel(380).toString(),
@@ -64,20 +89,24 @@ const SignInSection: React.FC = () => {
         height: new Pixel(30).toString(),
         marginBottom: new Pixel(20).toString()
       })}>
-        <LinkContainer to={"/time-track"}>
-          <button
-            css={css({
-              width: new Pixel(280).toString(),
-              height: new Pixel(30).toString(),
-              borderRadius: 7,
+        <button
+          css={css({
+            width: new Pixel(280).toString(),
+            height: new Pixel(30).toString(),
+            borderRadius: 7,
 
-            })}
-            className={'button-work'}
-            type={"submit"}
-            onClick={() => alert("should api call sign in")}
-          >sign in
-          </button>
-        </LinkContainer>
+          })}
+          className={'button-work'}
+          type={"submit"}
+          onClick={signIn}
+        >
+
+          sign in
+
+        </button>
+        {/*<LinkContainer to={"/time-track"}>*/}
+        {/*  */}
+        {/*</LinkContainer>*/}
       </div>
 
 
@@ -97,12 +126,13 @@ const SignInSection: React.FC = () => {
       <span css={css({
         paddingRight: new Pixel(7).toString()
       })}>no account yet?</span>
-      <LinkContainer to={"/sign-up"}>
-        <span css={css({
-          fontFamily: "Gaegu-Regular",
-          color: Colors.theme.main.work
-        })}> Join us</span>
-      </LinkContainer>
+      <span css={css({
+        fontFamily: "Gaegu-Regular",
+        color: Colors.theme.main.work
+      })}> Join us</span>
+      {/*<LinkContainer to={"/sign-up"}>*/}
+      {/*  */}
+      {/*</LinkContainer>*/}
 
 
     </div>
