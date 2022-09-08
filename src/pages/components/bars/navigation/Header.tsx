@@ -8,13 +8,14 @@ import brandImage from 'src/assets/brand_at_top_navigation.png'
 import Container from 'react-bootstrap/Container';
 import Colors from "src/constants/Colors";
 import {SerializedStyles} from "@emotion/serialize";
-// import {LinkContainer} from 'react-router-bootstrap'
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {selectSign} from "src/context/signSlice";
 import fontConfig from "src/graphic/text/font";
+import {useNavigate} from "react-router-dom";
 
 
 const Menus: React.FC<{ isSigned: boolean }> = (props: { isSigned: boolean }) => {
+  const navigate = useNavigate();
   return <div css={css({
     display: "flex",
     flexDirection: "row",
@@ -33,11 +34,7 @@ const Menus: React.FC<{ isSigned: boolean }> = (props: { isSigned: boolean }) =>
       }
     }
   })}>
-    {/*<Nav.Link className={"menu-name"}>Time Track</Nav.Link>*/}
-    <span className={"menu-name"}>Time Track</span>
-    {/*<LinkContainer to={"/time-track"}>*/}
-    {/*  */}
-    {/*</LinkContainer>*/}
+    <span className={"menu-name"} onClick={() => navigate("/time-track")}>Time Track</span>
   </div>
 
 };
@@ -53,10 +50,10 @@ const Header: React.FC = () => {
     height: Sizes.layout.bar.top.value
   });
 
-  const brand: ReactElement<NavbarBrand> = <Navbar.Brand href="#home">
-    <img src={brandImage} alt="Brand" width={Sizes.components.bar.logo.width.value}
-         height={Sizes.components.bar.logo.height.value}/>
-  </Navbar.Brand>;
+  const brand: ReactElement<NavbarBrand> = <img css={css({
+    marginRight: "16px"
+  })} src={brandImage} alt="Brand" width={Sizes.components.bar.logo.width.value}
+                                                height={Sizes.components.bar.logo.height.value}/>;
 
   // todo: Link의 색상 조정 - 가만히 있을 땐 연보라, 클릭하면 진보라. 혹은 연주황 -> 진보라
   const collapse: ReactElement<Nav> = <Nav className="me-auto">
@@ -76,12 +73,10 @@ const TopNavigationBar: React.FC<TopNavigationBarProps> = ({
                                                            }: TopNavigationBarProps) => {
 
 
+  const navigate = useNavigate();
   // todo: refac links
   return <Container css={containerStyle}>
-    <span>{brand}</span>
-    {/*<LinkContainer to={"/time-track"}></LinkContainer>*/}
-    {/*/!*todo: check - 이거 뭔지 현재 모름.*!/*/}
-    {/*<Navbar.Toggle aria-controls="basic-navbar-nav"/>*/}
+    <span onClick={() => navigate("/time-track")}>{brand}</span>
     {collapse}
   </Container>
 };

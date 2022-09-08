@@ -13,7 +13,6 @@ import createAxios from "src/api/adapterFactory/axiosFactory";
 import {useDispatch} from "react-redux";
 import { usernameSign } from "src/context/usernameSlice";
 import { passwordSign } from "src/context/passwordSlice";
-import {LinkContainer} from "react-router-bootstrap";
 import {workasme_host} from "src/api/host/workasme";
 
 const SignUpSection: React.FC = () => {
@@ -144,17 +143,15 @@ const SignUpButtonModal:React.FC<{show: boolean, handleClose: () => void}> = (pr
         </Modal.Header>
         <Modal.Body>Sign Up Succeed, Enjoy my service</Modal.Body>
         <Modal.Footer>
-          <LinkContainer to="/management">
-            <ButtonComponent name={"moveToManagement"} backgroundColor={Colors.theme.main.work}
-                             textSize={new Pixel(20)}
-                             defaultTextColor={Colors.theme.text.button.default}
-                             hoverTextColor={Colors.theme.main.orgasme}
-                             width={new Percentage(100)}
-                             onClick={() => {}}
-            >
-              Move To Management
-            </ButtonComponent>
-          </LinkContainer>
+          <ButtonComponent name={"moveToManagement"} backgroundColor={Colors.theme.main.work}
+                           textSize={new Pixel(20)}
+                           defaultTextColor={Colors.theme.text.button.default}
+                           hoverTextColor={Colors.theme.main.orgasme}
+                           width={new Percentage(100)}
+                           onClick={() => {}}
+          >
+            Move To Management
+          </ButtonComponent>
         </Modal.Footer>
       </Modal>
     </>

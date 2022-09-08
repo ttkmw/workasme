@@ -5,7 +5,6 @@ import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
 import Title from "src/pages/components/Title";
-// import {LinkContainer} from "react-router-bootstrap";
 import createAxios from "src/api/adapterFactory/axiosFactory";
 import {workasme_host} from "src/api/host/workasme";
 import {selectToken, signIn as signInSlice} from "src/context/signSlice";
@@ -14,7 +13,6 @@ import { useNavigate } from 'react-router-dom';
 
 
 const SignInSection: React.FC = () => {
-  const token = useSelector(selectToken);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -104,9 +102,6 @@ const SignInSection: React.FC = () => {
           sign in
 
         </button>
-        {/*<LinkContainer to={"/time-track"}>*/}
-        {/*  */}
-        {/*</LinkContainer>*/}
       </div>
 
 
@@ -129,10 +124,7 @@ const SignInSection: React.FC = () => {
       <span css={css({
         fontFamily: "Gaegu-Regular",
         color: Colors.theme.main.work
-      })}> Join us</span>
-      {/*<LinkContainer to={"/sign-up"}>*/}
-      {/*  */}
-      {/*</LinkContainer>*/}
+      })} onClick={() => navigate("/sign-up")}> Join us</span>
 
 
     </div>

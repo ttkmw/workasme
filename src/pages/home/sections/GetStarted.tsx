@@ -4,7 +4,6 @@ import Container from 'react-bootstrap/Container';
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
-import {LinkContainer} from "react-router-bootstrap";
 import Colors from "src/constants/Colors";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 
@@ -71,33 +70,29 @@ const Description: React.FC = () => {
 };
 
 
-// <LinkContainer to={"/management"}>
-//   <Nav.Link>Management</Nav.Link>
-// </LinkContainer>
+
 const GetStartedButton: React.FC = () => {
-  return <LinkContainer to={"/sign"}>
-    <div css={css({
-      marginLeft: 'auto',
-      marginRight: 'auto'
-    })}>
-      <>
-        <style type="text/css"> {`
+  return <div css={css({
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  })}>
+    <>
+      <style type="text/css"> {`
             .btn-getStarted {
               background-color: ${Colors.theme.main.orgasme};
               color: ${Colors.theme.text.button.default};
             }
           `}
-        </style>
-        <ButtonComponent name={"getStarted"} backgroundColor={Colors.theme.main.work}
-                         defaultTextColor={Colors.theme.text.button.default}
-                         hoverTextColor={Colors.theme.main.orgasme}
-                         textSize={new Pixel(30)}
-                         width={new Pixel(200)} onClick={() => {}} size={"lg"}>
-          Get Started
-        </ButtonComponent>
-      </>
-    </div>
-  </LinkContainer>
+      </style>
+      <ButtonComponent name={"getStarted"} backgroundColor={Colors.theme.main.work}
+                       defaultTextColor={Colors.theme.text.button.default}
+                       hoverTextColor={Colors.theme.main.orgasme}
+                       textSize={new Pixel(30)}
+                       width={new Pixel(200)} onClick={() => {}} size={"lg"}>
+        Get Started
+      </ButtonComponent>
+    </>
+  </div>
 };
 
 export default GetStartedSection;

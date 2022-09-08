@@ -5,7 +5,9 @@ import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Title from "src/pages/components/Title";
 import Colors from "src/constants/Colors";
-// import {LinkContainer} from "react-router-bootstrap";
+import createAxios from "src/api/adapterFactory/axiosFactory";
+import {workasme_host} from "src/api/host/workasme";
+import {useNavigate} from "react-router-dom";
 
 
 
@@ -24,6 +26,16 @@ const SignUpPage: React.FC = () => {
 }
 
 const SignUpSection: React.FC = () => {
+  const navigate = useNavigate();
+  async function signUp() {
+    // const axiosInstance = createAxios({})
+    // const response = await axiosInstance.post(`${workasme_host}/iam/realms/bintegration/protocol/openid-connect/token`, {
+    //   "username": "ttkmw",
+    //   "password": "026060Mcfnxm**",
+    // });
+    navigate("/time-track")
+  }
+
   return <div>
     <div css={css({
       width: new Pixel(380).toString(),
@@ -102,11 +114,8 @@ const SignUpSection: React.FC = () => {
             })}
             className={'button-work'}
             type={"submit"}
-            onClick={() => alert("should api call sign up")}
+            onClick={signUp}
           >sign up</button>
-          {/*<LinkContainer to={"/time-track"}>*/}
-
-          {/*</LinkContainer>*/}
         </div>
 
 
@@ -129,10 +138,7 @@ const SignUpSection: React.FC = () => {
       <span css={css({
         fontFamily: "Gaegu-Regular",
         color: Colors.theme.main.work
-      })}> Sign in</span>
-      {/*<LinkContainer to={"/"}>*/}
-      {/* */}
-      {/*</LinkContainer>*/}
+      })} onClick={() => navigate("/")}> Sign in</span>
 
 
     </div>
