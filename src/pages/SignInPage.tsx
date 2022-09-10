@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -15,20 +15,62 @@ import { useNavigate } from 'react-router-dom';
 const SignInSection: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>("");
 
   async function signIn() {
     const axiosInstance = createAxios({})
-    //todo: try-catch
-    const response = await axiosInstance.post(`${workasme_host}/iam/realms/bintegration/protocol/openid-connect/token`, {
-      "username": "ttkmw",
-      "password": "026060Mcfnxm**",
+    axiosInstance.interceptors.response.use(function (response) {
+      if (response.status === 400) {
+        return;
+      }
+      return response;
+    }, function (error) {
+      // Do something with response error
+      return;
     });
-    //
+    //todo: try-catch
+    let response;
+    // axiosInstance.post(`${workasme_host}/iam/realms/bintegration/protocol/openid-connect/token`, {
+    //   "username": email,
+    //   "password": password,
+    // }).then(response => {
+    //     console.log('data', response.data)
+    //   }
+    // ).catch(error => {
+    //   console.log('error', error.message)
+    // });
+    try {
+      response = await axiosInstance.post(`${workasme_host}/iam/realms/bintegration/protocol/openid-connect/token`, {
+        "username": email,
+        "password": password,
+      });
+      const accessToken = response.data.access_token;
+      console.log("accessToken", accessToken)
+      dispatch(signInSlice({accessToken: accessToken}))
+      navigate("/time-track")
+      return;
 
-    const accessToken = response.data.access_token;
-    dispatch(signInSlice({accessToken: accessToken}))
-    navigate("/time-track")
-    return;
+    } catch (e: any) {
+      if (e.response) {
+        console.warn("error", e.response.data.message);
+        const status = e.response.status;
+        if (status === 401) {
+          const code: string = e.response.data.code;
+          if (code.includes("credentials")) {
+            alert("invalid email or password")
+          } else {
+            alert("unauthorized")
+          }
+          return
+        }
+      } else if(e.request) {
+        alert("could not communicate with server")
+      } else {
+        alert("unknown error occurred")
+      }
+      console.clear();
+    }
   }
 
   return <div>
@@ -58,7 +100,7 @@ const SignInSection: React.FC = () => {
         },
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(6).toString()
-      })} placeholder={"email"} id={"sign-in-id"}/>
+      })} value={email} onChange={(event) => {setEmail(event.target.value)}} placeholder={"email"} id={"sign-in-id"}/>
 
       <input css={css({
         width: new Pixel(280).toString(),
@@ -73,7 +115,7 @@ const SignInSection: React.FC = () => {
         },
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(14).toString()
-      })} placeholder={"password"} id={"sign-in-password"}/>
+      })} value={password} onChange={(event => {setPassword(event.target.value)})} type={'password'} placeholder={"password"} id={"sign-in-password"}/>
 
       <div css={css({
         display: "flex",
