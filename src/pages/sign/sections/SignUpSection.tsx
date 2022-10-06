@@ -14,6 +14,7 @@ import {useDispatch} from "react-redux";
 import { usernameSign } from "src/context/usernameSlice";
 import { passwordSign } from "src/context/passwordSlice";
 import {workasme_host} from "src/api/host/workasme";
+import {signIn as signInSlice} from "src/context/signSlice";
 
 const SignUpSection: React.FC = () => {
   return <Container>
@@ -67,9 +68,10 @@ const SignUpForm: React.FC = () => {
 
 const SignUpButton: React.FC<{email: string, password: string, firstName:string, lastName: string, handleShow: () => void}>
   = (props: {email: string, password: string, firstName:string, lastName: string, handleShow: () => void}) => {
+  const dispatch = useDispatch();
   const {email, password, firstName, lastName, handleShow} = props;
   const axiosInstance = createAxios({
-  });
+  }, dispatch, signInSlice);
   const signUp = async () =>  {
     const response = await axiosInstance.post(`${workasme_host}/auth/signUp`, {
       signature: email,
@@ -84,8 +86,6 @@ const SignUpButton: React.FC<{email: string, password: string, firstName:string,
       handleShow();
     }
   };
-
-  const dispatch = useDispatch();
 
   return <ButtonComponent name={"createAccount"} backgroundColor={Colors.theme.main.work}
                           textSize={new Pixel(20)}

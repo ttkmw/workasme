@@ -24,8 +24,13 @@ import Modal from "src/pages/components/Mordal";
 import TimeBlockRegisterForm from "src/pages/components/timeblock/TimeBlockRegisterForm";
 import {TodoDto} from "src/dtos/TodoDto";
 import {IoMdClose} from "react-icons/all";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {selectToken} from "src/context/signSlice";
+import createAxios from "src/api/adapterFactory/axiosFactory";
+import {workasme_host} from "src/api/host/workasme";
+import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
+import {Dispatch as ReduxDispatch} from "redux";
+import {signIn as signInSlice} from "src/context/signSlice";
 
 
 const SelectableComponent = createSelectable(Selectable);
@@ -292,6 +297,59 @@ function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
 }
 
 
+async function callGetTimes(token: string, dispatch: ReduxDispatch<any>, slice: ActionCreatorWithPayload<any>) {
+  const axiosInstance = createAxios({}, dispatch, slice)
+  let response;
+  try {
+    response = await axiosInstance.get(`${workasme_host}/life-history/times/kk`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    console.log('response', response);
+  } catch (e: any) {
+    console.log('errorasdafd');
+  }
+}
+
+const TodayButton: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const token = useSelector(selectToken);
+  return <div css={css({
+    display: "flex",
+    alignItems: "center",
+    '.button': {
+      backgroundColor: "transparent",
+      borderRadius: 10,
+      borderWidth: "2px",
+      borderColor: Colors.theme.text.box.default,
+      borderStyle: "solid",
+      color: Colors.theme.text.box.default,
+      paddingLeft: 0,
+      paddingRight: 0,
+    }
+  })}>
+    <button
+      css={css({
+        width: new Pixel(60).toString(),
+
+        height: new Pixel(30).toString(),
+        fontFamily: fontConfig.web.medium.fontFamily,
+
+      })}
+      className={"button"}
+      onClick={async () => {
+        // this.setState({
+        //   standardDate: dayjs()
+        // });
+        await callGetTimes(token, dispatch, signInSlice);
+      }}
+    >today
+    </button>
+  </div>;
+}
+
 export class TestSection extends React.Component<any> {
   selectableRef;
   state;
@@ -406,6 +464,7 @@ export class TestSection extends React.Component<any> {
   private noBorder = new Pixel(0);
 
 
+
   render() {
     const weekdays = calculateWeekdaysForView(this.state.standardDate);
 
@@ -477,37 +536,7 @@ export class TestSection extends React.Component<any> {
               }}/>
             </div>
 
-            <div css={css({
-              display: "flex",
-              alignItems: "center",
-              '.button': {
-                backgroundColor: "transparent",
-                borderRadius: 10,
-                borderWidth: "2px",
-                borderColor: Colors.theme.text.box.default,
-                borderStyle: "solid",
-                color: Colors.theme.text.box.default,
-                paddingLeft: 0,
-                paddingRight: 0,
-              }
-            })}>
-              <button
-                css={css({
-                  width: new Pixel(60).toString(),
-
-                  height: new Pixel(30).toString(),
-                  fontFamily: fontConfig.web.medium.fontFamily,
-
-                })}
-                className={"button"}
-                onClick={() => {
-                  this.setState({
-                    standardDate: dayjs()
-                  });
-                }}
-              >today
-              </button>
-            </div>
+            <TodayButton />
             <div css={css({
               display: "flex",
               alignItems: "center",
@@ -947,7 +976,6 @@ const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBl
     const token = useSelector(selectToken);
     const {weekdays, checkBoxSize, timeBlocks, updateTimeBlocks} = props;
     useEffect(() => {
-      console.log("TodoListSection token", token)
     }, [token])
 
     return <div

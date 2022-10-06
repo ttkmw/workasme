@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from "react-redux";
 import { passwordSign } from "src/context/passwordSlice";
 import {selectUsername, usernameSign} from "src/context/usernameSlice";
 import {workasme_host} from "src/api/host/workasme";
+import {signIn as signInSlice} from "src/context/signSlice";
 
 const SignInSection: React.FC = () => {
   return <Container>
@@ -61,7 +62,7 @@ const SignInButton: React.FC<{email: string, password: string}> = (props: {email
       username: email,
       password: password
     }
-  });
+  }, dispatch, signInSlice);
 
   const signIn = async () => {
     const response = await axiosInstance.post(`${workasme_host}/auth/signIn`, {

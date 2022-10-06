@@ -7,7 +7,7 @@ import Colors from "src/constants/Colors";
 import Title from "src/pages/components/Title";
 import createAxios from "src/api/adapterFactory/axiosFactory";
 import {workasme_host} from "src/api/host/workasme";
-import {selectToken, signIn as signInSlice} from "src/context/signSlice";
+import {signIn as signInSlice} from "src/context/signSlice";
 import {useDispatch, useSelector} from "react-redux";
 import { useNavigate } from 'react-router-dom';
 
@@ -18,8 +18,9 @@ const SignInSection: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>("");
 
+
   async function signIn() {
-    const axiosInstance = createAxios({})
+    const axiosInstance = createAxios({}, dispatch, signInSlice)
     axiosInstance.interceptors.response.use(function (response) {
       if (response.status === 400) {
         return;
@@ -46,7 +47,7 @@ const SignInSection: React.FC = () => {
         "password": password,
       });
       const accessToken = response.data.access_token;
-      console.log("accessToken", accessToken)
+      localStorage.setItem("refresh_token", response.data.refresh_token)
       dispatch(signInSlice({accessToken: accessToken}))
       navigate("/time-track")
       return;
