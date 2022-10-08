@@ -25,12 +25,9 @@ import TimeBlockRegisterForm from "src/pages/components/timeblock/TimeBlockRegis
 import {TodoDto} from "src/dtos/TodoDto";
 import {IoMdClose} from "react-icons/all";
 import {useDispatch, useSelector} from "react-redux";
-import {selectToken} from "src/context/signSlice";
-import createAxios from "src/api/adapterFactory/axiosFactory";
-import {workasme_host} from "src/api/host/workasme";
-import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
-import {Dispatch as ReduxDispatch} from "redux";
-import {signIn as signInSlice} from "src/context/signSlice";
+import {selectToken} from "src/context/redux/signSlice";
+import {useInjection} from "inversify-react";
+import AxiosProvider from "src/context/inversify/providers/AxiosProvider";
 
 
 const SelectableComponent = createSelectable(Selectable);
@@ -296,24 +293,10 @@ function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
   return latest!;
 }
 
-
-async function callGetTimes(token: string, dispatch: ReduxDispatch<any>, slice: ActionCreatorWithPayload<any>) {
-  const axiosInstance = createAxios({}, dispatch, slice)
-  let response;
-  try {
-    response = await axiosInstance.get(`${workasme_host}/life-history/times/kk`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    console.log('response', response);
-  } catch (e: any) {
-    console.log('errorasdafd');
-  }
-}
-
 const TodayButton: React.FC = () => {
   const dispatch = useDispatch();
+  const axiosProvider = useInjection(AxiosProvider);
+  const axiosInstance = axiosProvider.provide()
 
   const token = useSelector(selectToken);
   return <div css={css({
@@ -339,11 +322,17 @@ const TodayButton: React.FC = () => {
 
       })}
       className={"button"}
+
+
       onClick={async () => {
-        // this.setState({
-        //   standardDate: dayjs()
-        // });
-        await callGetTimes(token, dispatch, signInSlice);
+        let response;
+        console.log("test section header", axiosInstance.defaults.headers.common['Authorization']);
+        try {
+          response = await axiosInstance.get(`/life-history/times/kk`);
+          console.log('response', response);
+        } catch (e: any) {
+          console.log('errorasdafd');
+        }
       }}
     >today
     </button>
@@ -464,7 +453,6 @@ export class TestSection extends React.Component<any> {
   private noBorder = new Pixel(0);
 
 
-
   render() {
     const weekdays = calculateWeekdaysForView(this.state.standardDate);
 
@@ -536,7 +524,7 @@ export class TestSection extends React.Component<any> {
               }}/>
             </div>
 
-            <TodayButton />
+            <TodayButton/>
             <div css={css({
               display: "flex",
               alignItems: "center",
@@ -815,167 +803,170 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
                 timeBlocks={timeBlocks}
                 updateTimeBlocks={updateTimeBlocks}
       />
-      <TodoContent day={day} index={index} isFocused={isFocused} isHover={isHover} setIsFocused={setIsFocused} timeBlocks={timeBlocks} todoDto={todoDto} updateTimeBlocks={updateTimeBlocks} wrapperRef={wrapperRef}/>
+      <TodoContent day={day} index={index} isFocused={isFocused} isHover={isHover} setIsFocused={setIsFocused}
+                   timeBlocks={timeBlocks} todoDto={todoDto} updateTimeBlocks={updateTimeBlocks}
+                   wrapperRef={wrapperRef}/>
 
       {/*다음으로 할 작업은 인풋 api 콜 되는부분에서 setTodos를 해서 defaultValue를 수정하는것. 마찬가지로 check에서도 체크했을때 api 콜 가정하여 setTodos 호출해서 check 수정하*/}
     </div>
   }
 
 
-const TodoContent: React.FC<{timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, todoDto: TodoDto, isFocused: boolean, wrapperRef: MutableRefObject<any>, day: Dayjs, index: number, setIsFocused: Dispatch<SetStateAction<boolean>>, isHover: boolean}> =
-  (props: {timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, todoDto: TodoDto, isFocused: boolean, wrapperRef:MutableRefObject<any>, day: Dayjs, index: number, setIsFocused: Dispatch<SetStateAction<boolean>>, isHover: boolean}) => {
-  const {timeBlocks, updateTimeBlocks, todoDto, isFocused, wrapperRef, day, index, setIsFocused, isHover} = props;
+const TodoContent: React.FC<{ timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, todoDto: TodoDto, isFocused: boolean, wrapperRef: MutableRefObject<any>, day: Dayjs, index: number, setIsFocused: Dispatch<SetStateAction<boolean>>, isHover: boolean }> =
+  (props: { timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, todoDto: TodoDto, isFocused: boolean, wrapperRef: MutableRefObject<any>, day: Dayjs, index: number, setIsFocused: Dispatch<SetStateAction<boolean>>, isHover: boolean }) => {
+    const {timeBlocks, updateTimeBlocks, todoDto, isFocused, wrapperRef, day, index, setIsFocused, isHover} = props;
 
-  let borderBottomColor;
-  if (todoDto.isChecked) {
-    borderBottomColor = Colors.theme.main.orgasme;
-  } else if (todoDto.content !== undefined && todoDto.content !== '') {
-    borderBottomColor = Colors.theme.main.work;
-  } else {
-    borderBottomColor = Colors.theme.table.innerLine;
-  }
+    let borderBottomColor;
+    if (todoDto.isChecked) {
+      borderBottomColor = Colors.theme.main.orgasme;
+    } else if (todoDto.content !== undefined && todoDto.content !== '') {
+      borderBottomColor = Colors.theme.main.work;
+    } else {
+      borderBottomColor = Colors.theme.table.innerLine;
+    }
 
-  let closeButtonBackgroundColor;
-  if (todoDto.isChecked) {
-    closeButtonBackgroundColor = Colors.theme.main.orgasme;
-  } else {
-    closeButtonBackgroundColor = Colors.theme.main.work;
-  }
+    let closeButtonBackgroundColor;
+    if (todoDto.isChecked) {
+      closeButtonBackgroundColor = Colors.theme.main.orgasme;
+    } else {
+      closeButtonBackgroundColor = Colors.theme.main.work;
+    }
 
-  const onDelete = (e, day, index, timeBlocks, updateTimeBlocks) => {
-    let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-    const removeTarget = todoDtosAtDate!.filter((todoDto, todoDtoIndex) => todoDtoIndex === index)[0];
-    alert("should api call deleted")
-    let newTodoDtos = todoDtosAtDate!.filter((todoDto) => {
-      return todoDto !== removeTarget
-    });
-
-    // if (hasFullChecked(timeBlocks)) {
-    //   newTodoDtos.push({id: undefined, isChecked: false, content: ''})
-    // } else {
-    //   const otherDays = Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key !== TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-    //   for (const otherDay of otherDays) {
-    //     let todoDtosAtDate = timeBlocks.todoWithinThisWeek.get(otherDay);
-    //     todoDtosAtDate.pop()
-    //     timeBlocks.todoWithinThisWeek.set(otherDay, todoDtosAtDate);
-    //   }
-    // }
-
-    timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos);
-
-
-    updateTimeBlocks(timeBlocks);
-  }
-
-  const onKeyPress = (event, day, index, setIsFocused) => {
-    // todo: 엔티티가 아니면, 즉 아이디가 없으면 생성 콜을 해야함.
-    if (event.charCode === 13 && !event.shiftKey) {
-      event.preventDefault();
+    const onDelete = (e, day, index, timeBlocks, updateTimeBlocks) => {
       let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-      const target = event.target as HTMLInputElement;
-      if (target.defaultValue !== target.value) {
-        alert("should api call modified")
+      const removeTarget = todoDtosAtDate!.filter((todoDto, todoDtoIndex) => todoDtoIndex === index)[0];
+      alert("should api call deleted")
+      let newTodoDtos = todoDtosAtDate!.filter((todoDto) => {
+        return todoDto !== removeTarget
+      });
 
-        let newTodoDtos: TodoDto[] | undefined;
+      // if (hasFullChecked(timeBlocks)) {
+      //   newTodoDtos.push({id: undefined, isChecked: false, content: ''})
+      // } else {
+      //   const otherDays = Array.from(timeBlocks.todoWithinThisWeek.keys()).filter(key => key !== TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+      //   for (const otherDay of otherDays) {
+      //     let todoDtosAtDate = timeBlocks.todoWithinThisWeek.get(otherDay);
+      //     todoDtosAtDate.pop()
+      //     timeBlocks.todoWithinThisWeek.set(otherDay, todoDtosAtDate);
+      //   }
+      // }
 
-        if (todoDtosAtDate === undefined) {
-          newTodoDtos = [{id: todoDto.id, isChecked: todoDto.isChecked, content: target.value}]
-        } else {
-          todoDtosAtDate.push({id: todoDto.id, isChecked: todoDto.isChecked, content: target.value});
-          newTodoDtos = todoDtosAtDate;
+      timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos);
+
+
+      updateTimeBlocks(timeBlocks);
+    }
+
+    const onKeyPress = (event, day, index, setIsFocused) => {
+      // todo: 엔티티가 아니면, 즉 아이디가 없으면 생성 콜을 해야함.
+      if (event.charCode === 13 && !event.shiftKey) {
+        event.preventDefault();
+        let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+        const target = event.target as HTMLInputElement;
+        if (target.defaultValue !== target.value) {
+          alert("should api call modified")
+
+          let newTodoDtos: TodoDto[] | undefined;
+
+          if (todoDtosAtDate === undefined) {
+            newTodoDtos = [{id: todoDto.id, isChecked: todoDto.isChecked, content: target.value}]
+          } else {
+            todoDtosAtDate.push({id: todoDto.id, isChecked: todoDto.isChecked, content: target.value});
+            newTodoDtos = todoDtosAtDate;
+          }
+
+
+          timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
+          updateTimeBlocks(timeBlocks);
         }
-
-
-        timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
-        updateTimeBlocks(timeBlocks);
+        setIsFocused(false);
       }
-      setIsFocused(false);
-    }
-  };
+    };
 
-  return <div
-    css={css({
-      display: 'flex',
-      flexDirection: 'row',
-      position: "relative",
-      width: "100%",
-      height: 15
-    })}
-  >
+    return <div
+      css={css({
+        display: 'flex',
+        flexDirection: 'row',
+        position: "relative",
+        width: "100%",
+        height: 15
+      })}
+    >
 
-    {
-      isFocused ? <textarea ref={wrapperRef} css={css({
-          position: "absolute",
-          top: "0px",
-          left: "0px",
-          zIndex: 50,
-          width: "200%",
-          marginLeft: "5%",
-          ":focus-visible": {
-            outline: "0px"
-          },
+      {
+        isFocused ? <textarea ref={wrapperRef} css={css({
+            position: "absolute",
+            top: "0px",
+            left: "0px",
+            zIndex: 50,
+            width: "200%",
+            marginLeft: "5%",
+            ":focus-visible": {
+              outline: "0px"
+            },
 
-        })} autoFocus={isFocused} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)}
-                            defaultValue={todoDto.content}
-        /> :
-        <input ref={wrapperRef} css={css({
-          border: 0,
-          borderBottom: 1,
-          paddingTop: 0,
-          paddingBottom: 1,
-          borderBottomStyle: "solid",
-          borderBottomColor: borderBottomColor,
-          marginLeft: "5%",
-          width: "100%",
-          textOverflow: "ellipsis",
-          overflow: "hidden",
-          WebkitLineClamp: 1,
-          wordBreak: "break-all",
-          whiteSpace: "nowrap",
-          ":focus-visible": {
-            outline: "0px"
-          },
-        })} key={TimeRecord.getFormattedDate(day, RelativeDay.TODAY) + index + todoDto.content}
-               onFocus={() => setIsFocused(true)} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)}
-               defaultValue={todoDto.content} type={"text"}/>
-    }
-    {isHover && !isFocused && (
-      <button
-        css={css({
-          paddingLeft: 0,
-          paddingRight: 0,
-          backgroundColor: 'transparent',
-          ":focus-visible": {
-            outline: "0px"
-          },
-          borderWidth: "0px",
-          display: "flex",
-          alignItems: "center"
-        })}
-        onClick={event => onDelete(event, day, index, timeBlocks, updateTimeBlocks)}
+          })} autoFocus={isFocused} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)}
+                              defaultValue={todoDto.content}
+          /> :
+          <input ref={wrapperRef} css={css({
+            border: 0,
+            borderBottom: 1,
+            paddingTop: 0,
+            paddingBottom: 1,
+            borderBottomStyle: "solid",
+            borderBottomColor: borderBottomColor,
+            marginLeft: "5%",
+            width: "100%",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            WebkitLineClamp: 1,
+            wordBreak: "break-all",
+            whiteSpace: "nowrap",
+            ":focus-visible": {
+              outline: "0px"
+            },
+          })} key={TimeRecord.getFormattedDate(day, RelativeDay.TODAY) + index + todoDto.content}
+                 onFocus={() => setIsFocused(true)} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)}
+                 defaultValue={todoDto.content} type={"text"}/>
+      }
+      {isHover && !isFocused && (
+        <button
+          css={css({
+            paddingLeft: 0,
+            paddingRight: 0,
+            backgroundColor: 'transparent',
+            ":focus-visible": {
+              outline: "0px"
+            },
+            borderWidth: "0px",
+            display: "flex",
+            alignItems: "center"
+          })}
+          onClick={event => onDelete(event, day, index, timeBlocks, updateTimeBlocks)}
 
-      >
-        {/*<span id="close-modal" className="_hide-visual">*/}
-        {/*  Close*/}
-        {/*</span>*/}
-        <IoMdClose css={css({
-          backgroundColor: closeButtonBackgroundColor,
-        })} size={new Pixel(15).toString()} color={"white"}
-                   onClick={() => {
-                   }}/>
-        {/*<svg className="_modal-close-icon" viewBox="0 0 40 40">*/}
-        {/*  <path d="M 10,10 L 30,30 M 30,10 L 10,30"/>*/}
-        {/*</svg>*/}
-      </button>
-    )}
-  </div>
-}
+        >
+          {/*<span id="close-modal" className="_hide-visual">*/}
+          {/*  Close*/}
+          {/*</span>*/}
+          <IoMdClose css={css({
+            backgroundColor: closeButtonBackgroundColor,
+          })} size={new Pixel(15).toString()} color={"white"}
+                     onClick={() => {
+                     }}/>
+          {/*<svg className="_modal-close-icon" viewBox="0 0 40 40">*/}
+          {/*  <path d="M 10,10 L 30,30 M 30,10 L 10,30"/>*/}
+          {/*</svg>*/}
+        </button>
+      )}
+    </div>
+  }
 
 const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
   (props: { weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
     const token = useSelector(selectToken);
     const {weekdays, checkBoxSize, timeBlocks, updateTimeBlocks} = props;
     useEffect(() => {
+      console.log("token", token);
     }, [token])
 
     return <div

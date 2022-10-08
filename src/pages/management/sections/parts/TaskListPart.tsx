@@ -8,7 +8,7 @@ import BasicInputCell from "src/pages/management/sections/parts/components/table
 import Colors from "src/constants/Colors";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 import {useSelector} from "react-redux";
-import {selectTime} from "src/context/timeSlice";
+import {selectTime} from "src/context/redux/timeSlice";
 import TitleComponent from "src/pages/management/sections/parts/components/TitleComponent";
 import {TaskListRowDto} from "src/dtos/TaskListRowDto";
 import {TimeSnippet} from "src/dtos/TimeSnippet";

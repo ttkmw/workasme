@@ -1,5 +1,5 @@
 import React from "react";
-import { addTime } from "src/context/timeSlice";
+import { addTime } from "src/context/redux/timeSlice";
 import {TimeSnippet} from "src/dtos/TimeSnippet";
 
 const BasicInputCell: React.FC<{ initialValue: any, isUpdating: boolean, timeSnippets: TimeSnippet[]  }> = (props: { initialValue: string, isUpdating: boolean, timeSnippets: TimeSnippet[]}) => {

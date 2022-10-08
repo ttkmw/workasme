@@ -5,8 +5,6 @@ import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Title from "src/pages/components/Title";
 import Colors from "src/constants/Colors";
-import createAxios from "src/api/adapterFactory/axiosFactory";
-import {workasme_host} from "src/api/host/workasme";
 import {useNavigate} from "react-router-dom";
 
 

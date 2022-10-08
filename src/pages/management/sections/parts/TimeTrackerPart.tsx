@@ -8,7 +8,7 @@ import {Button, ButtonGroup, Col, Container, Dropdown, Form, Row, Table} from "r
 import BasicInputCell from "src/pages/management/sections/parts/components/table/BasicInputCell";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 import {useDispatch, useSelector} from "react-redux";
-import {addTime, selectTime} from "src/context/timeSlice";
+import {addTime, selectTime} from "src/context/redux/timeSlice";
 import TitleComponent from "src/pages/management/sections/parts/components/TitleComponent";
 import Percentage from "src/graphic/size/percentage";
 import {TimeSnippet} from "src/dtos/TimeSnippet";

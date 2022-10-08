@@ -5,11 +5,10 @@ import {css, jsx} from "@emotion/react";
 import Pixel from "src/graphic/size/pixel";
 import Colors from "src/constants/Colors";
 import Title from "src/pages/components/Title";
-import createAxios from "src/api/adapterFactory/axiosFactory";
-import {workasme_host} from "src/api/host/workasme";
-import {signIn as signInSlice} from "src/context/signSlice";
-import {useDispatch, useSelector} from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import {useDispatch} from "react-redux";
+import {useNavigate} from 'react-router-dom';
+import {useInjection} from "inversify-react";
+import AxiosProvider from "src/context/inversify/providers/AxiosProvider";
 
 
 const SignInSection: React.FC = () => {
@@ -17,10 +16,13 @@ const SignInSection: React.FC = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>("");
+  const axiosProvider = useInjection(AxiosProvider);
+
+
 
 
   async function signIn() {
-    const axiosInstance = createAxios({}, dispatch, signInSlice)
+    const axiosInstance = axiosProvider.provide()
     axiosInstance.interceptors.response.use(function (response) {
       if (response.status === 400) {
         return;
@@ -42,13 +44,15 @@ const SignInSection: React.FC = () => {
     //   console.log('error', error.message)
     // });
     try {
-      response = await axiosInstance.post(`${workasme_host}/iam/realms/bintegration/protocol/openid-connect/token`, {
+      response = await axiosInstance.post(`/iam/realms/bintegration/protocol/openid-connect/token`, {
         "username": email,
         "password": password,
       });
-      const accessToken = response.data.access_token;
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
       localStorage.setItem("refresh_token", response.data.refresh_token)
-      dispatch(signInSlice({accessToken: accessToken}))
+      // dispatch(signInSlice({accessToken: accessToken}))
+      console.log("axiosInstance", axiosInstance);
+      console.log("header", axiosInstance.defaults.headers.common['Authorization']);
       navigate("/time-track")
       return;
 

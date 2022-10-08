@@ -11,10 +11,8 @@ import Percentage from "src/graphic/size/percentage";
 import googleLogo from "src/assets/icons/google.png";
 import createAxios from "src/api/adapterFactory/axiosFactory";
 import {useDispatch} from "react-redux";
-import { usernameSign } from "src/context/usernameSlice";
-import { passwordSign } from "src/context/passwordSlice";
-import {workasme_host} from "src/api/host/workasme";
-import {signIn as signInSlice} from "src/context/signSlice";
+import { usernameSign } from "src/context/redux/usernameSlice";
+import { passwordSign } from "src/context/redux/passwordSlice";
 
 const SignUpSection: React.FC = () => {
   return <Container>
@@ -71,9 +69,9 @@ const SignUpButton: React.FC<{email: string, password: string, firstName:string,
   const dispatch = useDispatch();
   const {email, password, firstName, lastName, handleShow} = props;
   const axiosInstance = createAxios({
-  }, dispatch, signInSlice);
+  });
   const signUp = async () =>  {
-    const response = await axiosInstance.post(`${workasme_host}/auth/signUp`, {
+    const response = await axiosInstance.post(`/auth/signUp`, {
       signature: email,
       password: password,
       firstName: firstName,

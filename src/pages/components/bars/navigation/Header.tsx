@@ -9,7 +9,7 @@ import Container from 'react-bootstrap/Container';
 import Colors from "src/constants/Colors";
 import {SerializedStyles} from "@emotion/serialize";
 import {useDispatch, useSelector} from "react-redux";
-import {selectSign} from "src/context/signSlice";
+import {selectSign} from "src/context/redux/signSlice";
 import fontConfig from "src/graphic/text/font";
 import {useNavigate} from "react-router-dom";
 

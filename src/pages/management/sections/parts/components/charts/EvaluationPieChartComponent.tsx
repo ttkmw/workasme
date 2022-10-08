@@ -9,7 +9,7 @@ import PieChart, {
   Connector
 } from 'devextreme-react/pie-chart';
 import {useSelector} from "react-redux";
-import {selectTime} from "src/context/timeSlice";
+import {selectTime} from "src/context/redux/timeSlice";
 import {TimeSnippet} from "src/dtos/TimeSnippet";
 import {TimeByCategory} from "src/dtos/TimeByCaregoryDto";
 
