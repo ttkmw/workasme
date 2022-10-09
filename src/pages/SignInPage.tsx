@@ -57,6 +57,7 @@ const SignInSection: React.FC = () => {
       return;
 
     } catch (e: any) {
+      console.clear();
       if (e.response) {
         console.warn("error", e.response.data.message);
         const status = e.response.status;
@@ -74,7 +75,6 @@ const SignInSection: React.FC = () => {
       } else {
         alert("unknown error occurred")
       }
-      console.clear();
     }
   }
 

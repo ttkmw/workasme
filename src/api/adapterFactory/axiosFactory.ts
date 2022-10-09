@@ -6,11 +6,10 @@ const createAxios = (config: AxiosRequestConfig): AxiosInstance => {
   axiosInstance.interceptors.response.use(response => {
     return response
   }, async error => {
-    console.clear();
+    // console.clear();
     const { config, response: { status } } = error;
     const originalRequest = config;
-
-    console.log("code", error.response.data.code)
+    console.log("data", error.response.data)
     if (status === 401 && error.response.data.code === 'expired_access_token') {
       const refreshToken = localStorage.getItem("refresh_token");
       const response = await axios.post(`${workasme_host}/iam/realms/bintegration/protocol/openid-connect/refresh-token`, {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -6,7 +6,8 @@ import Pixel from "src/graphic/size/pixel";
 import Title from "src/pages/components/Title";
 import Colors from "src/constants/Colors";
 import {useNavigate} from "react-router-dom";
-
+import {useInjection} from "inversify-react";
+import AxiosProvider from "src/context/inversify/providers/AxiosProvider";
 
 
 const SignUpPage: React.FC = () => {
@@ -25,13 +26,75 @@ const SignUpPage: React.FC = () => {
 
 const SignUpSection: React.FC = () => {
   const navigate = useNavigate();
+  const axiosProvider = useInjection(AxiosProvider);
+  const axiosInstance = axiosProvider.provide();
+  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
+
+
   async function signUp() {
-    // const axiosInstance = createAxios({})
-    // const response = await axiosInstance.post(`${workasme_host}/iam/realms/bintegration/protocol/openid-connect/token`, {
-    //   "username": "ttkmw",
-    //   "password": "026060Mcfnxm**",
-    // });
-    navigate("/time-track")
+    if (password !== passwordConfirm) {
+      alert("Please check password");
+      return;
+    }
+
+    // "username": "test-signup",
+    //   "email": "test-signup@gmail.com",
+    //   "firstName": "test-signup",
+    //   "lastName": "test-signup",
+    //   "password": "026060Mcfnxm**"
+
+
+    let response;
+    try {
+      console.log("trying create")
+      response = await axiosInstance.post(`/iam/realms/bintegration/users`, {
+        "username": username,
+        "email": email,
+        "firstName": firstName,
+        "lastName": lastName,
+        "password": password,
+      });
+
+      console.log("signup response", response);
+
+      response = await axiosInstance.post(`/iam/realms/bintegration/protocol/openid-connect/token`, {
+        "username": email,
+        "password": password,
+      });
+
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
+      localStorage.setItem("refresh_token", response.data.refresh_token)
+      navigate("/time-track")
+      //todo: 이거 로직 빼기
+    } catch (e: any) {
+      // console.clear();
+      if (e.response) {
+        console.warn("error", e.response.data.message);
+        const status = e.response.status;
+        if (status === 401) {
+          const code: string = e.response.data.code;
+          if (code.includes("credentials")) {
+            alert("invalid email or password")
+          } else {
+            alert("unauthorized")
+          }
+          return
+        }
+      } else if(e.request) {
+        alert("could not communicate with server")
+      } else {
+        alert("unknown error occurred")
+      }
+    }
+
+
+
+    // navigate("/time-track")
   }
 
   return <div>
@@ -47,7 +110,7 @@ const SignUpSection: React.FC = () => {
       alignItems: "center",
       marginBottom: new Pixel(21).toString()
     })}>
-      <Title />
+      <Title/>
       <input css={css({
         width: new Pixel(280).toString(),
         height: new Pixel(38).toString(),
@@ -61,7 +124,10 @@ const SignUpSection: React.FC = () => {
         },
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(6).toString()
-      })} placeholder={"username(user id)"} id={"sign-up-username"}/>
+      })}
+             value={username}
+             onChange={(event => setUsername(event.target.value))}
+             placeholder={"username(user id)"} id={"sign-up-username"}/>
       <input css={css({
         width: new Pixel(280).toString(),
         height: new Pixel(38).toString(),
@@ -75,7 +141,10 @@ const SignUpSection: React.FC = () => {
         },
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(6).toString()
-      })} placeholder={"email"} id={"sign-up-email"}/>
+      })}
+             value={email}
+             onChange={(event => setEmail(event.target.value))}
+             placeholder={"email"} id={"sign-up-email"}/>
       <div css={css({
         display: "flex",
         flexDirection: "row",
@@ -96,7 +165,10 @@ const SignUpSection: React.FC = () => {
             },
             backgroundColor: "rgba(var(--b3f,250,250,250),1)",
             marginBottom: new Pixel(6).toString()
-          })} placeholder={"first name"} id={"sign-up-first-name"}/>
+          })}
+                 value={firstName}
+                 onChange={(event => setFirstName(event.target.value))}
+                 placeholder={"first name"} id={"sign-up-first-name"}/>
         </div>
         <div>
           <input css={css({
@@ -112,7 +184,10 @@ const SignUpSection: React.FC = () => {
             },
             backgroundColor: "rgba(var(--b3f,250,250,250),1)",
             marginBottom: new Pixel(6).toString()
-          })} placeholder={"last name"} id={"sign-up-last-name"}/>
+          })}
+                 value={lastName}
+                 onChange={(event => setLastName(event.target.value))}
+                 placeholder={"last name"} id={"sign-up-last-name"}/>
         </div>
       </div>
       <input css={css({
@@ -127,33 +202,56 @@ const SignUpSection: React.FC = () => {
           outline: "0px"
         },
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
+        marginBottom: new Pixel(6).toString()
+      })}
+             value={password}
+             onChange={(event => setPassword(event.target.value))}
+             type={'password'}
+             placeholder={"password"} id={"password"}/>
+      <input css={css({
+        width: new Pixel(280).toString(),
+        height: new Pixel(38).toString(),
+        borderWidth: new Pixel(1).toString(),
+        borderStyle: "solid",
+        borderColor: "rgb(219, 219, 219)",
+        borderRadius: new Pixel(1).toString(),
+        paddingLeft: new Pixel(7).toString(),
+        ":focus-visible": {
+          outline: "0px"
+        },
+        backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(14).toString()
-      })} placeholder={"nickname"} id={"nickname"}/>
+      })}
+             value={passwordConfirm}
+             onChange={(event => setPasswordConfirm(event.target.value))}
+             type={'password'}
+             placeholder={"passwordConfirm"} id={"password check"}/>
 
-        <div css={css({
-          display: "flex",
-          alignItems: "center",
-          '.button-work': {
-            backgroundColor: Colors.theme.main.work,
-            border: "none",
-            color: Colors.theme.button.default,
-          },
-          width: new Pixel(280).toString(),
-          height: new Pixel(30).toString(),
-          marginBottom: new Pixel(20).toString()
-        })}>
-          <button
-            css={css({
-              width: new Pixel(280).toString(),
-              borderRadius: 7,
-              height: new Pixel(30).toString(),
+      <div css={css({
+        display: "flex",
+        alignItems: "center",
+        '.button-work': {
+          backgroundColor: Colors.theme.main.work,
+          border: "none",
+          color: Colors.theme.button.default,
+        },
+        width: new Pixel(280).toString(),
+        height: new Pixel(30).toString(),
+        marginBottom: new Pixel(20).toString()
+      })}>
+        <button
+          css={css({
+            width: new Pixel(280).toString(),
+            borderRadius: 7,
+            height: new Pixel(30).toString(),
 
-            })}
-            className={'button-work'}
-            type={"submit"}
-            onClick={signUp}
-          >sign up</button>
-        </div>
+          })}
+          className={'button-work'}
+          type={"submit"}
+          onClick={signUp}
+        >sign up
+        </button>
+      </div>
 
 
     </div>
