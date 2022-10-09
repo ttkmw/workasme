@@ -61,7 +61,7 @@ const SignUpSection: React.FC = () => {
         },
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(6).toString()
-      })} placeholder={"email"} id={"sign-up-id"}/>
+      })} placeholder={"username(user id)"} id={"sign-up-username"}/>
       <input css={css({
         width: new Pixel(280).toString(),
         height: new Pixel(38).toString(),
@@ -75,7 +75,46 @@ const SignUpSection: React.FC = () => {
         },
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(6).toString()
-      })} placeholder={"name"} id={"sign-up-name"}/>
+      })} placeholder={"email"} id={"sign-up-email"}/>
+      <div css={css({
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: new Pixel(280).toString(),
+      })}>
+        <div>
+          <input css={css({
+            width: new Pixel(135).toString(),
+            height: new Pixel(38).toString(),
+            borderWidth: new Pixel(1).toString(),
+            borderStyle: "solid",
+            borderColor: "rgb(219, 219, 219)",
+            borderRadius: new Pixel(1).toString(),
+            paddingLeft: new Pixel(7).toString(),
+            ":focus-visible": {
+              outline: "0px"
+            },
+            backgroundColor: "rgba(var(--b3f,250,250,250),1)",
+            marginBottom: new Pixel(6).toString()
+          })} placeholder={"first name"} id={"sign-up-first-name"}/>
+        </div>
+        <div>
+          <input css={css({
+            width: new Pixel(135).toString(),
+            height: new Pixel(38).toString(),
+            borderWidth: new Pixel(1).toString(),
+            borderStyle: "solid",
+            borderColor: "rgb(219, 219, 219)",
+            borderRadius: new Pixel(1).toString(),
+            paddingLeft: new Pixel(7).toString(),
+            ":focus-visible": {
+              outline: "0px"
+            },
+            backgroundColor: "rgba(var(--b3f,250,250,250),1)",
+            marginBottom: new Pixel(6).toString()
+          })} placeholder={"last name"} id={"sign-up-last-name"}/>
+        </div>
+      </div>
       <input css={css({
         width: new Pixel(280).toString(),
         height: new Pixel(38).toString(),
