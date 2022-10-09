@@ -8,7 +8,6 @@ import Colors from "src/constants/Colors";
 import {Form} from "react-bootstrap";
 import ButtonComponent from "src/pages/components/ButtonComponent";
 import Percentage from "src/graphic/size/percentage";
-import createAxios from "src/api/adapterFactory/axiosFactory";
 import {useDispatch, useSelector} from "react-redux";
 import { passwordSign } from "src/context/redux/passwordSlice";
 import {selectUsername, usernameSign} from "src/context/redux/usernameSlice";
@@ -55,7 +54,7 @@ const SignInButton: React.FC<{email: string, password: string}> = (props: {email
   const {email, password} = props;
   const dispatch = useDispatch();
 
-  const axiosInstance = createAxios({
+  const axiosInstance = axios.create({
     auth: {
       username: email,
       password: password

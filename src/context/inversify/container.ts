@@ -1,5 +1,9 @@
 import { Container } from "inversify";
-import AxiosProvider from "src/context/inversify/providers/AxiosProvider";
+import AxiosSupplier from "src/api/AxiosSupplier";
+import {TYPES} from "src/context/inversify/types";
+import UserApi from "src/api/UserApi";
 
 export const container = new Container();
-container.bind(AxiosProvider).toSelf().inSingletonScope();
+container.bind<AxiosSupplier>(TYPES.AxiosSupplier).to(AxiosSupplier).inSingletonScope();
+// container.bind<AxiosSupplier>(TYPES.AxiosSupplier).to(AxiosSupplier);
+container.bind(UserApi).toSelf().inSingletonScope();

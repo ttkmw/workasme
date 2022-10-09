@@ -8,74 +8,36 @@ import Title from "src/pages/components/Title";
 import {useDispatch} from "react-redux";
 import {useNavigate} from 'react-router-dom';
 import {useInjection} from "inversify-react";
-import AxiosProvider from "src/context/inversify/providers/AxiosProvider";
+import {container} from "src/context/inversify/container";
+import {TYPES} from "src/context/inversify/types";
+import AxiosSupplier from "src/api/AxiosSupplier";
+import UserApi from "src/api/UserApi";
 
 
 const SignInSection: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>("");
-  const axiosProvider = useInjection(AxiosProvider);
 
+  const userApi = useInjection(UserApi);
 
 
 
   async function signIn() {
-    const axiosInstance = axiosProvider.provide()
-    axiosInstance.interceptors.response.use(function (response) {
-      if (response.status === 400) {
-        return;
-      }
-      return response;
-    }, function (error) {
-      // Do something with response error
-      return;
-    });
-    //todo: try-catch
-    let response;
-    // axiosInstance.post(`${workasme_host}/iam/realms/bintegration/protocol/openid-connect/token`, {
-    //   "username": email,
-    //   "password": password,
-    // }).then(response => {
-    //     console.log('data', response.data)
-    //   }
-    // ).catch(error => {
-    //   console.log('error', error.message)
-    // });
-    try {
-      response = await axiosInstance.post(`/iam/realms/bintegration/protocol/openid-connect/token`, {
-        "username": email,
-        "password": password,
-      });
-      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
-      localStorage.setItem("refresh_token", response.data.refresh_token)
-      // dispatch(signInSlice({accessToken: accessToken}))
-      console.log("axiosInstance", axiosInstance);
-      console.log("header", axiosInstance.defaults.headers.common['Authorization']);
-      navigate("/time-track")
-      return;
 
-    } catch (e: any) {
-      console.clear();
-      if (e.response) {
-        console.warn("error", e.response.data.message);
-        const status = e.response.status;
-        if (status === 401) {
-          const code: string = e.response.data.code;
-          if (code.includes("credentials")) {
-            alert("invalid email or password")
-          } else {
-            alert("unauthorized")
-          }
-          return
-        }
-      } else if(e.request) {
-        alert("could not communicate with server")
-      } else {
-        alert("unknown error occurred")
-      }
-    }
+    // axiosInstance.interceptors.response.use(function (response) {
+    //   if (response.status === 400) {
+    //     return;
+    //   }
+    //   return response;
+    // }, function (error) {
+    //   // Do something with response error
+    //   return;
+    // });
+    //todo: try-catch
+    await userApi.signIn(email, password)
+    navigate("/time-track")
   }
 
   return <div>

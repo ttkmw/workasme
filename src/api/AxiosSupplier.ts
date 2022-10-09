@@ -1,5 +1,26 @@
-import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
-import {workasme_host} from "src/api/host/workasme";
+import { injectable } from "inversify";
+import axios, {AxiosInstance, AxiosRequestConfig} from "axios";
+
+
+export const workasme_host = `${process.env.REACT_APP_WORKASME_SERVER_HOST}:${process.env.REACT_APP_WORKASME_SERVER_PORT}`;
+
+@injectable()
+class AxiosSupplier {
+  private readonly axiosInstance: AxiosInstance;
+  constructor() {
+    // this.axiosInstance = axios;
+    // const dispatch = useDispatch();
+
+
+    this.axiosInstance = createAxios({
+      baseURL: workasme_host
+    });
+  }
+
+  provide(): AxiosInstance {
+    return this.axiosInstance;
+  }
+}
 
 const createAxios = (config: AxiosRequestConfig): AxiosInstance => {
   const axiosInstance: AxiosInstance = axios.create(config);
@@ -30,5 +51,4 @@ const createAxios = (config: AxiosRequestConfig): AxiosInstance => {
   return axiosInstance;
 };
 
-
-export default createAxios;
+export default AxiosSupplier;

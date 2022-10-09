@@ -27,7 +27,9 @@ import {IoMdClose} from "react-icons/all";
 import {useDispatch, useSelector} from "react-redux";
 import {selectToken} from "src/context/redux/signSlice";
 import {useInjection} from "inversify-react";
-import AxiosProvider from "src/context/inversify/providers/AxiosProvider";
+import AxiosSupplier from "src/api/AxiosSupplier";
+import {container} from "src/context/inversify/container";
+import {TYPES} from "src/context/inversify/types";
 
 
 const SelectableComponent = createSelectable(Selectable);
@@ -295,7 +297,7 @@ function getLatestRecord(selectedTimeRecords: TimeRecord[]): TimeRecord {
 
 const TodayButton: React.FC = () => {
   const dispatch = useDispatch();
-  const axiosProvider = useInjection(AxiosProvider);
+  const axiosProvider = container.get<AxiosSupplier>(TYPES.AxiosSupplier);
   const axiosInstance = axiosProvider.provide()
 
   const token = useSelector(selectToken);
