@@ -31,6 +31,7 @@ const createAxios = (config: AxiosRequestConfig): AxiosInstance => {
     const { config, response: { status } } = error;
     const originalRequest = config;
     console.log("data", error.response.data)
+    //todo: 여기에서 400 빼곤 다 처리하기
     if (status === 401 && error.response.data.code === 'expired_access_token') {
       const refreshToken = localStorage.getItem("refresh_token");
       const response = await axios.post(`${workasme_host}/iam/realms/bintegration/protocol/openid-connect/refresh-token`, {

@@ -6,8 +6,6 @@ import Pixel from "src/graphic/size/pixel";
 import Title from "src/pages/components/Title";
 import Colors from "src/constants/Colors";
 import {useNavigate} from "react-router-dom";
-import {useInjection} from "inversify-react";
-import AxiosProvider from "src/context/inversify/providers/AxiosProvider";
 
 
 const SignUpPage: React.FC = () => {
@@ -26,8 +24,6 @@ const SignUpPage: React.FC = () => {
 
 const SignUpSection: React.FC = () => {
   const navigate = useNavigate();
-  const axiosProvider = useInjection(AxiosProvider);
-  const axiosInstance = axiosProvider.provide();
   const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [firstName, setFirstName] = useState<string>('');
@@ -52,6 +48,7 @@ const SignUpSection: React.FC = () => {
     let response;
     try {
       console.log("trying create")
+      //todo: user api
       response = await axiosInstance.post(`/iam/realms/bintegration/users`, {
         "username": username,
         "email": email,
