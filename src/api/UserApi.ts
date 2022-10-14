@@ -13,6 +13,38 @@ class UserApi {
     this.axiosInstance = container.get<AxiosSupplier>(TYPES.AxiosSupplier).provide();
   }
 
+  public async signUp(username: string, email: string, firstName: string, lastName: string, password: string) {
+    let response;
+    try {
+      response = await this.axiosInstance.post(`/iam/realms/bintegration/users`, {
+        "username": username,
+        "email": email,
+        "firstName": firstName,
+        "lastName": lastName,
+        "password": password,
+      });
+    } catch (e: any) {
+      // console.clear();
+      if (e.response) {
+        console.warn("error", e.response.data.message);
+        const status = e.response.status;
+        if (status === 401) {
+          const code: string = e.response.data.code;
+          if (code.includes("credentials")) {
+            alert("invalid email or password")
+          } else {
+            alert("unauthorized")
+          }
+          return
+        }
+      } else if (e.request) {
+        alert("could not communicate with server")
+      } else {
+        alert("unknown error occurred")
+      }
+    }
+  }
+
   public async signIn(email: string, password: string) {
     let response;
     try {

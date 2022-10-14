@@ -6,6 +6,8 @@ import Pixel from "src/graphic/size/pixel";
 import Title from "src/pages/components/Title";
 import Colors from "src/constants/Colors";
 import {useNavigate} from "react-router-dom";
+import {useInjection} from "inversify-react";
+import UserApi from "src/api/UserApi";
 
 
 const SignUpPage: React.FC = () => {
@@ -30,6 +32,7 @@ const SignUpSection: React.FC = () => {
   const [lastName, setLastName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
+  const userApi = useInjection(UserApi);
 
 
   async function signUp() {
@@ -49,23 +52,9 @@ const SignUpSection: React.FC = () => {
     try {
       console.log("trying create")
       //todo: user api
-      response = await axiosInstance.post(`/iam/realms/bintegration/users`, {
-        "username": username,
-        "email": email,
-        "firstName": firstName,
-        "lastName": lastName,
-        "password": password,
-      });
+      await userApi.signUp(username, email, firstName, lastName, password);
 
-      console.log("signup response", response);
-
-      response = await axiosInstance.post(`/iam/realms/bintegration/protocol/openid-connect/token`, {
-        "username": email,
-        "password": password,
-      });
-
-      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
-      localStorage.setItem("refresh_token", response.data.refresh_token)
+      await userApi.signIn(username, password);
       navigate("/time-track")
       //todo: 이거 로직 빼기
     } catch (e: any) {
