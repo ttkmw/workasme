@@ -8,7 +8,7 @@ import {ReactSelectableComponentProps} from "react-selectable";
 import Colors from "src/constants/Colors";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import TimeBlock from "src/pages/components/timeblock/TimeBlock";
-import {WeekTimes} from "src/model/WeekTimes";
+import {WeekViewDto} from "src/dtos/WeekViewDto";
 
 interface SelectableProps extends ReactSelectableComponentProps {
   selectableRef: any,
@@ -17,8 +17,8 @@ interface SelectableProps extends ReactSelectableComponentProps {
   timeBlockDto: TimeBlockDto | undefined,
   timeBlockHeightRatio?: Percentage
   timeCellHeight: Pixel,
-  timeBlocks: WeekTimes,
-  updateTimeBlocks: (timeBlocks: WeekTimes) => void;
+  timeBlocks: WeekViewDto,
+  updateTimeBlocks: (timeBlocks: WeekViewDto) => void;
 }
 
 class Selectable extends Component<SelectableProps> {

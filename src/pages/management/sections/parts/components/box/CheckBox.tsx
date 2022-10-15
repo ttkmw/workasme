@@ -6,14 +6,15 @@ import check from 'src/assets/whiteCheck.svg'
 import Pixel from "src/graphic/size/pixel";
 import Percentage from "src/graphic/size/percentage";
 import {TodoDto} from "src/dtos/TodoDto";
-import {WeekTimes} from "src/model/WeekTimes";
 import {Dayjs} from "dayjs";
 import {TimeRecord} from "src/model/TimeRecord";
 import {RelativeDay} from "src/model/RelativeDay";
 import Colors from "src/constants/Colors";
+import {WeekViewDto} from "src/dtos/WeekViewDto";
+import timeBlock from "src/pages/components/timeblock/TimeBlock";
 
-const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, index: number, day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
-  (props: { size: Pixel, borderWidth: Pixel, index: number, day: Dayjs, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, index: number, day: Dayjs, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void }> =
+  (props: { size: Pixel, borderWidth: Pixel, index: number, day: Dayjs, todoDto: TodoDto, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void }) => {
     const {
       size,
       borderWidth,
@@ -41,11 +42,12 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, in
     }
 
     const onChange = (day, index) => {
-      let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-      if (todoDtosAtDate === undefined || todoDtosAtDate.length === 0) {
+      let dailyRecord = timeBlocks.dailyRecords.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+      if (dailyRecord === undefined || dailyRecord.todos.length === 0) {
         return;
       }
-      let newTodoDtos: TodoDto[] | undefined = todoDtosAtDate.map((todoDto, todoDtoIndex) => {
+
+      let newTodoDtos: TodoDto[] | undefined = dailyRecord.todos.map((todoDto, todoDtoIndex) => {
         if (todoDtoIndex === index) {
           //여기에서 api 콜한 결과를 리턴
           if (todoDto.content === undefined ||todoDto.content === '') {
@@ -59,7 +61,9 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, in
         }
       });
 
-      timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
+      dailyRecord.todos = newTodoDtos;
+
+      timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), dailyRecord);
       updateTimeBlocks(timeBlocks);
 
     };

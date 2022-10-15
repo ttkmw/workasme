@@ -8,7 +8,6 @@ import {createSelectable} from 'react-selectable';
 import Selectable from "src/pages/management/sections/Selectable";
 import ReactSelectableGroup from "src/pages/management/sections/selectable/react-selectable/ReactSelectableGroup";
 import Percentage from "src/graphic/size/percentage";
-import {WeekTimes} from "src/model/WeekTimes";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import dayjs, {Dayjs} from "dayjs";
 import {TimeRecord} from "src/model/TimeRecord";
@@ -30,14 +29,16 @@ import {useInjection} from "inversify-react";
 import AxiosSupplier from "src/api/AxiosSupplier";
 import {container} from "src/context/inversify/container";
 import {TYPES} from "src/context/inversify/types";
+import {WeekViewDto} from "src/dtos/WeekViewDto";
+import {DailyRecordDto} from "src/dtos/DailyRecordDto";
 
 
 const SelectableComponent = createSelectable(Selectable);
 
-const serverData: WeekTimes = new WeekTimes(
-  new Map<string, TimeBlockDto[]>([
-    ["2022-08-07", [
-      {
+const serverData: WeekViewDto = {
+  dailyRecords: new Map<string, DailyRecordDto>([
+    ["2022-08-07", {
+      times: [{
         id: 1,
         title: "엣지타임",
         startDateTime: {dateTime: "2022-08-07T23:00"},
@@ -45,10 +46,11 @@ const serverData: WeekTimes = new WeekTimes(
         isGood: true,
         category: "NONE",
         memo: "엣지타임"
-      }
-    ]],
-    ["2022-08-08", [
-      {
+      }],
+      todos: []
+    }],
+    ["2022-08-08", {
+      times: [{
         id: 2,
         title: "영화 보고 친구랑 잠깐 수다떨음",
         startDateTime: {dateTime: "2022-08-08T01:00"},
@@ -57,18 +59,19 @@ const serverData: WeekTimes = new WeekTimes(
         category: "SOCIAL",
         memo: undefined
       },
-      {
-        id: 3,
-        title: "일했지",
-        startDateTime: {dateTime: "2022-08-08T15:00"},
-        endDateTime: {dateTime: "2022-08-08T19:00"},
-        isGood: false,
-        category: "INTELLECTUAL",
-        memo: undefined
-      },
-    ]],
-    ["2022-08-09", [
-      {
+        {
+          id: 3,
+          title: "일했지",
+          startDateTime: {dateTime: "2022-08-08T15:00"},
+          endDateTime: {dateTime: "2022-08-08T19:00"},
+          isGood: false,
+          category: "INTELLECTUAL",
+          memo: undefined
+        },],
+      todos: []
+    }],
+    ["2022-08-09", {
+      times: [{
         id: 4,
         title: "샤워하고 밥먹고 전화하다가 엄마한테 등짝맞고 공부하다가 플스함",
         startDateTime: {dateTime: "2022-08-09T01:00"},
@@ -76,10 +79,11 @@ const serverData: WeekTimes = new WeekTimes(
         isGood: false,
         category: "NONE",
         memo: "why should id live like this"
-      },
-    ]],
-    ["2022-08-10", [
-      {
+      },],
+      todos: []
+    }],
+    ["2022-08-10", {
+      times: [{
         id: 5,
         title: "코딩함",
         startDateTime: {dateTime: "2022-08-10T01:00"},
@@ -88,18 +92,19 @@ const serverData: WeekTimes = new WeekTimes(
         category: "INTELLECTUAL",
         memo: undefined
       },
-      {
-        id: 6,
-        title: "카페에 왔다",
-        startDateTime: {dateTime: "2022-08-10T10:00"},
-        endDateTime: {dateTime: "2022-08-10T13:00"},
-        isGood: true,
-        category: "INTELLECTUAL",
-        memo: undefined
-      },
-    ]],
-    ["2022-08-11", [
-      {
+        {
+          id: 6,
+          title: "카페에 왔다",
+          startDateTime: {dateTime: "2022-08-10T10:00"},
+          endDateTime: {dateTime: "2022-08-10T13:00"},
+          isGood: true,
+          category: "INTELLECTUAL",
+          memo: undefined
+        },],
+      todos: []
+    }],
+    ["2022-08-11", {
+      times: [{
         id: 7,
         title: "베라 피티를 함",
         startDateTime: {dateTime: "2022-08-11T01:00"},
@@ -107,10 +112,11 @@ const serverData: WeekTimes = new WeekTimes(
         isGood: true,
         category: "PHYSICAL",
         memo: "개힘들다"
-      },
-    ]],
-    ["2022-08-12", [
-      {
+      },],
+      todos: []
+    }],
+    ["2022-08-12", {
+      times: [{
         id: 8,
         title: "산책을 함",
         startDateTime: {dateTime: "2022-08-12T01:00"},
@@ -118,11 +124,11 @@ const serverData: WeekTimes = new WeekTimes(
         isGood: false,
         category: "SPIRITUAL",
         memo: "개운하다"
-      },
-    ]],
-
-    ["2022-08-13", [
-      {
+      },],
+      todos: []
+    }],
+    ["2022-08-13", {
+      times: [{
         id: 9,
         title: "잠을 뒤척임",
         startDateTime: {dateTime: "2022-08-13T02:00"},
@@ -130,11 +136,15 @@ const serverData: WeekTimes = new WeekTimes(
         isGood: false,
         category: "NONE",
         memo: "힘들다"
-      },
-    ]],
-
-    ["2022-08-14", [
-      {
+      },],
+      todos: [{
+        id: 2,
+        isChecked: true,
+        content: "다했음!"
+      }]
+    }],
+    ["2022-08-14", {
+      times: [{
         id: 10,
         title: "sleep bad",
         startDateTime: {dateTime: "2022-08-14T00:00"},
@@ -142,48 +152,32 @@ const serverData: WeekTimes = new WeekTimes(
         isGood: false,
         category: "NONE",
         memo: "힘들다"
-      },
-    ]]
-  ]),
-
-  undefined,
-  new Map<string, TodoDto[]>([
-    ["2022-08-14", [
-      {
+      },],
+      todos: [{
         id: 1,
         isChecked: false,
         content: "해야하는데 아직 못함"
       },
-      {
-        id: 3,
-        isChecked: true,
-        content: "쉽게 함"
-      },
-      {
-        id: 4,
-        isChecked: true,
-        content: "하는중"
-      },
-      {
-        id: 5,
-        isChecked: true,
-        content: "고고"
-      }
-    ]],
-    ["2022-08-15", [
-      {
-        id: 2,
-        isChecked: true,
-        content: "다했음!"
-      }
-    ]],
-    ["2022-08-16", []],
-    ["2022-08-17", []],
-    ["2022-08-18", []],
-    ["2022-08-19", []],
-    ["2022-08-20", []]
-  ])
-);
+        {
+          id: 3,
+          isChecked: true,
+          content: "쉽게 함"
+        },
+        {
+          id: 4,
+          isChecked: true,
+          content: "하는중"
+        },
+        {
+          id: 5,
+          isChecked: true,
+          content: "고고"
+        }]
+    }],
+
+  ]),
+  edgeTime: undefined
+}
 
 const timeTemplates: TimeRecordTemplate[] = [
   new TimeRecordTemplate("03:00", RelativeDay.TODAY),
@@ -354,7 +348,7 @@ export class TestSection extends React.Component<any> {
       tolerance: 0,
       selectOnMouseMove: false,
       standardDate: dayjs(),
-      timeBlocks: new WeekTimes(new Map<string, TimeBlockDto[]>([]), undefined, new Map<string, TodoDto[]>([]))
+      timeBlocks: {dailyRecords: new Map<string, DailyRecordDto>([]), edgeTime: undefined}
     };
     this.selectableRef = React.createRef();
     this.wrapperRef = React.createRef();
@@ -365,7 +359,7 @@ export class TestSection extends React.Component<any> {
     this.toggleSelectOnMouseMove = this.toggleSelectOnMouseMove.bind(this);
   }
 
-  updateTimeBlocks(timeBlocks: WeekTimes) {
+  updateTimeBlocks(timeBlocks: WeekViewDto) {
 
     this.setState({
       timeBlocks: timeBlocks
@@ -651,27 +645,27 @@ export class TestSection extends React.Component<any> {
 }
 
 
-const TodoList: React.FC<{ checkBoxSize: Pixel, weekdays: Dayjs[], day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
-  (props: { checkBoxSize: Pixel, weekdays: Dayjs[], day: Dayjs, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+const TodoList: React.FC<{ checkBoxSize: Pixel, weekdays: Dayjs[], day: Dayjs, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void }> =
+  (props: { checkBoxSize: Pixel, weekdays: Dayjs[], day: Dayjs, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void }) => {
 
     const {checkBoxSize, weekdays, day, timeBlocks, updateTimeBlocks} = props;
 
-    let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+    let dailyRecords = timeBlocks.dailyRecords.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
 
     let todoDtosForRender: TodoDto[];
-    if (todoDtosAtDate === undefined) {
+    if (dailyRecords === undefined || dailyRecords.todos.length === 0) {
       todoDtosForRender = [
         {id: undefined, isChecked: false, content: ''},
         {id: undefined, isChecked: false, content: ''},
         {id: undefined, isChecked: false, content: ''},
       ]
     } else {
-      todoDtosForRender = todoDtosAtDate.map(todoDto => {
+      todoDtosForRender = dailyRecords.todos.map(todoDto => {
         return {id: todoDto.id, isChecked: todoDto.isChecked, content: todoDto.content}
       });
     }
 
-    const maxCount = getCountOfTodoAtDate(timeBlocks.todoWithinThisWeek, weekdays);
+    const maxCount = getCountOfTodoAtDate(timeBlocks, weekdays);
     while (todoDtosForRender.length < maxCount) {
       todoDtosForRender.push({id: undefined, isChecked: false, content: ''})
     }
@@ -701,34 +695,39 @@ const TodoList: React.FC<{ checkBoxSize: Pixel, weekdays: Dayjs[], day: Dayjs, t
     </div>
   }
 
-function getCountOfTodoAtDate(todoWithinThisWeek: Map<string, TodoDto[]>, weekdays: Dayjs[]) {
+function getCountOfTodoAtDate(weekView: WeekViewDto, weekdays: Dayjs[]) {
   let biggestCountOfTodosWhitinThisWeek = 0;
   for (const key of weekdays) {
-    let todoDtosAtDate: TodoDto[] | undefined = todoWithinThisWeek.get(TimeRecord.getFormattedDate(key, RelativeDay.TODAY));
-    if (todoDtosAtDate === undefined) {
+    const dailyRecords = weekView.dailyRecords;
+    if (dailyRecords === undefined) {
       continue;
     }
 
-    if (biggestCountOfTodosWhitinThisWeek < todoDtosAtDate.length) {
-      biggestCountOfTodosWhitinThisWeek = todoDtosAtDate.length;
+    let dailyRecord = dailyRecords.get(TimeRecord.getFormattedDate(key, RelativeDay.TODAY));
+    if (dailyRecord === undefined) {
+      continue;
+    }
+    let todos = dailyRecord.todos;
+
+    if (biggestCountOfTodosWhitinThisWeek < todos.length) {
+      biggestCountOfTodosWhitinThisWeek = todos.length;
     }
   }
   return biggestCountOfTodosWhitinThisWeek < 3 ? 3 : biggestCountOfTodosWhitinThisWeek + 1;
 }
 
-function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: number, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, setIsFocused: Dispatch<SetStateAction<any>>) {
+function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: number, todoDto: TodoDto, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void, setIsFocused: Dispatch<SetStateAction<any>>) {
   if (ref.current && !ref.current.contains(event.target)) {
     if ((ref.current.value !== ref.current.defaultValue) && (ref.current.value !== '' && ref.current.value !== undefined)) {
-
-      let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
       alert("should api call modified")
-
       let newTodoDtos: TodoDto[];
-      if (todoDtosAtDate === undefined) {
-        newTodoDtos = [{id: undefined, isChecked: false, content: ref.current.value}]
+      const dailyRecord = timeBlocks.dailyRecords.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+      if (dailyRecord === undefined) {
+        timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), {times: [], todos: [{id: undefined, isChecked: false, content: ref.current.value}]})
       } else {
-        todoDtosAtDate.push({id: todoDto.id, isChecked: todoDto.isChecked, content: ref.current.value})
-        newTodoDtos = todoDtosAtDate;
+        //todo: 이상한데? 왜 여긴 id가 있어...
+        dailyRecord.todos.push({id: todoDto.id, isChecked: todoDto.isChecked, content: ref.current.value})
+        timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), dailyRecord)
       }
 
 
@@ -742,7 +741,6 @@ function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: 
       //   }
       // })
 
-      timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
       updateTimeBlocks(timeBlocks);
     }
     setIsFocused(false);
@@ -750,7 +748,7 @@ function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: 
   }
 }
 
-function useOutsideAlerter(ref: RefObject<any>, day: Dayjs, index: number, todoDto: TodoDto, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, setIsFocused: Dispatch<SetStateAction<any>>) {
+function useOutsideAlerter(ref: RefObject<any>, day: Dayjs, index: number, todoDto: TodoDto, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void, setIsFocused: Dispatch<SetStateAction<any>>) {
 
   useEffect(() => {
     /**
@@ -767,8 +765,8 @@ function useOutsideAlerter(ref: RefObject<any>, day: Dayjs, index: number, todoD
 }
 
 //https://stackoverflow.com/questions/32553158/detect-click-outside-react-component
-const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void }> =
-  (props: { checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlock: WeekTimes) => void }) => {
+const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlock: WeekViewDto) => void }> =
+  (props: { checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index: number, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlock: WeekViewDto) => void }) => {
     const {checkBoxSize, todoDto, day, index, timeBlocks, updateTimeBlocks} = props;
     const [isHover, setIsHover] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
@@ -814,8 +812,8 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
   }
 
 
-const TodoContent: React.FC<{ timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, todoDto: TodoDto, isFocused: boolean, wrapperRef: MutableRefObject<any>, day: Dayjs, index: number, setIsFocused: Dispatch<SetStateAction<boolean>>, isHover: boolean }> =
-  (props: { timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void, todoDto: TodoDto, isFocused: boolean, wrapperRef: MutableRefObject<any>, day: Dayjs, index: number, setIsFocused: Dispatch<SetStateAction<boolean>>, isHover: boolean }) => {
+const TodoContent: React.FC<{ timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void, todoDto: TodoDto, isFocused: boolean, wrapperRef: MutableRefObject<any>, day: Dayjs, index: number, setIsFocused: Dispatch<SetStateAction<boolean>>, isHover: boolean }> =
+  (props: { timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void, todoDto: TodoDto, isFocused: boolean, wrapperRef: MutableRefObject<any>, day: Dayjs, index: number, setIsFocused: Dispatch<SetStateAction<boolean>>, isHover: boolean }) => {
     const {timeBlocks, updateTimeBlocks, todoDto, isFocused, wrapperRef, day, index, setIsFocused, isHover} = props;
 
     let borderBottomColor;
@@ -863,22 +861,18 @@ const TodoContent: React.FC<{ timeBlocks: WeekTimes, updateTimeBlocks: (timeBloc
       // todo: 엔티티가 아니면, 즉 아이디가 없으면 생성 콜을 해야함.
       if (event.charCode === 13 && !event.shiftKey) {
         event.preventDefault();
-        let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
         const target = event.target as HTMLInputElement;
         if (target.defaultValue !== target.value) {
           alert("should api call modified")
-
-          let newTodoDtos: TodoDto[] | undefined;
-
-          if (todoDtosAtDate === undefined) {
-            newTodoDtos = [{id: todoDto.id, isChecked: todoDto.isChecked, content: target.value}]
+          const dailyRecord = timeBlocks.dailyRecords.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+          if (dailyRecord === undefined) {
+            timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), {times: [], todos: [{id: undefined, isChecked: false, content: target.value}]})
           } else {
-            todoDtosAtDate.push({id: todoDto.id, isChecked: todoDto.isChecked, content: target.value});
-            newTodoDtos = todoDtosAtDate;
+            //todo: 이상한데? 왜 여긴 id가 있어...
+            dailyRecord.todos.push({id: todoDto.id, isChecked: todoDto.isChecked, content: target.value})
+            timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), dailyRecord)
           }
 
-
-          timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos === undefined ? [] : newTodoDtos)
           updateTimeBlocks(timeBlocks);
         }
         setIsFocused(false);
@@ -963,8 +957,8 @@ const TodoContent: React.FC<{ timeBlocks: WeekTimes, updateTimeBlocks: (timeBloc
     </div>
   }
 
-const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
-  (props: { weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void }> =
+  (props: { weekdays: Dayjs[], checkBoxSize: Pixel, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void }) => {
     const token = useSelector(selectToken);
     const {weekdays, checkBoxSize, timeBlocks, updateTimeBlocks} = props;
     useEffect(() => {

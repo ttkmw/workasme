@@ -1,10 +1,10 @@
 import dayjs, {Dayjs} from "dayjs";
 import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
 import moment from "moment";
-import {WeekTimes} from "src/model/WeekTimes";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
 import {RelativeDay} from "src/model/RelativeDay";
 import Percentage from "src/graphic/size/percentage";
+import {WeekViewDto} from "src/dtos/WeekViewDto";
 
 export class TimeRecord {
 
@@ -70,7 +70,7 @@ export class TimeRecord {
     return this._startDateTime.format("YYYY-MM-DD");
   }
 
-  public getMatching(savedTimes: WeekTimes, standardDate: Dayjs): TimeBlockDto | undefined {
+  public getMatching(savedTimes: WeekViewDto, standardDate: Dayjs): TimeBlockDto | undefined {
     if (this.isFirstTime()) {
       const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes, standardDate);
       if (edgeTimeOfDay !== undefined) {
@@ -78,11 +78,16 @@ export class TimeRecord {
       }
     }
 
-    const atSameDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(this.getStartDate());
-    if (atSameDate === undefined) {
+    const dailyRecord = savedTimes.dailyRecords.get(this.getStartDate());
+    if (dailyRecord === undefined) {
       return undefined;
     }
+    // const atSameDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(this.getStartDate());
+    // if (atSameDate === undefined) {
+    //   return undefined;
+    // }
 
+    const atSameDate = dailyRecord.times;
     for (let i = 0; i < atSameDate.length; i++) {
       const candidate = atSameDate[i];
       if (this.getStartDateTime() === candidate.startDateTime.dateTime) {
@@ -93,7 +98,7 @@ export class TimeRecord {
     return undefined;
   }
 
-  public match(savedTimes: WeekTimes, standardDate: Dayjs) {
+  public match(savedTimes: WeekViewDto, standardDate: Dayjs) {
     if (this.isFirstTime()) {
       const edgeTimeOfDay = this.getEdgeTimeOfDay(savedTimes, standardDate);
       if (edgeTimeOfDay !== undefined) {
@@ -104,10 +109,12 @@ export class TimeRecord {
       }
     }
 
-    const atSameDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(this.getStartDate());
-    if (atSameDate === undefined) {
+    const dailyRecord = savedTimes.dailyRecords.get(this.getStartDate());
+    if (dailyRecord === undefined) {
       return false;
     }
+    const atSameDate = dailyRecord.times;
+
 
     for (let i = 0; i < atSameDate.length; i++) {
       const candidate = atSameDate[i];
@@ -119,19 +126,25 @@ export class TimeRecord {
     return false;
   }
 
-  private getEdgeTimeOfDay(savedTimes: WeekTimes, standardDate: Dayjs): TimeBlockDto | undefined {
+  private getEdgeTimeOfDay(savedTimes: WeekViewDto, standardDate: Dayjs): TimeBlockDto | undefined {
     let currentDate = this.getCurrentDate();
     const firstDateOfThisWeek: Dayjs = TimeRecord.getFirstDateOfThisWeek(standardDate);
     while (TimeRecord.getFormattedDate(currentDate, RelativeDay.YESTERDAY) !== TimeRecord.getFormattedDate(firstDateOfThisWeek, RelativeDay.TODAY) && firstDateOfThisWeek.isBefore(currentDate.add(1, "days"))) {
       const formattedCurrentDate: string = TimeRecord.getFormattedDate(currentDate, RelativeDay.TODAY);
-      const timeBlocksOfDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(formattedCurrentDate);
 
-      if (timeBlocksOfDate === undefined || timeBlocksOfDate.length === 0) {
+      let dailyRecord = savedTimes.dailyRecords.get(formattedCurrentDate);
+      if (dailyRecord === undefined || dailyRecord.times.length === 0) {
         currentDate = currentDate.subtract(1, 'days');
         continue;
       }
+      //  const timeBlocksOfDate: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(formattedCurrentDate);
+      //
+      // if (timeBlocksOfDate === undefined || timeBlocksOfDate.length === 0) {
+      //   currentDate = currentDate.subtract(1, 'days');
+      //   continue;
+      // }
 
-      for (let timeOfDate of timeBlocksOfDate) {
+      for (let timeOfDate of dailyRecord.times) {
         if (moment(timeOfDate.startDateTime.dateTime).isBefore(this.getFirstDateTime())
           && moment(timeOfDate.endDateTime.dateTime).isAfter(this.getFirstDateTime())
         ) {
@@ -141,13 +154,13 @@ export class TimeRecord {
       currentDate = currentDate.subtract(1, 'days');
     }
 
-    if (savedTimes.edgeTimeBeforeThisWeek !== undefined) {
-      return (moment(savedTimes.edgeTimeBeforeThisWeek.startDateTime.dateTime).isBefore(this.getFirstDateTime())
-        && moment(savedTimes.edgeTimeBeforeThisWeek.endDateTime.dateTime).isAfter(this.getFirstDateTime())
-      ) ? savedTimes.edgeTimeBeforeThisWeek : undefined;
+    if (savedTimes.edgeTime !== undefined) {
+      return (moment(savedTimes.edgeTime.startDateTime.dateTime).isBefore(this.getFirstDateTime())
+        && moment(savedTimes.edgeTime.endDateTime.dateTime).isAfter(this.getFirstDateTime())
+      ) ? savedTimes.edgeTime : undefined;
     }
 
-    return savedTimes.edgeTimeBeforeThisWeek;
+    return savedTimes.edgeTime;
   }
 
   private getCurrentDate() {
@@ -178,7 +191,7 @@ export class TimeRecord {
     return this.getStartTime() === TimeRecord.FIRST_TIME;
   }
 
-  public calculateHeightTimes(savedTimes: WeekTimes, isMatching: boolean, standardDate: Dayjs): Percentage | undefined {
+  public calculateHeightTimes(savedTimes: WeekViewDto, isMatching: boolean, standardDate: Dayjs): Percentage | undefined {
     if (!isMatching) {
       return undefined;
     }
@@ -193,12 +206,12 @@ export class TimeRecord {
       }
     }
 
-    const todayTimes: TimeBlockDto[] | undefined = savedTimes.timesWithinThisWeek.get(TimeRecord.getFormattedDate(this.getCurrentDate(), RelativeDay.TODAY));
-    if (todayTimes === undefined) {
+    let dailyRecord = savedTimes.dailyRecords.get(TimeRecord.getFormattedDate(this.getCurrentDate(), RelativeDay.TODAY));
+    if (dailyRecord === undefined) {
       return undefined;
     }
 
-    for (let todayTime of todayTimes) {
+    for (let todayTime of dailyRecord.times) {
       if (this.getStartDateTime() === todayTime.startDateTime.dateTime) {
         const endDateTimeOfTimeBlock: moment.Moment = this.getEndDateTimeOfTimeBlock(todayTime);
         return new Percentage(endDateTimeOfTimeBlock.diff(this._startDateTime, 'hours') * 100);

@@ -9,19 +9,19 @@ import Colors from "src/constants/Colors";
 import '../../../index.css';
 import {TimeRecord} from "src/model/TimeRecord";
 import {options} from "src/pages/components/timeblock/CategoryOptions";
-import {WeekTimes} from "src/model/WeekTimes";
 import {TimeBlockDto} from "src/dtos/TimeBlockDto";
+import {WeekViewDto} from "src/dtos/WeekViewDto";
 
 interface FormProps {
   earliestRecord: TimeRecord,
   latestRecord: TimeRecord,
   closeModal: (e) => void,
-  timeBlocks: WeekTimes,
-  updateTimeBlocks: (timeBlocks: WeekTimes) => void
+  timeBlocks: WeekViewDto,
+  updateTimeBlocks: (timeBlocks: WeekViewDto) => void
 }
 
 
-const onRegister = (e, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
+const onRegister = (e, closeModal: (e) => void, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void) => {
   if (e.target.innerText !== 'record') {
     return;
   }
@@ -54,17 +54,18 @@ const onRegister = (e, closeModal: (e) => void, timeBlocks: WeekTimes, updateTim
     memo: memo
   }
 
+  let dailyRecord = timeBlocks.dailyRecords.get(formattedStartDate);
 
-
-  let timeBlockDtosAtDate: TimeBlockDto[] | undefined = timeBlocks.timesWithinThisWeek.get(formattedStartDate);
   let newTimeBlockDtosAtDate;
-  if (timeBlockDtosAtDate === undefined) {
+  if (dailyRecord === undefined) {
     newTimeBlockDtosAtDate = [newTimeBlock]
+    dailyRecord = {times: newTimeBlockDtosAtDate, todos: []}
   } else {
-    newTimeBlockDtosAtDate = [...timeBlockDtosAtDate, newTimeBlock]
+    newTimeBlockDtosAtDate = [...dailyRecord.times, newTimeBlock]
+    dailyRecord.times = newTimeBlockDtosAtDate;
   }
 
-  timeBlocks.timesWithinThisWeek.set(formattedStartDate, newTimeBlockDtosAtDate);
+  timeBlocks.dailyRecords.set(formattedStartDate, dailyRecord);
   updateTimeBlocks(timeBlocks);
   closeModal(e);
 

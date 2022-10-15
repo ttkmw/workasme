@@ -8,13 +8,13 @@ import {css, jsx} from "@emotion/react";
 import Colors from "src/constants/Colors";
 import TimeBlockEditForm from "src/pages/components/timeblock/TimeBlockEditForm";
 import Modal from "src/pages/components/Mordal";
-import {WeekTimes} from "src/model/WeekTimes";
+import {WeekViewDto} from "src/dtos/WeekViewDto";
 
 
 
 
-const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}> =
-  (props: { isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }) => {
+const TimeBlock: React.FC<{ isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void}> =
+  (props: { isMatching: boolean, timeBlockDto: TimeBlockDto | undefined, timeCellHeight: Pixel, timeBlockHeightRatio?: Percentage, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void }) => {
     const {isMatching, timeBlockDto, timeCellHeight, timeBlockHeightRatio, timeBlocks, updateTimeBlocks} = props;
     const [isEditFormOpen, setIsEditFormOpen] = useState(false);
     let modal: any = undefined;

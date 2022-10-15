@@ -8,10 +8,11 @@ import TimePicker from "src/pages/components/TimePicker";
 import Colors from "src/constants/Colors";
 import {options} from "src/pages/components/timeblock/CategoryOptions";
 import Pixel from "src/graphic/size/pixel";
-import {WeekTimes} from "src/model/WeekTimes";
+import {WeekViewDto} from "src/dtos/WeekViewDto";
 
 
-const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void) => {
+const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void) => {
+  console.log("exTimeBlockDto", exTimeBlockDto.startDateTime);
 
   if (e.target.innerText !== 'edit' && e.target.innerText !== 'remove') {
     return;
@@ -20,13 +21,16 @@ const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => voi
   if (e.target.innerText === 'remove') {
     let id = Number(e.currentTarget[0].value);
     const startDate = exTimeBlockDto.startDateTime.dateTime.split('T')[0];
-    const timeBlockDtosAtDate = timeBlocks.timesWithinThisWeek.get(startDate)!;
+    const dailyRecord = timeBlocks.dailyRecords.get(startDate);
+    if (dailyRecord === undefined) {
+      throw Error("이상한데요~~")
+    }
     alert("should api call deleted with id " + id)
-    const newTimeblockDtos = timeBlockDtosAtDate.filter((timeBlockDto) => {
+    dailyRecord.times = dailyRecord.times.filter((timeBlockDto) => {
       return timeBlockDto.id !== exTimeBlockDto.id;
-    })
+    });
 
-    timeBlocks.timesWithinThisWeek.set(startDate, newTimeblockDtos);
+    timeBlocks.dailyRecords.set(startDate, dailyRecord);
     updateTimeBlocks(timeBlocks);
   }
 
@@ -55,16 +59,21 @@ const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => voi
     }
 
     const formattedDate = exTimeBlockDto.startDateTime.dateTime.split("T")[0];
-    let timeBlockDtosAtDate: TimeBlockDto[] | undefined = timeBlocks.timesWithinThisWeek.get(formattedDate);
-    let newTimeBlockDtos = timeBlockDtosAtDate!.map((timeBlockDto) => {
+    const dailyRecord = timeBlocks.dailyRecords.get(formattedDate);
+    console.log("startDate", startDate);
+    if (dailyRecord === undefined) {
+      throw Error("이상한데요~");
+    }
+
+    dailyRecord.times = dailyRecord.times.map((timeBlockDto) => {
       if (newTimeBlock.id === timeBlockDto.id) {
         return newTimeBlock;
       } else {
         return timeBlockDto;
       }
-    })
+    });
 
-    timeBlocks.timesWithinThisWeek.set(formattedDate, newTimeBlockDtos);
+    timeBlocks.dailyRecords.set(formattedDate, dailyRecord);
     updateTimeBlocks(timeBlocks);
 
   }
@@ -72,8 +81,8 @@ const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => voi
   closeModal(e)
 }
 
-const TimeBlockEditForm: React.FC<{timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void }> =
-  (props: { timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekTimes, updateTimeBlocks: (timeBlocks: WeekTimes) => void}) => {
+const TimeBlockEditForm: React.FC<{timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void }> =
+  (props: { timeBlockDto: TimeBlockDto, closeModal: (e) => void, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void}) => {
     const {timeBlockDto, closeModal, timeBlocks, updateTimeBlocks} = props;
     const [isGood, setIsGood] = useState(timeBlockDto.isGood)
     const toggleIsGood = (e) => {
