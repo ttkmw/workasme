@@ -11,7 +11,6 @@ import {TimeRecord} from "src/model/TimeRecord";
 import {RelativeDay} from "src/model/RelativeDay";
 import Colors from "src/constants/Colors";
 import {WeekViewDto} from "src/dtos/WeekViewDto";
-import timeBlock from "src/pages/components/timeblock/TimeBlock";
 
 const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, index: number, day: Dayjs, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void }> =
   (props: { size: Pixel, borderWidth: Pixel, index: number, day: Dayjs, todoDto: TodoDto, timeBlocks: WeekViewDto, updateTimeBlocks: (timeBlocks: WeekViewDto) => void }) => {
@@ -47,10 +46,10 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, in
         return;
       }
 
-      let newTodoDtos: TodoDto[] | undefined = dailyRecord.todos.map((todoDto, todoDtoIndex) => {
+      dailyRecord.todos = dailyRecord.todos.map((todoDto, todoDtoIndex) => {
         if (todoDtoIndex === index) {
           //여기에서 api 콜한 결과를 리턴
-          if (todoDto.content === undefined ||todoDto.content === '') {
+          if (todoDto.content === undefined || todoDto.content === '') {
             return todoDto;
           }
 
@@ -61,10 +60,8 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, in
         }
       });
 
-      dailyRecord.todos = newTodoDtos;
-
       timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), dailyRecord);
-      updateTimeBlocks(timeBlocks);
+      updateTimeBlocks({dailyRecords: timeBlocks.dailyRecords, edgeTime: timeBlocks.edgeTime});
 
     };
 

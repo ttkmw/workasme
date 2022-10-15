@@ -6,6 +6,7 @@ import {css, jsx} from "@emotion/react";
 import Colors from "src/constants/Colors";
 import TestSection from "src/pages/management/sections/TestSection";
 import Header from "src/pages/components/bars/navigation/Header";
+import WeekViewSection from "src/pages/management/sections/WeekViewSection";
 
 const TimeTrackersPage: React.FC = () => {
 
@@ -30,7 +31,7 @@ const TimeTrackersPage: React.FC = () => {
       {/*  </Tab>*/}
       {/*</Tabs>*/}
       <Header />
-      <TestSection/>
+      <WeekViewSection />
     </>
 
   </Container>

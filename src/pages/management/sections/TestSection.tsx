@@ -772,6 +772,15 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
     const [isHover, setIsHover] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
 
+    if (TimeRecord.getFormattedDate(day, RelativeDay.TODAY) === '2022-10-13') {
+      console.log('isHover', isHover, 'isFocus', isFocused)
+    }
+
+
+    useEffect(() => {
+      console.log("useEffect");
+    })
+
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, day, index, todoDto, timeBlocks, updateTimeBlocks, setIsFocused);
 
@@ -785,6 +794,7 @@ const Todo: React.FC<{ checkBoxSize: Pixel, todoDto: TodoDto, day: Dayjs, index:
         marginBottom: checkBoxSize.multiply(new Percentage(25)).toString(),
       })}
       onMouseEnter={() => {
+
         if (todoDto.content === undefined || todoDto.content === '') {
           return
         }
@@ -834,10 +844,12 @@ const TodoContent: React.FC<{ timeBlocks: WeekViewDto, updateTimeBlocks: (timeBl
     }
 
     const onDelete = (e, day, index, timeBlocks, updateTimeBlocks) => {
-      let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
-      const removeTarget = todoDtosAtDate!.filter((todoDto, todoDtoIndex) => todoDtoIndex === index)[0];
+      let dailyRecord = timeBlocks.dailyRecords.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+      // let todoDtosAtDate: TodoDto[] | undefined = timeBlocks.todoWithinThisWeek.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
+
+      const removeTarget = dailyRecord!.todos.filter((todoDto, todoDtoIndex) => todoDtoIndex === index)[0];
       alert("should api call deleted")
-      let newTodoDtos = todoDtosAtDate!.filter((todoDto) => {
+      dailyRecord!.todos = dailyRecord!.todos.filter((todoDto) => {
         return todoDto !== removeTarget
       });
 
@@ -852,10 +864,10 @@ const TodoContent: React.FC<{ timeBlocks: WeekViewDto, updateTimeBlocks: (timeBl
       //   }
       // }
 
-      timeBlocks.todoWithinThisWeek.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), newTodoDtos);
+      timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), dailyRecord!);
 
 
-      updateTimeBlocks(timeBlocks);
+      updateTimeBlocks({dailyRecords: timeBlocks.dailyRecords, edgeTime: timeBlocks.edgeTime});
     }
 
     const onKeyPress = (event, day, index, setIsFocused) => {
