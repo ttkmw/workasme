@@ -28,6 +28,8 @@ import CheckBox from "src/pages/management/sections/parts/components/box/CheckBo
 import {IoMdClose} from "react-icons/all";
 import {TimeRecordTemplate} from "src/model/TimeRecordTemplate";
 import {DailyRecordDto} from "src/dtos/DailyRecordDto";
+import {useInjection} from "inversify-react";
+import WeekViewApi from "src/api/WeekViewApi";
 
 const SelectableComponent = createSelectable(Selectable);
 
@@ -217,9 +219,17 @@ const WeekViewSection: React.FC = () => {
   const [timeBlocks, setTimeBlocks] = useState<WeekViewDto>({dailyRecords: new Map<string, DailyRecordDto>([]), edgeTime: undefined});
   const [isShown, setIsShown] = useState<boolean>(false)
   const [selectOnMouseMove, setSelectOnMouseMove] = useState<boolean>(false);
+  const weekViewApi = useInjection(WeekViewApi);
 
   useEffect(() => {
-    setTimeBlocks(serverData)
+    const getWeekView = async () => {
+      const weekViewDto = await weekViewApi.getWeekView(TimeRecord.getFormattedDate(standardDate, RelativeDay.TODAY), '03:00');
+      setTimeBlocks(weekViewDto);
+    };
+
+    getWeekView();
+
+
     // closeButton.focus();
     return () => {
       document.removeEventListener('click', clearItems);
@@ -839,7 +849,7 @@ const TodoContent: React.FC<{ timeBlocks: WeekViewDto, updateTimeBlocks: (timeBl
             },
           })} key={TimeRecord.getFormattedDate(day, RelativeDay.TODAY) + index + todoDto.content}
                  onFocus={() => setIsFocused(true)} onKeyPress={(e) => onKeyPress(e, day, index, setIsFocused)}
-                 defaultValue={todoDto.content} type={"text"}/>
+                 defaultValue={todoDto.content || ""} type={"text"}/>
       }
       {isHover && !isFocused && (todoDto.content !== undefined && todoDto.content !== '') && (
         <button
