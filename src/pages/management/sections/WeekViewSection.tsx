@@ -137,7 +137,7 @@ const serverData: WeekViewDto = {
       },],
       todos: [{
         id: 2,
-        isChecked: true,
+        isFinished: true,
         content: "다했음!"
       }]
     }],
@@ -153,26 +153,25 @@ const serverData: WeekViewDto = {
       },],
       todos: [{
         id: 1,
-        isChecked: false,
+        isFinished: false,
         content: "해야하는데 아직 못함"
       },
         {
           id: 3,
-          isChecked: true,
+          isFinished: true,
           content: "쉽게 함"
         },
         {
           id: 4,
-          isChecked: true,
+          isFinished: true,
           content: "하는중"
         },
         {
           id: 5,
-          isChecked: true,
+          isFinished: true,
           content: "고고"
         }]
     }],
-
   ]),
   edgeTime: undefined
 }
@@ -222,8 +221,10 @@ const WeekViewSection: React.FC = () => {
   const weekViewApi = useInjection(WeekViewApi);
 
   useEffect(() => {
+    console.log("called");
     const getWeekView = async () => {
       const weekViewDto = await weekViewApi.getWeekView(TimeRecord.getFormattedDate(standardDate, RelativeDay.TODAY), '03:00');
+      console.log("weekViewDto", weekViewDto);
       setTimeBlocks(weekViewDto);
     };
 
@@ -234,7 +235,7 @@ const WeekViewSection: React.FC = () => {
     return () => {
       document.removeEventListener('click', clearItems);
     }
-  }, )
+  }, [weekViewApi])
 
   const showModal = (selectedKeys: number[]) => {
     if (selectedKeys.length === 0) {
@@ -529,19 +530,19 @@ const TodoList: React.FC<{ checkBoxSize: Pixel, weekdays: Dayjs[], day: Dayjs, t
     let todoDtosForRender: TodoDto[];
     if (dailyRecords === undefined || dailyRecords.todos.length === 0) {
       todoDtosForRender = [
-        {id: undefined, isChecked: false, content: ''},
-        {id: undefined, isChecked: false, content: ''},
-        {id: undefined, isChecked: false, content: ''},
+        {id: undefined, isFinished: false, content: ''},
+        {id: undefined, isFinished: false, content: ''},
+        {id: undefined, isFinished: false, content: ''},
       ]
     } else {
       todoDtosForRender = dailyRecords.todos.map(todoDto => {
-        return {id: todoDto.id, isChecked: todoDto.isChecked, content: todoDto.content}
+        return {id: todoDto.id, isFinished: todoDto.isFinished, content: todoDto.content}
       });
     }
 
     const maxCount = getCountOfTodoAtDate(timeBlocks, weekdays);
     while (todoDtosForRender.length < maxCount) {
-      todoDtosForRender.push({id: undefined, isChecked: false, content: ''})
+      todoDtosForRender.push({id: undefined, isFinished: false, content: ''})
     }
 
     // if (someDayIsFullOfContents(timeBlocks.todoWithinThisWeek, weekdays)) {
@@ -625,10 +626,10 @@ function handleClickOutside(event: any, ref: RefObject<any>, day: Dayjs, index: 
       let newTodoDtos: TodoDto[];
       const dailyRecord = timeBlocks.dailyRecords.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
       if (dailyRecord === undefined) {
-        timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), {times: [], todos: [{id: undefined, isChecked: false, content: ref.current.value}]})
+        timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), {times: [], todos: [{id: undefined, isFinished: false, content: ref.current.value}]})
       } else {
         //todo: 이상한데? 왜 여긴 id가 있어...
-        dailyRecord.todos.push({id: todoDto.id, isChecked: todoDto.isChecked, content: ref.current.value})
+        dailyRecord.todos.push({id: todoDto.id, isFinished: todoDto.isFinished, content: ref.current.value})
         timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), dailyRecord)
       }
 
@@ -738,7 +739,7 @@ const TodoContent: React.FC<{ timeBlocks: WeekViewDto, updateTimeBlocks: (timeBl
     const {timeBlocks, updateTimeBlocks, todoDto, isFocused, wrapperRef, day, index, setIsFocused, isHover} = props;
 
     let borderBottomColor;
-    if (todoDto.isChecked) {
+    if (todoDto.isFinished) {
       borderBottomColor = Colors.theme.main.orgasme;
     } else if (todoDto.content !== undefined && todoDto.content !== '') {
       borderBottomColor = Colors.theme.main.work;
@@ -747,7 +748,7 @@ const TodoContent: React.FC<{ timeBlocks: WeekViewDto, updateTimeBlocks: (timeBl
     }
 
     let closeButtonBackgroundColor;
-    if (todoDto.isChecked) {
+    if (todoDto.isFinished) {
       closeButtonBackgroundColor = Colors.theme.main.orgasme;
     } else {
       closeButtonBackgroundColor = Colors.theme.main.work;
@@ -790,11 +791,11 @@ const TodoContent: React.FC<{ timeBlocks: WeekViewDto, updateTimeBlocks: (timeBl
           alert("should api call modified")
           const dailyRecord = timeBlocks.dailyRecords.get(TimeRecord.getFormattedDate(day, RelativeDay.TODAY));
           if (dailyRecord === undefined) {
-            timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), {times: [], todos: [{id: undefined, isChecked: false, content: target.value}]})
+            timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), {times: [], todos: [{id: undefined, isFinished: false, content: target.value}]})
 
           } else {
             //todo: 이상한데? 왜 여긴 id가 있어...
-            dailyRecord.todos.push({id: todoDto.id, isChecked: todoDto.isChecked, content: target.value})
+            dailyRecord.todos.push({id: todoDto.id, isFinished: todoDto.isFinished, content: target.value})
             timeBlocks.dailyRecords.set(TimeRecord.getFormattedDate(day, RelativeDay.TODAY), dailyRecord)
           }
 

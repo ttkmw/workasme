@@ -25,7 +25,7 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, in
     } = props;
 
     let borderColor;
-    if (todoDto.isChecked) {
+    if (todoDto.isFinished) {
       borderColor = Colors.theme.main.orgasme
     } else if (todoDto.content !== '') {
       borderColor = Colors.theme.main.work
@@ -34,7 +34,7 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, in
     }
 
     let backgroundColor;
-    if (todoDto.isChecked) {
+    if (todoDto.isFinished) {
       backgroundColor = Colors.theme.main.orgasme
     } else {
       backgroundColor = "transparent";
@@ -54,7 +54,7 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, in
           }
 
           alert("should api call modified")
-          return {id: todoDto.id, isChecked: !todoDto.isChecked, content: todoDto.content}
+          return {id: todoDto.id, isFinished: !todoDto.isFinished, content: todoDto.content}
         } else {
           return todoDto;
         }
@@ -132,9 +132,9 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, in
     })}
     >
       <label className="container">
-        <input type="checkbox"  checked={todoDto.isChecked} readOnly={true}/>
+        <input type="checkbox" checked={todoDto.isFinished || false} readOnly={true}/>
         {/*todo: onClicke에 api 콜 해서 체크하는 것들 다 저장 */}
-        <span className={"checkmark"} onClick={() => onChange(day, index)} defaultChecked={todoDto.isChecked}>
+        <span className={"checkmark"} onClick={() => onChange(day, index)} defaultChecked={todoDto.isFinished || false}>
               <img src={check} alt="Check" width={imgSize.toString()}
                    height={imgSize.toString()}/>
       </span>

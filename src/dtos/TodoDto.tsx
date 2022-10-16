@@ -2,6 +2,6 @@ import React from "react";
 
 export interface TodoDto {
   id: number | undefined
-  isChecked: boolean
+  isFinished: boolean
   content: string
 }

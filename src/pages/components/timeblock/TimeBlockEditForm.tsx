@@ -117,7 +117,7 @@ const TimeBlockEditForm: React.FC<{timeBlockDto: TimeBlockDto, closeModal: (e) =
       <div className={"form-group"} css={css({
         display: "none"
       })}>
-        <input defaultValue={timeBlockDto.id}/>
+        <input defaultValue={timeBlockDto.id || ""}/>
       </div>
       <div className="form-group" css={css({
         display: "flex",

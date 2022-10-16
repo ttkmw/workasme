@@ -19,7 +19,7 @@ class WeekViewApi {
       {params: {startDate: date, standardTime: time}});
 
 
-    return {dailyRecords:new Map(Object.entries(axiosResponse.data.dailyRecords)), edgeTime: axiosResponse.data.edgeTime !== null ? axiosResponse.data.edgeTime : undefined };
+    return {dailyRecords: new Map(Object.entries(axiosResponse.data.dailyRecords)), edgeTime: axiosResponse.data.edgeTime !== null ? axiosResponse.data.edgeTime : undefined };
 
   }
 }

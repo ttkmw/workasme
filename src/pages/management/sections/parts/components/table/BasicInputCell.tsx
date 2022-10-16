@@ -40,7 +40,7 @@ const BasicInputCell: React.FC<{ initialValue: any, isUpdating: boolean, timeSni
     return !isUpdating;
   }
 
-  return <input onInput={() => {}} disabled={isNotUpdating()} value={value} onKeyPress={handleOnlyEnterKeyPressed} onChange={onChange} ref={inputRef}/>
+  return <input onInput={() => {}} disabled={isNotUpdating()} value={value || ""} onKeyPress={handleOnlyEnterKeyPressed} onChange={onChange} ref={inputRef}/>
 };
 
 export default BasicInputCell;

@@ -67,7 +67,7 @@ const SignInSection: React.FC = () => {
         },
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(6).toString()
-      })} value={email} onChange={(event) => {setEmail(event.target.value)}} placeholder={"email"} id={"sign-in-id"}/>
+      })} value={email || ""} onChange={(event) => {setEmail(event.target.value)}} placeholder={"email"} id={"sign-in-id"}/>
 
       <input css={css({
         width: new Pixel(280).toString(),
@@ -82,7 +82,7 @@ const SignInSection: React.FC = () => {
         },
         backgroundColor: "rgba(var(--b3f,250,250,250),1)",
         marginBottom: new Pixel(14).toString()
-      })} value={password} onChange={(event => {setPassword(event.target.value)})} type={'password'} placeholder={"password"} id={"sign-in-password"}/>
+      })} value={password || ""} onChange={(event => {setPassword(event.target.value)})} type={'password'} placeholder={"password"} id={"sign-in-password"}/>
 
       <div css={css({
         display: "flex",
