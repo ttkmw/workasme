@@ -20,7 +20,7 @@ const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => voi
 
   if (e.target.innerText === 'remove') {
     let id = Number(e.currentTarget[0].value);
-    const startDate = exTimeBlockDto.startDateTime.dateTime.split('T')[0];
+    const startDate = exTimeBlockDto.startDateTime.split('T')[0];
     const dailyRecord = timeBlocks.dailyRecords.get(startDate);
     if (dailyRecord === undefined) {
       throw Error("이상한데요~~")
@@ -51,14 +51,14 @@ const onSubmitHandler = (e, exTimeBlockDto: TimeBlockDto, closeModal: (e) => voi
 
     alert("should api call modified")
     const newTimeBlock: TimeBlockDto = {id: id, title: title,
-      startDateTime: {dateTime: startYear + '-' + startMonth + '-' + startDay + "T" + startTime + ":00"},
-      endDateTime: {dateTime: endYear + '-' + endMonth + '-' + endDay + "T" + endTime + ":00"},
+      startDateTime: startYear + '-' + startMonth + '-' + startDay + "T" + startTime + ":00",
+      endDateTime: endYear + '-' + endMonth + '-' + endDay + "T" + endTime + ":00",
       isGood: isGood,
       category: category,
       memo: memo
     }
 
-    const formattedDate = exTimeBlockDto.startDateTime.dateTime.split("T")[0];
+    const formattedDate = exTimeBlockDto.startDateTime.split("T")[0];
     const dailyRecord = timeBlocks.dailyRecords.get(formattedDate);
     console.log("startDate", startDate);
     if (dailyRecord === undefined) {
@@ -117,7 +117,7 @@ const TimeBlockEditForm: React.FC<{timeBlockDto: TimeBlockDto, closeModal: (e) =
       <div className={"form-group"} css={css({
         display: "none"
       })}>
-        <input defaultValue={timeBlockDto.id || ""}/>
+        <input defaultValue={timeBlockDto.id}/>
       </div>
       <div className="form-group" css={css({
         display: "flex",
@@ -163,10 +163,10 @@ const TimeBlockEditForm: React.FC<{timeBlockDto: TimeBlockDto, closeModal: (e) =
           })}
                id={"startDateTime"}
           >
-            <DatePicker dateTime={timeBlockDto.startDateTime.dateTime}/>
+            <DatePicker dateTime={timeBlockDto.startDateTime}/>
             <div>-</div>
 
-            <TimePicker initialValue={timeBlockDto.startDateTime.dateTime.split("T")[1].slice(0, 2)}/>
+            <TimePicker initialValue={timeBlockDto.startDateTime.split("T")[1].slice(0, 2)}/>
           </div>
         </div>
       </div>
@@ -187,9 +187,9 @@ const TimeBlockEditForm: React.FC<{timeBlockDto: TimeBlockDto, closeModal: (e) =
             justifyContent: "space-between",
           })}
                id={"endDateTime"}>
-            <DatePicker dateTime={timeBlockDto.endDateTime.dateTime}/>
+            <DatePicker dateTime={timeBlockDto.endDateTime}/>
             <div>-</div>
-            <TimePicker initialValue={timeBlockDto.endDateTime.dateTime.split("T")[1].slice(0, 2)}/>
+            <TimePicker initialValue={timeBlockDto.endDateTime.split("T")[1].slice(0, 2)}/>
           </div>
         </div>
       </div>

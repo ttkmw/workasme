@@ -132,9 +132,9 @@ const CheckBox: React.FC<{ size: Pixel, borderWidth: Pixel, todoDto: TodoDto, in
     })}
     >
       <label className="container">
-        <input type="checkbox" checked={todoDto.isFinished || false} readOnly={true}/>
+        <input type="checkbox" checked={todoDto.isFinished} readOnly={true}/>
         {/*todo: onClicke에 api 콜 해서 체크하는 것들 다 저장 */}
-        <span className={"checkmark"} onClick={() => onChange(day, index)} defaultChecked={todoDto.isFinished || false}>
+        <span className={"checkmark"} onClick={() => onChange(day, index)} defaultChecked={todoDto.isFinished}>
               <img src={check} alt="Check" width={imgSize.toString()}
                    height={imgSize.toString()}/>
       </span>

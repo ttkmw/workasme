@@ -47,8 +47,8 @@ const onRegister = (e, closeModal: (e) => void, timeBlocks: WeekViewDto, updateT
 
   alert("should api call created")
   const newTimeBlock: TimeBlockDto = {id: 0, title: title,
-    startDateTime: {dateTime: startDateTime},
-    endDateTime: {dateTime: endDateTime},
+    startDateTime: startDateTime,
+    endDateTime: endDateTime,
     isGood: isGood,
     category: category,
     memo: memo
