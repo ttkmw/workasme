@@ -1,4 +1,13 @@
-import React, {Dispatch, MutableRefObject, RefObject, SetStateAction, useEffect, useRef, useState} from "react";
+import React, {
+  Dispatch,
+  MutableRefObject,
+  RefObject,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import {css, jsx} from "@emotion/react";
@@ -219,23 +228,37 @@ const WeekViewSection: React.FC = () => {
   const [isShown, setIsShown] = useState<boolean>(false)
   const [selectOnMouseMove, setSelectOnMouseMove] = useState<boolean>(false);
   const weekViewApi = useInjection(WeekViewApi);
+  const axiosInstance = container.get<AxiosSupplier>(TYPES.AxiosSupplier).provide();
+
+  const clearItems = useCallback((e) => {
+    if (!isNodeInRoot(e.target, selectableRef)) {
+      setSelectedKeys([]);
+    }
+  }, [selectableRef.current])
+
+
+
+  const fetchWeekView = useCallback(async () => {
+    const weekViewDto = await weekViewApi.getWeekView(TimeRecord.getFormattedDate(standardDate, RelativeDay.TODAY), '03:00');
+    setTimeBlocks(weekViewDto)
+
+    return weekViewDto;
+  }, [weekViewApi, standardDate]);
 
   useEffect(() => {
     console.log("called");
-    const getWeekView = async () => {
-      const weekViewDto = await weekViewApi.getWeekView(TimeRecord.getFormattedDate(standardDate, RelativeDay.TODAY), '03:00');
-      console.log("weekViewDto", weekViewDto);
-      setTimeBlocks(weekViewDto);
-    };
-
-    getWeekView();
+    weekViewApi.getWeekView(TimeRecord.getFormattedDate(standardDate, RelativeDay.TODAY), '03:00')
+      .then((weekViewDto) => {
+        setTimeBlocks(weekViewDto)
+      });
+    // todo: catch를 해야하나?
 
 
     // closeButton.focus();
     return () => {
       document.removeEventListener('click', clearItems);
     }
-  }, [weekViewApi])
+  }, [standardDate, weekViewApi, clearItems])
 
   const showModal = (selectedKeys: number[]) => {
     if (selectedKeys.length === 0) {
@@ -262,12 +285,6 @@ const WeekViewSection: React.FC = () => {
     if (modal && modal.contains(event.target)) return;
     onClose(event);
   };
-
-  const clearItems = (e) => {
-    if (!isNodeInRoot(e.target, selectableRef)) {
-      setSelectedKeys([]);
-    }
-  }
 
   const toggleScrollLock = () => {
     // @ts-ignore
@@ -353,7 +370,7 @@ const WeekViewSection: React.FC = () => {
         </div>
       </div>
       <TodoListSection weekdays={weekdays} checkBoxSize={checkBoxSize} timeBlocks={timeBlocks}
-                       updateTimeBlocks={(timeBlocks) => setTimeBlocks(timeBlocks)}/>
+                       updateTimeBlocks={(timeBlocks) => setTimeBlocks.bind(timeBlocks)}/>
 
       <ReactSelectableGroup onSelection={(keys) => setSelectedKeys(keys)}
                             onEndSelection={() => showModal(selectedKeys)}
@@ -417,7 +434,7 @@ const WeekViewSection: React.FC = () => {
                             timeBlockHeightRatio={timeBlockHeightRatio}
                             timeCellHeight={timeCellHeight}
                             timeBlocks={timeBlocks}
-                            updateTimeBlocks={(timeBlocks) => setTimeBlocks(timeBlocks)}
+                            updateTimeBlocks={(timeBlocks) => setTimeBlocks.bind(timeBlocks)}
                           >
                             <NumberBox number={timeCell.getAlias()} numberSize={checkBoxSize}
                                        numberFont={fontConfig.web.medium.fontFamily}
@@ -450,7 +467,7 @@ const WeekViewSection: React.FC = () => {
                                      latestRecord={latestRecord}
                                      closeModal={onClose.bind(this)}
                                      timeBlocks={timeBlocks}
-                                     updateTimeBlocks={(timeBlocks) => setTimeBlocks(timeBlocks)}
+                                     updateTimeBlocks={(timeBlocks) => setTimeBlocks.bind(timeBlocks)}
               />
             </Modal>
           ) : null}
@@ -465,7 +482,6 @@ const TodoListSection: React.FC<{ weekdays: Dayjs[], checkBoxSize: Pixel, timeBl
     const token = useSelector(selectToken);
     const {weekdays, checkBoxSize, timeBlocks, updateTimeBlocks} = props;
     useEffect(() => {
-      console.log("token", token);
     }, [token])
 
     return <div
