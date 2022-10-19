@@ -229,6 +229,7 @@ const WeekViewSection: React.FC = () => {
   const [selectOnMouseMove, setSelectOnMouseMove] = useState<boolean>(false);
   const weekViewApi = useInjection(WeekViewApi);
   const axiosInstance = container.get<AxiosSupplier>(TYPES.AxiosSupplier).provide();
+  const token: string = useSelector(selectToken);
 
   const clearItems = useCallback((e) => {
     if (!isNodeInRoot(e.target, selectableRef)) {
@@ -238,13 +239,6 @@ const WeekViewSection: React.FC = () => {
 
 
 
-  const fetchWeekView = useCallback(async () => {
-    const weekViewDto = await weekViewApi.getWeekView(TimeRecord.getFormattedDate(standardDate, RelativeDay.TODAY), '03:00');
-    setTimeBlocks(weekViewDto)
-
-    return weekViewDto;
-  }, [weekViewApi, standardDate]);
-
   useEffect(() => {
     console.log("called");
     weekViewApi.getWeekView(TimeRecord.getFormattedDate(standardDate, RelativeDay.TODAY), '03:00')
@@ -252,6 +246,7 @@ const WeekViewSection: React.FC = () => {
         setTimeBlocks(weekViewDto)
       });
     // todo: catch를 해야하나?
+    console.log("hahahaaha", token)
 
 
     // closeButton.focus();
