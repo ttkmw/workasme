@@ -90,6 +90,7 @@
     ]
   },
   "devDependencies": {
-    "@emotion/babel-plugin": "^11.3.0"
+    "@emotion/babel-plugin": "^11.3.0",
+    "minimatch": ">=3.0.5"
   }
 }
